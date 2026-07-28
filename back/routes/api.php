@@ -23,8 +23,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/productos', [ProductoController::class, 'index']);
     Route::get('/productos-catalogos', [ProductoController::class, 'catalogos']);
+    Route::post('/categorias', [ProductoController::class, 'storeCategoria']);
+    Route::put('/categorias/{categoria}', [ProductoController::class, 'updateCategoria']);
+    Route::delete('/categorias/{categoria}', [ProductoController::class, 'destroyCategoria']);
+    Route::patch('/productos/{producto}/codigo-barras', [ProductoController::class, 'updateBarcode']);
     Route::post('/productos', [ProductoController::class, 'store']);
     Route::put('/productos/{producto}', [ProductoController::class, 'update']);
     Route::post('/productos/{producto}/foto', [ProductoController::class, 'uploadPhoto']);
+    Route::post('/productos/{producto}/foto-url', [ProductoController::class, 'uploadPhotoFromUrl']);
     Route::delete('/productos/{producto}', [ProductoController::class, 'destroy']);
 });

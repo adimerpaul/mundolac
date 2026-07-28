@@ -9,7 +9,7 @@
         <template #top><q-input v-model="search" dense outlined debounce="200" placeholder="Buscar usuario" clearable style="width:290px"><template #prepend><q-icon name="search" size="18px"/></template></q-input></template>
         <template #body-cell-user="p"><q-td :props="p"><div class="row items-center no-wrap q-gutter-xs"><q-avatar size="28px" color="blue-1" text-color="primary" icon="person"/><div><div class="text-weight-medium">{{p.row.name}}</div><div class="text-caption text-grey-7">@{{p.row.username}}</div></div></div></q-td></template>
         <template #body-cell-permissions="p"><q-td :props="p"><q-badge outline color="primary" :label="`${p.row.permissions?.length||0} permisos`"/></q-td></template>
-        <template #body-cell-actions="p"><q-td :props="p" class="text-right">
+        <template #body-cell-actions="p"><q-td :props="p" class="text-left">
           <q-btn-dropdown dense flat color="primary" icon="more_vert" dropdown-icon="none">
             <q-list dense style="min-width:170px">
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openForm(p.row)"><q-item-section avatar><q-icon name="edit" color="primary"/></q-item-section><q-item-section>Editar y permisos</q-item-section></q-item>
@@ -67,7 +67,7 @@ import { computed, getCurrentInstance, onMounted, reactive, ref } from 'vue'
 const { proxy }=getCurrentInstance()
 const rows=ref([]),search=ref(''),loading=ref(false),saving=ref(false),dialog=ref(false),permissions=ref([]),selectedPermissions=ref([])
 const empty=()=>({id:null,name:'',username:'',email:'',celular:'',ci:'',password:'123456'}),form=reactive(empty())
-const columns=[{name:'user',label:'Usuario',field:'name',align:'left'},{name:'email',label:'Correo',field:'email',align:'left'},{name:'celular',label:'Celular',field:'celular',align:'left'},{name:'ci',label:'CI',field:'ci',align:'left'},{name:'permissions',label:'Permisos',align:'center'},{name:'actions',label:'Acciones',align:'right'}]
+const columns=[{name:'actions',label:'Acciones',align:'left'},{name:'user',label:'Usuario',field:'name',align:'left'},{name:'email',label:'Correo',field:'email',align:'left'},{name:'celular',label:'Celular',field:'celular',align:'left'},{name:'ci',label:'CI',field:'ci',align:'left'},{name:'permissions',label:'Permisos',align:'center'}]
 const can=p=>proxy.$store.hasPermission(p),required=v=>!!v||'Campo requerido'
 const filtered=computed(()=>{const q=(search.value||'').toLowerCase();return rows.value.filter(u=>[u.name,u.username,u.email,u.ci].some(v=>(v||'').toLowerCase().includes(q)))})
 const permissionGroups=computed(()=>['Usuarios','Productos'].map(name=>({name,items:permissions.value.filter(p=>p.name.includes(name))})))
