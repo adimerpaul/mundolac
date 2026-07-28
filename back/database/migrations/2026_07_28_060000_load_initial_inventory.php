@@ -1,14 +1,30 @@
 <?php
 
-namespace Database\Seeders;
-
 use App\Models\Producto;
-use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Spatie\Permission\Models\Permission;
 
-class ProductoSeeder extends Seeder
+return new class extends Migration
 {
-    public function run(): void
+    public function up(): void
     {
+        $permissions = [
+            'Ver Usuarios', 'Crear Usuarios', 'Editar Usuarios', 'Eliminar Usuarios',
+            'Gestionar Permisos', 'Ver Productos', 'Crear Productos',
+            'Editar Productos', 'Eliminar Productos',
+        ];
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
+        }
+        $admin = User::firstOrCreate(['username' => 'admin'], [
+            'name' => 'ADMINISTRADOR',
+            'email' => 'admin@mundolac.com',
+            'ci' => '00000000',
+            'password' => bcrypt('admin'),
+        ]);
+        $admin->syncPermissions(Permission::all());
+
         $rows = [
             ['F01600', 'LECHE DESLACTOSADA POLVO 760 GR', 'KG', 77.1, 85, 10],
             ['F02223', 'YOGURELO ESCOLAR', 'ML', 1.1, 1.5, 1575],
@@ -132,4 +148,9 @@ class ProductoSeeder extends Seeder
             ]);
         }
     }
-}
+
+    public function down(): void
+    {
+        User::where('username', 'admin')->delete();
+    }
+};

@@ -10,8 +10,8 @@ class Producto extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'codigo', 'nombre', 'categoria', 'unidad',
-        'precio_compra', 'precio_venta', 'stock_inicial',
+        'codigo', 'codigo_barras', 'nombre', 'categoria', 'unidad',
+        'precio_compra', 'precio_venta', 'stock_inicial', 'foto',
     ];
 
     protected $casts = [

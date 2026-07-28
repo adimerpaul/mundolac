@@ -16,6 +16,7 @@ class ProductoController extends Controller
         if ($search = trim((string) $request->input('q'))) {
             $query->where(fn ($q) => $q->where('codigo', 'like', "%{$search}%")
                 ->orWhere('nombre', 'like', "%{$search}%")
+                ->orWhere('codigo_barras', 'like', "%{$search}%")
                 ->orWhere('categoria', 'like', "%{$search}%"));
         }
         if ($categoria = trim((string) $request->input('categoria'))) {
@@ -53,6 +54,7 @@ class ProductoController extends Controller
     public function destroy(Request $request, Producto $producto)
     {
         $this->authorizeAction($request, 'Eliminar Productos');
+        $this->deletePhoto($producto);
         $producto->delete();
 
         return response()->json(['message' => 'Producto eliminado correctamente']);
@@ -61,7 +63,8 @@ class ProductoController extends Controller
     private function validatedData(Request $request, ?Producto $producto = null): array
     {
         $data = $request->validate([
-            'codigo' => ['required', 'string', 'max:50', Rule::unique('productos')->ignore($producto)],
+            'codigo' => ['required', 'string', 'max:50', Rule::unique('productos')->whereNull('deleted_at')->ignore($producto)],
+            'codigo_barras' => ['nullable', 'string', 'max:100', Rule::unique('productos')->whereNull('deleted_at')->ignore($producto)],
             'nombre' => ['required', 'string', 'max:255'],
             'categoria' => ['nullable', 'string', 'max:100'],
             'unidad' => ['required', 'string', 'max:20'],
@@ -75,6 +78,50 @@ class ProductoController extends Controller
         }
 
         return $data;
+    }
+
+    public function uploadPhoto(Request $request, Producto $producto)
+    {
+        $this->authorizeAction($request, 'Editar Productos');
+        $request->validate(['foto' => ['required', 'image', 'max:8192']]);
+
+        $this->deletePhoto($producto);
+        $file = $request->file('foto');
+        $image = imagecreatefromstring(file_get_contents($file->getPathname()));
+        abort_unless($image, 422, 'No se pudo procesar la fotografía');
+
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $scale = min(1, 700 / max($width, $height));
+        $newWidth = max(1, (int) round($width * $scale));
+        $newHeight = max(1, (int) round($height * $scale));
+        $output = imagecreatetruecolor($newWidth, $newHeight);
+        $white = imagecolorallocate($output, 255, 255, 255);
+        imagefill($output, 0, 0, $white);
+        imagecopyresampled($output, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        $directory = public_path('images/productos');
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+        $filename = "producto_{$producto->id}_".time().'.webp';
+        imagewebp($output, "{$directory}/{$filename}", 85);
+        imagedestroy($image);
+        imagedestroy($output);
+
+        $producto->update(['foto' => "productos/{$filename}"]);
+
+        return response()->json($producto->fresh());
+    }
+
+    private function deletePhoto(Producto $producto): void
+    {
+        if ($producto->foto) {
+            $path = public_path('images/'.$producto->foto);
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
     }
 
     private function authorizeAction(Request $request, string $permission): void
