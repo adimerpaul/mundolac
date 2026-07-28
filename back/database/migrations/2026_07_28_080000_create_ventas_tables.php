@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('unidad', 20);
             $table->string('foto')->nullable();
             $table->decimal('precio_compra', 12, 2);
-            $table->decimal('precio_venta', 12, 2);
+            $table->decimal('precio_venta', 12, 4);
             $table->unsignedInteger('cantidad');
             $table->decimal('subtotal', 12, 2);
             $table->decimal('descuento', 12, 2)->default(0);

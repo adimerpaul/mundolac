@@ -117,6 +117,7 @@ class VentaController extends Controller
             'detalles' => ['required', 'array', 'min:1'],
             'detalles.*.producto_id' => ['required', 'integer', 'exists:productos,id'],
             'detalles.*.cantidad' => ['required', 'integer', 'min:1'],
+            'detalles.*.precio_venta' => ['required', 'numeric', 'min:0'],
         ]);
 
         $venta = DB::transaction(function () use ($request, $data) {
@@ -125,9 +126,10 @@ class VentaController extends Controller
             foreach ($data['detalles'] as $detail) {
                 $product = Producto::lockForUpdate()->findOrFail($detail['producto_id']);
                 abort_if($product->stock_inicial < $detail['cantidad'], 422, "Stock insuficiente para {$product->nombre}");
-                $lineSubtotal = round((float) $product->precio_venta * $detail['cantidad'], 2);
+                $salePrice = round((float) $detail['precio_venta'], 4);
+                $lineSubtotal = round($salePrice * $detail['cantidad'], 2);
                 $subtotal += $lineSubtotal;
-                $items[] = [$product, $detail['cantidad'], $lineSubtotal];
+                $items[] = [$product, $detail['cantidad'], $salePrice, $lineSubtotal];
             }
 
             $discount = round((float) ($data['descuento'] ?? 0), 2);
@@ -153,7 +155,7 @@ class VentaController extends Controller
             $sale->update(['numero' => 'V-'.str_pad((string) $sale->id, 8, '0', STR_PAD_LEFT)]);
 
             $allocated = 0;
-            foreach ($items as $index => [$product, $quantity, $lineSubtotal]) {
+            foreach ($items as $index => [$product, $quantity, $salePrice, $lineSubtotal]) {
                 $lineDiscount = $index === array_key_last($items)
                     ? $discount - $allocated
                     : round($discount * ($lineSubtotal / $subtotal), 2);
@@ -167,7 +169,7 @@ class VentaController extends Controller
                     'unidad' => $product->unidad,
                     'foto' => $product->foto,
                     'precio_compra' => $product->precio_compra,
-                    'precio_venta' => $product->precio_venta,
+                    'precio_venta' => $salePrice,
                     'cantidad' => $quantity,
                     'subtotal' => $lineSubtotal,
                     'descuento' => $lineDiscount,
