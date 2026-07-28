@@ -157,7 +157,7 @@ class UserController extends Controller
 
     public function uploadAvatar(Request $request, $id)
     {
-        $this->requirePermission($request, 'Editar Usuarios');
+        $this->requirePermission($request, ['Crear Usuarios', 'Editar Usuarios']);
 
         $request->validate(['avatar' => 'required|image|max:8192']);
 

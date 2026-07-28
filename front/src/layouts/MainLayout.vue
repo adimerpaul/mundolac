@@ -128,6 +128,8 @@ const links = [
   { title: 'Inicio',    icon: 'dashboard',   link: '/',         can: null },
   { title: 'Usuarios',  icon: 'people',      link: '/usuarios', can: 'Ver Usuarios' },
   { title: 'Productos', icon: 'inventory_2', link: '/productos', can: 'Ver Productos' },
+  { title: 'Nueva venta', icon: 'point_of_sale', link: '/ventas/nueva', can: 'Crear Ventas' },
+  { title: 'Ventas', icon: 'receipt_long', link: '/ventas', can: 'Ver Ventas' },
 ]
 
 const visibleLinks = computed(() =>

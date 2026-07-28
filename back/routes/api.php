@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'login']);
@@ -32,4 +33,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/productos/{producto}/foto', [ProductoController::class, 'uploadPhoto']);
     Route::post('/productos/{producto}/foto-url', [ProductoController::class, 'uploadPhotoFromUrl']);
     Route::delete('/productos/{producto}', [ProductoController::class, 'destroy']);
+
+    Route::get('/ventas', [VentaController::class, 'index']);
+    Route::post('/ventas', [VentaController::class, 'store']);
+    Route::get('/ventas-resumen', [VentaController::class, 'summary']);
+    Route::get('/dashboard', [VentaController::class, 'dashboard']);
+    Route::get('/ventas-exportar/excel', [VentaController::class, 'exportExcel']);
+    Route::get('/ventas-exportar/pdf', [VentaController::class, 'exportPdf']);
+    Route::get('/ventas/{venta}', [VentaController::class, 'show']);
+    Route::put('/ventas/{venta}/anular', [VentaController::class, 'cancel']);
 });
