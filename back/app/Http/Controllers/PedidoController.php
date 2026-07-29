@@ -97,6 +97,13 @@ class PedidoController extends Controller
             ->download('pedidos_'.now()->format('Ymd_His').'.pdf');
     }
 
+    public function printData(Request $request)
+    {
+        $this->authorizeAction($request, 'Ver Pedidos');
+        return response()->json($this->filteredQuery($request)
+            ->with('detalles')->latest('fecha')->limit(500)->get());
+    }
+
     private function filteredQuery(Request $request)
     {
         $query = Pedido::query();

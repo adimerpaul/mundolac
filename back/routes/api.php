@@ -71,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pedidos', [PedidoController::class, 'store']);
     Route::get('/pedidos-exportar/excel', [PedidoController::class, 'exportExcel']);
     Route::get('/pedidos-exportar/pdf', [PedidoController::class, 'exportPdf']);
+    Route::get('/pedidos-imprimir', [PedidoController::class, 'printData']);
     Route::get('/pedidos/{pedido}', [PedidoController::class, 'show']);
     Route::put('/pedidos/{pedido}/estado', [PedidoController::class, 'status']);
 });
