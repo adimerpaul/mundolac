@@ -130,6 +130,12 @@ const links = [
   { title: 'Productos', icon: 'inventory_2', link: '/productos', can: 'Ver Productos' },
   { title: 'Nueva venta', icon: 'point_of_sale', link: '/ventas/nueva', can: 'Crear Ventas' },
   { title: 'Ventas', icon: 'receipt_long', link: '/ventas', can: 'Ver Ventas' },
+  { title: 'Nueva compra', icon: 'add_business', link: '/compras/nueva', can: 'Crear Compras' },
+  { title: 'Compras', icon: 'shopping_bag', link: '/compras', can: 'Ver Compras' },
+  { title: 'Proveedores', icon: 'groups', link: '/proveedores', can: 'Ver Compras' },
+  { title: 'Por vencer', icon: 'schedule', link: '/productos/por-vencer', can: 'Ver Compras' },
+  { title: 'Vencidos', icon: 'event_busy', link: '/productos/vencidos', can: 'Ver Compras' },
+  { title: 'Configuración', icon: 'settings', link: '/configuracion', can: 'Gestionar Configuración' },
 ]
 
 const visibleLinks = computed(() =>
