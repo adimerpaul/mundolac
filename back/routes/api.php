@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
@@ -58,4 +60,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/vencimientos', [CompraController::class, 'vencimientos']);
     Route::put('/configuracion', [ConfiguracionController::class, 'update']);
     Route::post('/configuracion/logo', [ConfiguracionController::class, 'uploadLogo']);
+    Route::get('/clientes', [ClienteController::class, 'index']);
+    Route::post('/clientes', [ClienteController::class, 'store']);
+    Route::get('/clientes/{cliente}', [ClienteController::class, 'show']);
+    Route::put('/clientes/{cliente}', [ClienteController::class, 'update']);
+    Route::delete('/clientes/{cliente}', [ClienteController::class, 'destroy']);
+    Route::post('/clientes/{cliente}/foto', [ClienteController::class, 'uploadPhoto']);
+    Route::get('/pedidos-clientes', [PedidoController::class, 'clients']);
+    Route::get('/pedidos', [PedidoController::class, 'index']);
+    Route::post('/pedidos', [PedidoController::class, 'store']);
+    Route::get('/pedidos-exportar/excel', [PedidoController::class, 'exportExcel']);
+    Route::get('/pedidos-exportar/pdf', [PedidoController::class, 'exportPdf']);
+    Route::get('/pedidos/{pedido}', [PedidoController::class, 'show']);
+    Route::put('/pedidos/{pedido}/estado', [PedidoController::class, 'status']);
 });

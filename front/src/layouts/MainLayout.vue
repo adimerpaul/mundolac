@@ -135,6 +135,10 @@ const links = [
   { title: 'Proveedores', icon: 'groups', link: '/proveedores', can: 'Ver Compras' },
   { title: 'Por vencer', icon: 'schedule', link: '/productos/por-vencer', can: 'Ver Compras' },
   { title: 'Vencidos', icon: 'event_busy', link: '/productos/vencidos', can: 'Ver Compras' },
+  { title: 'Clientes', icon: 'person_pin_circle', link: '/clientes', can: 'Ver Clientes' },
+  { title: 'Mapa de clientes', icon: 'map', link: '/clientes/mapa', can: 'Ver Clientes' },
+  { title: 'Crear pedido', icon: 'add_location_alt', link: '/pedidos/nuevo', can: 'Crear Pedidos' },
+  { title: 'Pedidos', icon: 'assignment', link: '/pedidos', can: 'Ver Pedidos' },
   { title: 'Configuración', icon: 'settings', link: '/configuracion', can: 'Gestionar Configuración' },
 ]
 

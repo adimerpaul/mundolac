@@ -16,6 +16,10 @@ const routes = [
       { path: 'compras/nueva', component: () => import('pages/compras/NuevaPage.vue') },
       { path: 'proveedores', component: () => import('pages/proveedores/IndexPage.vue') },
       { path: 'configuracion', component: () => import('pages/configuracion/IndexPage.vue') },
+      { path: 'clientes', component: () => import('pages/clientes/IndexPage.vue') },
+      { path: 'clientes/mapa', component: () => import('pages/clientes/MapaPage.vue') },
+      { path: 'pedidos', component: () => import('pages/pedidos/IndexPage.vue') },
+      { path: 'pedidos/nuevo', component: () => import('pages/pedidos/CrearPage.vue') },
       { path: 'productos/por-vencer', component: () => import('pages/compras/VencimientosPage.vue'), props: { estado: 'por_vencer' } },
       { path: 'productos/vencidos', component: () => import('pages/compras/VencimientosPage.vue'), props: { estado: 'vencido' } }
     ]
