@@ -21,6 +21,10 @@ export default defineBoot(({ app, router }) => {
   app.config.globalProperties.$imgBase = (import.meta.env.VITE_API_BACK || '').replace(/\/api\/?$/, '')
   app.config.globalProperties.$version = import.meta.env.VITE_VERSION
 
+  app.config.globalProperties.$axios.get('/configuracion')
+    .then(({ data }) => store.setCompany(data))
+    .catch(() => { /* Se mantienen los datos predeterminados. */ })
+
   const token = localStorage.getItem('tokenMundolac')
   if (token) {
     app.config.globalProperties.$axios.defaults.headers.common['Authorization'] = `Bearer ${token}`

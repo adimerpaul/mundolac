@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
+    "@quasar/icongenie": "^6.1.2",
     "apexcharts": "^6.6.1",
     "axios": "^1.2.1",
     "leaflet": "^1.9.4",

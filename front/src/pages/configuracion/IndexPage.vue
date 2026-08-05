@@ -111,7 +111,10 @@ watch(logo, file => {
 
 function load () {
   logo.value = null
-  proxy.$axios.get('/configuracion').then(({ data }) => Object.assign(form, data))
+  proxy.$axios.get('/configuracion').then(({ data }) => {
+    Object.assign(form, data)
+    proxy.$store.setCompany(data)
+  })
 }
 
 function fileRejected () {
@@ -123,11 +126,13 @@ async function save () {
   try {
     const { data } = await proxy.$axios.put('/configuracion', form)
     Object.assign(form, data)
+    proxy.$store.setCompany(data)
     if (logo.value) {
       const body = new FormData()
       body.append('logo', logo.value)
       const response = await proxy.$axios.post('/configuracion/logo', body)
       Object.assign(form, response.data)
+      proxy.$store.setCompany(response.data)
       logo.value = null
     }
     proxy.$alert.success('Configuración guardada correctamente')
