@@ -8,9 +8,10 @@
           <q-card flat bordered class="login-card">
 
             <q-card-section class="q-pt-lg text-center">
-              <q-icon name="storefront" color="primary" size="64px" class="q-mb-sm" />
+              <img v-if="companyLogoUrl" :src="companyLogoUrl" :alt="companyName" class="login-logo q-mb-sm" />
+              <q-icon v-else name="storefront" color="primary" size="64px" class="q-mb-sm" />
               <div class="text-subtitle2 text-grey-7">
-                <b>Mundolac</b> · Sistema de gestión
+                <b>{{ companyName }}</b> · Sistema de gestión
               </div>
             </q-card-section>
 
@@ -50,7 +51,7 @@
               <q-card-section class="q-pt-none text-center">
                 <q-separator spaced />
                 <div class="text-caption text-grey-6">
-                  © {{ year }} Mundolac. Todos los derechos reservados.
+                  © {{ year }} {{ companyName }}. Todos los derechos reservados.
                 </div>
               </q-card-section>
             </template>
@@ -125,6 +126,10 @@ const loadingChange          = ref(false)
 let   tempToken              = ''
 
 const year = computed(() => new Date().getFullYear())
+const companyName = computed(() => proxy.$store.company.nombre_empresa || 'Mundolac')
+const companyLogoUrl = computed(() => proxy.$store.company.logo
+  ? `${proxy.$imgBase}/images/${proxy.$store.company.logo}`
+  : '')
 
 function login () {
   loading.value = true
@@ -208,5 +213,14 @@ function cambiarPassword () {
   width: 100%;
   min-width: 0;
   overflow: hidden;
+}
+.login-logo {
+  display: block;
+  width: auto;
+  max-width: 220px;
+  height: 72px;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

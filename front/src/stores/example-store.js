@@ -5,6 +5,10 @@ export const useCounterStore = defineStore('counter', {
     isLogged: false,
     user: {},
     permissions: [],
+    company: {
+      nombre_empresa: 'Mundolac',
+      logo: null,
+    },
   }),
 
   getters: {
@@ -15,6 +19,10 @@ export const useCounterStore = defineStore('counter', {
   },
 
   actions: {
+    setCompany (company = {}) {
+      this.company = { ...this.company, ...company }
+    },
+
     logout () {
       this.isLogged = false
       this.user = {}

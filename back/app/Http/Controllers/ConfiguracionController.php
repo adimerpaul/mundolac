@@ -9,7 +9,11 @@ class ConfiguracionController extends Controller
 {
     public function show()
     {
-        return response()->json(Configuracion::firstOrCreate([], ['nombre_empresa' => 'Mundolac']));
+        return response()->json(Configuracion::firstOrCreate([], [
+            'nombre_empresa' => 'Mundolac',
+            'titulo_web' => 'Productos para tu negocio al mejor precio',
+            'whatsapp' => '+591 73809946',
+        ]));
     }
 
     public function update(Request $request)
@@ -18,9 +22,16 @@ class ConfiguracionController extends Controller
         $data = $request->validate([
             'nombre_empresa' => ['required', 'string', 'max:150'], 'nit' => ['nullable', 'string', 'max:50'],
             'direccion' => ['nullable', 'string', 'max:255'], 'telefono' => ['nullable', 'string', 'max:80'],
+            'titulo_web' => ['required', 'string', 'max:180'],
+            'whatsapp' => ['required', 'string', 'max:30', 'regex:/^\+?[0-9 ]+$/'],
         ]);
-        $config = Configuracion::firstOrCreate([], ['nombre_empresa' => 'Mundolac']);
+        $config = Configuracion::firstOrCreate([], [
+            'nombre_empresa' => 'Mundolac',
+            'titulo_web' => 'Productos para tu negocio al mejor precio',
+            'whatsapp' => '+591 73809946',
+        ]);
         $config->update($data);
+
         return response()->json($config);
     }
 
@@ -31,17 +42,26 @@ class ConfiguracionController extends Controller
         $config = Configuracion::firstOrCreate([], ['nombre_empresa' => 'Mundolac']);
         $image = imagecreatefromstring(file_get_contents($request->file('logo')->getPathname()));
         abort_unless($image, 422, 'No se pudo procesar el logotipo');
-        $width = imagesx($image); $height = imagesy($image); $scale = min(1, 800 / max($width, $height));
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $scale = min(1, 800 / max($width, $height));
         $output = imagecreatetruecolor((int) ($width * $scale), (int) ($height * $scale));
-        imagealphablending($output, false); imagesavealpha($output, true);
+        imagealphablending($output, false);
+        imagesavealpha($output, true);
         imagecopyresampled($output, $image, 0, 0, 0, 0, imagesx($output), imagesy($output), $width, $height);
         $directory = public_path('images/empresa');
-        if (! is_dir($directory)) mkdir($directory, 0755, true);
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
         $filename = 'empresa/logo_'.time().'.webp';
         imagewebp($output, public_path('images/'.$filename), 88);
-        imagedestroy($image); imagedestroy($output);
-        if ($config->logo && is_file(public_path('images/'.$config->logo))) unlink(public_path('images/'.$config->logo));
+        imagedestroy($image);
+        imagedestroy($output);
+        if ($config->logo && is_file(public_path('images/'.$config->logo))) {
+            unlink(public_path('images/'.$config->logo));
+        }
         $config->update(['logo' => $filename]);
+
         return response()->json($config->fresh());
     }
 }

@@ -14,7 +14,7 @@
         />
         <div class="row items-center q-gutter-sm">
           <div class="text-subtitle1 text-weight-medium" style="line-height: 0.9">
-            Mundolac
+            {{ companyName }}
           </div>
         </div>
 
@@ -63,10 +63,11 @@
         <div class="drawer-shell">
           <div class="drawer-brand">
             <div class="drawer-brand__logo">
-              <q-icon name="storefront" size="17px" />
+              <img v-if="companyLogoUrl" :src="companyLogoUrl" :alt="companyName" />
+              <q-icon v-else name="storefront" size="17px" />
             </div>
             <div class="drawer-brand__text">
-              <div class="drawer-brand__title">Mundolac</div>
+              <div class="drawer-brand__title">{{ companyName }}</div>
               <div class="drawer-brand__caption">Sistema de gestión</div>
             </div>
           </div>
@@ -94,8 +95,8 @@
           </q-list>
 
           <div class="drawer-footer">
-            <div>Mundolac v{{ $version }}</div>
-            <div>© {{ new Date().getFullYear() }} Mundolac</div>
+            <div>{{ companyName }} v{{ $version }}</div>
+            <div>© {{ new Date().getFullYear() }} {{ companyName }}</div>
           </div>
 
           <q-item clickable class="drawer-logout" @click="logout">
@@ -123,6 +124,10 @@ import { computed, getCurrentInstance, ref } from 'vue'
 const { proxy } = getCurrentInstance()
 
 const leftDrawerOpen = ref(false)
+const companyName = computed(() => proxy.$store.company.nombre_empresa || 'Mundolac')
+const companyLogoUrl = computed(() => proxy.$store.company.logo
+  ? `${proxy.$imgBase}/images/${proxy.$store.company.logo}`
+  : '')
 
 const links = [
   { title: 'Inicio',    icon: 'dashboard',   link: '/',         can: null },
@@ -205,6 +210,13 @@ function logout () {
   background: linear-gradient(135deg, #42a5f5, #1565c0);
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.drawer-brand__logo img {
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+  object-fit: contain;
 }
 
 .drawer-brand__title {

@@ -8,5 +8,5 @@ class Configuracion extends Model
 {
     protected $table = 'configuraciones';
 
-    protected $fillable = ['nombre_empresa', 'nit', 'direccion', 'telefono', 'logo'];
+    protected $fillable = ['nombre_empresa', 'nit', 'direccion', 'telefono', 'logo', 'titulo_web', 'whatsapp'];
 }

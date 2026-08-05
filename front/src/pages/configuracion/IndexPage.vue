@@ -69,6 +69,20 @@
             </q-card-section>
 
             <q-separator/>
+            <q-card-section>
+              <div class="section-title"><q-icon name="language" color="primary"/><span>Página web</span></div>
+              <div class="text-caption text-grey-7 q-mb-md">Configura el título público y el único número de WhatsApp que recibirá los pedidos de la página web.</div>
+              <div class="row q-col-gutter-md">
+                <q-input v-model="form.titulo_web" outlined label="Título principal de la página *" class="col-12" :rules="[v=>!!v||'El título es requerido']">
+                  <template #prepend><q-icon name="title"/></template>
+                </q-input>
+                <q-input v-model="form.whatsapp" outlined label="Número de WhatsApp *" hint="Incluye el código de país. Ejemplo: +591 73809946" class="col-12" :rules="[v=>!!v||'El número de WhatsApp es requerido',v=>/^\+?[0-9 ]+$/.test(v)||'Use solamente números, espacios y el signo +']">
+                  <template #prepend><q-icon name="chat" color="positive"/></template>
+                </q-input>
+              </div>
+            </q-card-section>
+
+            <q-separator/>
             <q-card-section class="company-summary">
               <q-avatar rounded size="52px" color="blue-1" text-color="primary">
                 <img v-if="previewUrl" :src="previewUrl" class="summary-logo"/>
@@ -95,7 +109,7 @@
 import { computed, getCurrentInstance, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
 const { proxy } = getCurrentInstance()
-const form = reactive({ nombre_empresa: 'Mundolac', nit: '', telefono: '', direccion: '', logo: null })
+const form = reactive({ nombre_empresa: 'Mundolac', nit: '', telefono: '', direccion: '', logo: null, titulo_web: 'Productos para tu negocio al mejor precio', whatsapp: '+591 73809946' })
 const logo = ref(null)
 const localPreview = ref('')
 const saving = ref(false)
@@ -111,7 +125,10 @@ watch(logo, file => {
 
 function load () {
   logo.value = null
-  proxy.$axios.get('/configuracion').then(({ data }) => Object.assign(form, data))
+  proxy.$axios.get('/configuracion').then(({ data }) => {
+    Object.assign(form, data)
+    proxy.$store.setCompany(data)
+  })
 }
 
 function fileRejected () {
@@ -123,11 +140,13 @@ async function save () {
   try {
     const { data } = await proxy.$axios.put('/configuracion', form)
     Object.assign(form, data)
+    proxy.$store.setCompany(data)
     if (logo.value) {
       const body = new FormData()
       body.append('logo', logo.value)
       const response = await proxy.$axios.post('/configuracion/logo', body)
       Object.assign(form, response.data)
+      proxy.$store.setCompany(response.data)
       logo.value = null
     }
     proxy.$alert.success('Configuración guardada correctamente')

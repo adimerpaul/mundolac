@@ -10,11 +10,13 @@ table{width:100%;border-collapse:collapse}th,td{padding:2px}.right{text-align:ri
 const esc = value => String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
 const money = value => Number(value || 0).toFixed(2)
 
-export function printSale (sale) {
-  const logoUrl = `${window.location.origin}/logo.png`
+export function printSale (sale, company = {}, imageBase = '') {
+  const companyName = company.nombre_empresa || 'Mundolac'
+  const logoUrl = company.logo ? `${imageBase}/images/${company.logo}` : ''
+  const logo = logoUrl ? `<img class="logo" src="${esc(logoUrl)}" alt="${esc(companyName)}">` : ''
   const rows = (sale.detalles || []).map(item => `<tr><td>${esc(item.nombre)}<br><small>${item.cantidad} × ${money(item.precio_venta)}</small></td><td class="right">${money(item.total)}</td></tr>`).join('')
   const element = document.createElement('div')
-  element.innerHTML = `<div class="ticket"><img class="logo" src="${logoUrl}" alt="Mundolac"><h2>MUNDOLAC</h2><div class="center">COMPROBANTE DE VENTA</div><div class="line"></div>
+  element.innerHTML = `<div class="ticket">${logo}<h2>${esc(companyName).toUpperCase()}</h2><div class="center">COMPROBANTE DE VENTA</div><div class="line"></div>
   <div><b>${esc(sale.numero)}</b><br>Fecha: ${new Date(sale.fecha).toLocaleString('es-BO')}<br>Cajero: ${esc(sale.usuario_nombre)}<br>Pago: ${esc(sale.tipo_pago)}</div>
   <div class="line"></div><table><thead><tr><th>Producto</th><th class="right">Total</th></tr></thead><tbody>${rows}</tbody></table><div class="line"></div>
   <table><tr><td>Subtotal</td><td class="right">${money(sale.subtotal)}</td></tr><tr><td>Descuento</td><td class="right">-${money(sale.descuento)}</td></tr>

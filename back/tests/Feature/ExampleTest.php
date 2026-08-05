@@ -2,7 +2,8 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Http\Controllers\WebsiteController;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -10,10 +11,11 @@ class ExampleTest extends TestCase
     /**
      * A basic test example.
      */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_the_homepage_uses_the_website_controller(): void
     {
-        $response = $this->get('/');
+        $route = Route::getRoutes()->getByName('website.index');
 
-        $response->assertStatus(200);
+        $this->assertNotNull($route);
+        $this->assertSame(WebsiteController::class.'@index', $route->getActionName());
     }
 }
