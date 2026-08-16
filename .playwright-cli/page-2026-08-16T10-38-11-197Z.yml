@@ -1,0 +1,655 @@
+- generic [ref=f2e3]:
+  - banner [ref=f2e4]:
+    - toolbar [ref=f2e5]:
+      - button "Menu" [ref=f2e6] [cursor=pointer]:
+        - img [ref=f2e8]: keyboard_double_arrow_left
+      - generic [ref=f2e9]: Mundilac
+      - button "Expandir" [ref=f2e11] [cursor=pointer]:
+        - generic [ref=f2e12]:
+          - generic [ref=f2e13]: admin
+          - generic [ref=f2e19]: expand_more
+  - complementary [ref=f2e20]:
+    - generic [ref=f2e25]:
+      - generic [ref=f2e26]:
+        - img "Mundilac" [ref=f2e28]
+        - generic [ref=f2e29]:
+          - generic [ref=f2e30]: Mundilac
+          - generic [ref=f2e31]: Sistema de gestión
+      - generic [ref=f2e32]: Módulos
+      - list [ref=f2e33]:
+        - link "Inicio" [ref=f2e34] [cursor=pointer]:
+          - /url: /
+          - generic [ref=f2e35]: dashboard
+        - link "Usuarios" [ref=f2e39] [cursor=pointer]:
+          - /url: /usuarios
+          - generic [ref=f2e40]: people
+        - link "Productos" [ref=f2e44] [cursor=pointer]:
+          - /url: /productos
+          - generic [ref=f2e45]: inventory_2
+        - link "Nueva venta" [ref=f2e49] [cursor=pointer]:
+          - /url: /ventas/nueva
+          - generic [ref=f2e50]: point_of_sale
+        - link "Ventas" [ref=f2e54] [cursor=pointer]:
+          - /url: /ventas
+          - generic [ref=f2e55]: receipt_long
+        - link "Productos vendidos" [ref=f2e59] [cursor=pointer]:
+          - /url: /reportes/productos-vendidos
+          - generic [ref=f2e60]: leaderboard
+        - link "Nueva compra" [ref=f2e64] [cursor=pointer]:
+          - /url: /compras/nueva
+          - generic [ref=f2e65]: add_business
+        - link "Compras" [ref=f2e69] [cursor=pointer]:
+          - /url: /compras
+          - generic [ref=f2e70]: shopping_bag
+        - link "Proveedores" [ref=f2e74] [cursor=pointer]:
+          - /url: /proveedores
+          - generic [ref=f2e75]: groups
+        - link "Por vencer" [ref=f2e79] [cursor=pointer]:
+          - /url: /productos/por-vencer
+          - generic [ref=f2e80]: schedule
+        - link "Vencidos" [ref=f2e84] [cursor=pointer]:
+          - /url: /productos/vencidos
+          - generic [ref=f2e85]: event_busy
+        - link "Clientes" [ref=f2e89] [cursor=pointer]:
+          - /url: /clientes
+          - generic [ref=f2e90]: person_pin_circle
+        - link "Mapa de clientes" [ref=f2e94] [cursor=pointer]:
+          - /url: /clientes/mapa
+          - generic [ref=f2e95]: map
+        - link "Crear pedido" [ref=f2e99] [cursor=pointer]:
+          - /url: /pedidos/nuevo
+          - generic [ref=f2e100]: add_location_alt
+        - link "Pedidos" [ref=f2e104] [cursor=pointer]:
+          - /url: /pedidos
+          - generic [ref=f2e105]: assignment
+        - link "Configuración" [ref=f2e109] [cursor=pointer]:
+          - /url: /configuracion
+          - generic [ref=f2e110]: settings
+      - generic [ref=f2e114]:
+        - generic [ref=f2e115]: Mundilac v1.0.0
+        - generic [ref=f2e116]: © 2026 Mundilac
+      - button "Salir" [ref=f2e117] [cursor=pointer]:
+        - generic [ref=f2e118]: logout
+  - main [ref=f2e123]:
+    - generic [ref=f2e124]:
+      - generic [ref=f2e125]:
+        - generic [ref=f2e126]: Reporte de productos vendidos
+        - generic [ref=f2e127]: Ranking entre fechas por cantidad, ingresos, ganancia y precios
+      - button "Excel" [ref=f2e128] [cursor=pointer]:
+        - generic [ref=f2e129]:
+          - img [ref=f2e130]: table_view
+          - generic [ref=f2e131]: Excel
+    - generic [ref=f2e132]:
+      - generic [ref=f2e133]:
+        - generic [ref=f2e134]: ANÁLISIS RÁPIDO
+        - generic [ref=f2e135]:
+          - button "Más vendidos" [ref=f2e136] [cursor=pointer]:
+            - generic [ref=f2e137]: local_fire_department
+          - button "Menos vendidos" [ref=f2e139] [cursor=pointer]:
+            - generic [ref=f2e140]: trending_down
+          - button "Mayor ingreso" [ref=f2e142] [cursor=pointer]:
+            - generic [ref=f2e143]: payments
+          - button "Mayor ganancia" [active] [ref=f2e145] [cursor=pointer]:
+            - generic [ref=f2e146]: savings
+          - button "Venta más cara" [ref=f2e148] [cursor=pointer]:
+            - generic [ref=f2e149]: arrow_upward
+          - button "Venta más barata" [ref=f2e151] [cursor=pointer]:
+            - generic [ref=f2e152]: arrow_downward
+          - button "Compra más cara" [ref=f2e154] [cursor=pointer]:
+            - generic [ref=f2e155]: shopping_cart
+          - button "Compra más barata" [ref=f2e157] [cursor=pointer]:
+            - generic [ref=f2e158]: shopping_cart_checkout
+      - separator [ref=f2e160]
+      - generic [ref=f2e161]:
+        - generic [ref=f2e162]: PERIODO
+        - generic [ref=f2e163]:
+          - generic [ref=f2e164]:
+            - button "Hoy" [ref=f2e165] [cursor=pointer]
+            - button "7 días" [ref=f2e167] [cursor=pointer]
+            - button "30 días" [ref=f2e169] [cursor=pointer]
+            - button "Este mes" [ref=f2e171] [cursor=pointer]
+            - button "Este año" [ref=f2e173] [cursor=pointer]
+            - button "Todo" [ref=f2e175] [cursor=pointer]
+          - generic [ref=f2e180]:
+            - generic: Desde
+            - textbox "Desde" [ref=f2e181]: 2026-08-01
+          - generic [ref=f2e185]:
+            - generic: Hasta
+            - textbox "Hasta" [ref=f2e186]: 2026-08-16
+          - generic [ref=f2e189] [cursor=pointer]:
+            - generic [ref=f2e190]:
+              - generic: Vendedor
+              - combobox "Vendedor" [ref=f2e192]
+            - generic [ref=f2e193]: arrow_drop_down
+      - separator [ref=f2e195]
+      - generic [ref=f2e196]:
+        - generic [ref=f2e197]:
+          - generic [ref=f2e200]:
+            - generic [ref=f2e201]: search
+            - textbox [ref=f2e204]:
+              - /placeholder: Buscar producto, código o código de barras
+          - generic [ref=f2e207] [cursor=pointer]:
+            - generic [ref=f2e208]:
+              - generic: Categoría
+              - combobox "Categoría" [ref=f2e210]
+            - generic [ref=f2e211]: arrow_drop_down
+          - generic [ref=f2e215] [cursor=pointer]:
+            - generic [ref=f2e216]:
+              - generic: Ordenar por
+              - generic [ref=f2e217]:
+                - generic [ref=f2e218]: Ganancia (Bs)
+                - combobox "Ordenar por" [ref=f2e219]: Ganancia (Bs)
+            - generic [ref=f2e220]: arrow_drop_down
+          - generic [ref=f2e223]:
+            - button [pressed] [ref=f2e224] [cursor=pointer]:
+              - generic [ref=f2e225]: south
+            - button [ref=f2e227] [cursor=pointer]:
+              - generic [ref=f2e228]: north
+        - button "Expandir \"Filtros avanzados\"" [ref=f2e232] [cursor=pointer]:
+          - generic [ref=f2e233]: tune
+          - generic [ref=f2e235]: Filtros avanzados
+          - generic [ref=f2e237]: arrow_drop_down
+    - generic [ref=f2e239]:
+      - generic [ref=f2e242]:
+        - generic [ref=f2e243]: inventory_2
+        - generic [ref=f2e246]:
+          - generic [ref=f2e247]: Productos
+          - generic [ref=f2e248]: "248"
+      - generic [ref=f2e251]:
+        - generic [ref=f2e252]: local_shipping
+        - generic [ref=f2e255]:
+          - generic [ref=f2e256]: Unidades vendidas
+          - generic [ref=f2e257]: "7.313"
+      - generic [ref=f2e260]:
+        - generic [ref=f2e261]: payments
+        - generic [ref=f2e264]:
+          - generic [ref=f2e265]: Total vendido
+          - generic [ref=f2e266]: Bs 42.860,75
+      - generic [ref=f2e269]:
+        - generic [ref=f2e270]: trending_up
+        - generic [ref=f2e273]:
+          - generic [ref=f2e274]: Ganancia
+          - generic [ref=f2e275]: Bs 6.998,07
+    - generic [ref=f2e276]:
+      - generic [ref=f2e277]:
+        - generic [ref=f2e278]: Top 10 · Ganancia
+        - generic [ref=f2e279]: Del 01/08/2026 al 16/08/2026
+      - generic [ref=f2e282]:
+        - 'application "bar chart with 1 data series: Ganancia" [ref=f2e283]':
+          - generic [ref=f2e285]:
+            - generic [ref=f2e302]:
+              - generic "LECHE ENTERA EN POLVO 2000G" [ref=f2e303]
+              - generic "CHICOLAC 120ML" [ref=f2e304]
+              - generic "YOGURT DELIZIA FRUTILLA 2L" [ref=f2e305]
+              - generic "LECHE ENTERA 1.100ML" [ref=f2e306]
+              - generic "LECHE EVAPORADA EN BOLSA 400 ML" [ref=f2e307]: LECHE EVAPORADA EN BOLSA ...
+              - generic "YOGURT FRUTADO PIL FRUTILLA 140G" [ref=f2e308]: YOGURT FRUTADO PIL FRUTILL...
+              - generic "YOGURT FRUTADO COCO 700G" [ref=f2e309]
+              - generic "YOGURT DELIZIA MORA 2L" [ref=f2e310]
+              - generic "LECHE DESLACTOSADA PIL 800 ML" [ref=f2e311]: LECHE DESLACTOSADA PIL 800...
+              - generic "LECHE ENTERA EN POLVO 760 GR" [ref=f2e312]: LECHE ENTERA EN POLVO 760...
+            - generic [ref=f2e314]:
+              - generic "Bs 1600" [ref=f2e315]
+              - generic "Bs 1400" [ref=f2e316]
+              - generic "Bs 1200" [ref=f2e317]
+              - generic "Bs 1000" [ref=f2e318]
+              - generic "Bs 800" [ref=f2e319]
+              - generic "Bs 600" [ref=f2e320]
+              - generic "Bs 400" [ref=f2e321]
+              - generic "Bs 200" [ref=f2e322]
+              - generic "Bs 0" [ref=f2e323]
+        - status [ref=f2e324]
+        - tooltip
+    - generic [ref=f2e326]:
+      - table [ref=f2e328]:
+        - rowgroup [ref=f2e329]:
+          - row [ref=f2e330]:
+            - columnheader "#" [ref=f2e331]
+            - columnheader "Producto" [ref=f2e332] [cursor=pointer]:
+              - text: Producto
+              - generic [ref=f2e333]: arrow_upward
+            - columnheader "Categoría" [ref=f2e334]
+            - columnheader "Cantidad" [ref=f2e335] [cursor=pointer]:
+              - generic [ref=f2e336]: arrow_upward
+              - text: Cantidad
+            - columnheader "P. compra" [ref=f2e337] [cursor=pointer]:
+              - generic [ref=f2e338]: arrow_upward
+              - text: P. compra
+            - columnheader "P. venta" [ref=f2e339] [cursor=pointer]:
+              - generic [ref=f2e340]: arrow_upward
+              - text: P. venta
+            - columnheader "Margen" [ref=f2e341] [cursor=pointer]:
+              - generic [ref=f2e342]: arrow_upward
+              - text: Margen
+            - columnheader "Descuento" [ref=f2e343]
+            - columnheader "Total vendido" [ref=f2e344] [cursor=pointer]:
+              - generic [ref=f2e345]: arrow_upward
+              - text: Total vendido
+            - columnheader "Ganancia" [ref=f2e346] [cursor=pointer]:
+              - generic [ref=f2e347]: arrow_upward
+              - text: Ganancia
+            - columnheader "Stock" [ref=f2e348] [cursor=pointer]:
+              - text: Stock
+              - generic [ref=f2e349]: arrow_upward
+            - columnheader "Última venta" [ref=f2e350] [cursor=pointer]:
+              - text: Última venta
+              - generic [ref=f2e351]: arrow_upward
+        - rowgroup [ref=f2e352]:
+          - row [ref=f2e353]:
+            - cell [ref=f2e354]:
+              - status [ref=f2e355]: "1"
+            - cell "LECHE ENTERA EN POLVO 2000G F02000 · UNIDAD" [ref=f2e356]:
+              - generic [ref=f2e361]:
+                - generic [ref=f2e362]: LECHE ENTERA EN POLVO 2000G
+                - generic [ref=f2e363]: F02000 · UNIDAD
+            - cell "LECHES" [ref=f2e364]
+            - cell "58 29 venta(s)" [ref=f2e367]:
+              - text: "58"
+              - generic [ref=f2e368]: 29 venta(s)
+            - cell "Bs 163,40" [ref=f2e369]
+            - cell "Bs 189,83" [ref=f2e370]
+            - cell "Bs 26,43" [ref=f2e371]
+            - cell "Bs 0,00" [ref=f2e372]
+            - cell "Bs 11.010,00" [ref=f2e373]
+            - cell "Bs 1.532,80" [ref=f2e374]
+            - cell [ref=f2e375]:
+              - status [ref=f2e376]: "61"
+            - cell "15/8/2026, 7:05:34 p. m." [ref=f2e377]
+          - row [ref=f2e378]:
+            - cell [ref=f2e379]:
+              - status [ref=f2e380]: "2"
+            - cell "CHICOLAC 120ML CH001 · UNIDAD" [ref=f2e381]:
+              - generic [ref=f2e386]:
+                - generic [ref=f2e387]: CHICOLAC 120ML
+                - generic [ref=f2e388]: CH001 · UNIDAD
+            - cell "LECHES" [ref=f2e389]
+            - cell "1.166 136 venta(s)" [ref=f2e392]:
+              - text: "1.166"
+              - generic [ref=f2e393]: 136 venta(s)
+            - cell "Bs 1,10" [ref=f2e394]
+            - cell "Bs 1,45" [ref=f2e395]
+            - cell "Bs 0,34" [ref=f2e396]
+            - cell "Bs 0,00" [ref=f2e397]
+            - cell "Bs 1.688,00" [ref=f2e398]
+            - cell "Bs 400,93" [ref=f2e399]
+            - cell [ref=f2e400]:
+              - status [ref=f2e401]: "695"
+            - cell "15/8/2026, 8:23:06 p. m." [ref=f2e402]
+          - row [ref=f2e403]:
+            - cell [ref=f2e404]:
+              - status [ref=f2e405]: "3"
+            - cell "YOGURT DELIZIA FRUTILLA 2L D3146 · UNIDAD" [ref=f2e406]:
+              - generic [ref=f2e411]:
+                - generic [ref=f2e412]: YOGURT DELIZIA FRUTILLA 2L
+                - generic [ref=f2e413]: D3146 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e414]
+            - cell "12 12 venta(s)" [ref=f2e417]:
+              - text: "12"
+              - generic [ref=f2e418]: 12 venta(s)
+            - cell "Bs 11,21" [ref=f2e419]
+            - cell "Bs 29,00" [ref=f2e420]
+            - cell "Bs 17,79" [ref=f2e421]
+            - cell "Bs 0,00" [ref=f2e422]
+            - cell "Bs 348,00" [ref=f2e423]
+            - cell "Bs 213,50" [ref=f2e424]
+            - cell [ref=f2e425]:
+              - status [ref=f2e426]: "12"
+            - cell "15/8/2026, 1:06:57 p. m." [ref=f2e427]
+          - row [ref=f2e428]:
+            - cell [ref=f2e429]:
+              - status [ref=f2e430]: "4"
+            - cell "LECHE ENTERA 1.100ML F1100 · UNIDAD" [ref=f2e431]:
+              - generic [ref=f2e436]:
+                - generic [ref=f2e437]: LECHE ENTERA 1.100ML
+                - generic [ref=f2e438]: F1100 · UNIDAD
+            - cell "LECHES" [ref=f2e439]
+            - cell "134 56 venta(s)" [ref=f2e442]:
+              - text: "134"
+              - generic [ref=f2e443]: 56 venta(s)
+            - cell "Bs 10,60" [ref=f2e444]
+            - cell "Bs 11,94" [ref=f2e445]
+            - cell "Bs 1,34" [ref=f2e446]
+            - cell "Bs 0,00" [ref=f2e447]
+            - cell "Bs 1.600,00" [ref=f2e448]
+            - cell "Bs 179,60" [ref=f2e449]
+            - cell [ref=f2e450]:
+              - status [ref=f2e451]: "23"
+            - cell "15/8/2026, 7:18:03 p. m." [ref=f2e452]
+          - row [ref=f2e453]:
+            - cell [ref=f2e454]:
+              - status [ref=f2e455]: "5"
+            - cell "LECHE EVAPORADA EN BOLSA 400 ML EVPAIIE888 · ML" [ref=f2e456]:
+              - generic [ref=f2e461]:
+                - generic [ref=f2e462]: LECHE EVAPORADA EN BOLSA 400 ML
+                - generic [ref=f2e463]: EVPAIIE888 · ML
+            - cell "LECHES" [ref=f2e464]
+            - cell "11 7 venta(s)" [ref=f2e467]:
+              - text: "11"
+              - generic [ref=f2e468]: 7 venta(s)
+            - cell "Bs 0,00" [ref=f2e469]
+            - cell "Bs 15,50" [ref=f2e470]
+            - cell "Bs 15,50" [ref=f2e471]
+            - cell "Bs 0,00" [ref=f2e472]
+            - cell "Bs 170,50" [ref=f2e473]
+            - cell "Bs 170,50" [ref=f2e474]
+            - cell [ref=f2e475]:
+              - status [ref=f2e476]: "14"
+            - cell "15/8/2026, 12:36:35 p. m." [ref=f2e477]
+          - row [ref=f2e478]:
+            - cell [ref=f2e479]:
+              - status [ref=f2e480]: "6"
+            - cell "YOGURT FRUTADO PIL FRUTILLA 140G F02082 · UNIDAD" [ref=f2e481]:
+              - generic [ref=f2e486]:
+                - generic [ref=f2e487]: YOGURT FRUTADO PIL FRUTILLA 140G
+                - generic [ref=f2e488]: F02082 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e489]
+            - cell "40 17 venta(s)" [ref=f2e492]:
+              - text: "40"
+              - generic [ref=f2e493]: 17 venta(s)
+            - cell "Bs 1,00" [ref=f2e494]
+            - cell "Bs 5,18" [ref=f2e495]
+            - cell "Bs 4,17" [ref=f2e496]
+            - cell "Bs 0,00" [ref=f2e497]
+            - cell "Bs 207,00" [ref=f2e498]
+            - cell "Bs 166,85" [ref=f2e499]
+            - cell [ref=f2e500]:
+              - status [ref=f2e501]: "25"
+            - cell "15/8/2026, 4:39:29 p. m." [ref=f2e502]
+          - row [ref=f2e503]:
+            - cell [ref=f2e504]:
+              - status [ref=f2e505]: "7"
+            - cell "YOGURT FRUTADO COCO 700G F02250 · UNIDAD" [ref=f2e506]:
+              - generic [ref=f2e511]:
+                - generic [ref=f2e512]: YOGURT FRUTADO COCO 700G
+                - generic [ref=f2e513]: F02250 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e514]
+            - cell "7 7 venta(s)" [ref=f2e517]:
+              - text: "7"
+              - generic [ref=f2e518]: 7 venta(s)
+            - cell "Bs 0,00" [ref=f2e519]
+            - cell "Bs 22,00" [ref=f2e520]
+            - cell "Bs 22,00" [ref=f2e521]
+            - cell "Bs 0,00" [ref=f2e522]
+            - cell "Bs 154,00" [ref=f2e523]
+            - cell "Bs 154,00" [ref=f2e524]
+            - cell [ref=f2e525]:
+              - status [ref=f2e526]: "9"
+            - cell "15/8/2026, 5:04:39 p. m." [ref=f2e527]
+          - row [ref=f2e528]:
+            - cell [ref=f2e529]:
+              - status [ref=f2e530]: "8"
+            - cell "YOGURT DELIZIA MORA 2L D3148 · UNIDAD" [ref=f2e531]:
+              - generic [ref=f2e536]:
+                - generic [ref=f2e537]: YOGURT DELIZIA MORA 2L
+                - generic [ref=f2e538]: D3148 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e539]
+            - cell "6 6 venta(s)" [ref=f2e542]:
+              - text: "6"
+              - generic [ref=f2e543]: 6 venta(s)
+            - cell "Bs 8,97" [ref=f2e544]
+            - cell "Bs 29,00" [ref=f2e545]
+            - cell "Bs 20,03" [ref=f2e546]
+            - cell "Bs 0,00" [ref=f2e547]
+            - cell "Bs 174,00" [ref=f2e548]
+            - cell "Bs 120,20" [ref=f2e549]
+            - cell [ref=f2e550]:
+              - status [ref=f2e551]: "10"
+            - cell "15/8/2026, 1:59:02 p. m." [ref=f2e552]
+          - row [ref=f2e553]:
+            - cell [ref=f2e554]:
+              - status [ref=f2e555]: "9"
+            - cell "LECHE DESLACTOSADA PIL 800 ML F01017 · ML" [ref=f2e556]:
+              - generic [ref=f2e561]:
+                - generic [ref=f2e562]: LECHE DESLACTOSADA PIL 800 ML
+                - generic [ref=f2e563]: F01017 · ML
+            - cell "LECHES" [ref=f2e564]
+            - cell "125 58 venta(s)" [ref=f2e567]:
+              - text: "125"
+              - generic [ref=f2e568]: 58 venta(s)
+            - cell "Bs 9,13" [ref=f2e569]
+            - cell "Bs 10,00" [ref=f2e570]
+            - cell "Bs 0,87" [ref=f2e571]
+            - cell "Bs 0,00" [ref=f2e572]
+            - cell "Bs 1.250,00" [ref=f2e573]
+            - cell "Bs 108,25" [ref=f2e574]
+            - cell [ref=f2e575]:
+              - status [ref=f2e576]: "215"
+            - cell "15/8/2026, 7:37:21 p. m." [ref=f2e577]
+          - row [ref=f2e578]:
+            - cell [ref=f2e579]:
+              - status [ref=f2e580]: "10"
+            - cell "LECHE ENTERA EN POLVO 760 GR F01550 · GR" [ref=f2e581]:
+              - generic [ref=f2e586]:
+                - generic [ref=f2e587]: LECHE ENTERA EN POLVO 760 GR
+                - generic [ref=f2e588]: F01550 · GR
+            - cell "LECHES" [ref=f2e589]
+            - cell "12 12 venta(s)" [ref=f2e592]:
+              - text: "12"
+              - generic [ref=f2e593]: 12 venta(s)
+            - cell "Bs 66,50" [ref=f2e594]
+            - cell "Bs 75,00" [ref=f2e595]
+            - cell "Bs 8,50" [ref=f2e596]
+            - cell "Bs 0,00" [ref=f2e597]
+            - cell "Bs 900,00" [ref=f2e598]
+            - cell "Bs 102,00" [ref=f2e599]
+            - cell [ref=f2e600]:
+              - status [ref=f2e601]: "22"
+            - cell "15/8/2026, 8:14:14 p. m." [ref=f2e602]
+          - row [ref=f2e603]:
+            - cell [ref=f2e604]:
+              - status [ref=f2e605]: "11"
+            - cell "LECHE PIL NATURAL 900 ML F01231 · ML" [ref=f2e606]:
+              - generic [ref=f2e611]:
+                - generic [ref=f2e612]: LECHE PIL NATURAL 900 ML
+                - generic [ref=f2e613]: F01231 · ML
+            - cell "LECHES" [ref=f2e614]
+            - cell "133 55 venta(s)" [ref=f2e617]:
+              - text: "133"
+              - generic [ref=f2e618]: 55 venta(s)
+            - cell "Bs 8,25" [ref=f2e619]
+            - cell "Bs 9,00" [ref=f2e620]
+            - cell "Bs 0,75" [ref=f2e621]
+            - cell "Bs 0,00" [ref=f2e622]
+            - cell "Bs 1.197,00" [ref=f2e623]
+            - cell "Bs 99,75" [ref=f2e624]
+            - cell [ref=f2e625]:
+              - status [ref=f2e626]: "0"
+            - cell "12/8/2026, 7:53:35 p. m." [ref=f2e627]
+          - row [ref=f2e628]:
+            - cell [ref=f2e629]:
+              - status [ref=f2e630]: "12"
+            - cell "YOGURELLO CHICLE 95ML YG003 · UNIDAD" [ref=f2e631]:
+              - generic [ref=f2e636]:
+                - generic [ref=f2e637]: YOGURELLO CHICLE 95ML
+                - generic [ref=f2e638]: YG003 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e639]
+            - cell "446 105 venta(s)" [ref=f2e642]:
+              - text: "446"
+              - generic [ref=f2e643]: 105 venta(s)
+            - cell "Bs 1,07" [ref=f2e644]
+            - cell "Bs 1,28" [ref=f2e645]
+            - cell "Bs 0,21" [ref=f2e646]
+            - cell "Bs 0,00" [ref=f2e647]
+            - cell "Bs 570,00" [ref=f2e648]
+            - cell "Bs 93,55" [ref=f2e649]
+            - cell [ref=f2e650]:
+              - status [ref=f2e651]: "706"
+            - cell "15/8/2026, 8:23:06 p. m." [ref=f2e652]
+          - row [ref=f2e653]:
+            - cell [ref=f2e654]:
+              - status [ref=f2e655]: "13"
+            - cell "PILFRUT CHERRY PIL ROJO · ML" [ref=f2e656]:
+              - generic [ref=f2e661]:
+                - generic [ref=f2e662]: PILFRUT CHERRY
+                - generic [ref=f2e663]: PIL ROJO · ML
+            - cell "JUGOS Y NÉCTARES" [ref=f2e664]
+            - cell "278 75 venta(s)" [ref=f2e667]:
+              - text: "278"
+              - generic [ref=f2e668]: 75 venta(s)
+            - cell "Bs 1,05" [ref=f2e669]
+            - cell "Bs 1,38" [ref=f2e670]
+            - cell "Bs 0,33" [ref=f2e671]
+            - cell "Bs 0,00" [ref=f2e672]
+            - cell "Bs 382,70" [ref=f2e673]
+            - cell "Bs 90,80" [ref=f2e674]
+            - cell [ref=f2e675]:
+              - status [ref=f2e676]: "0"
+            - cell "13/8/2026, 7:10:24 p. m." [ref=f2e677]
+          - row [ref=f2e678]:
+            - cell [ref=f2e679]:
+              - status [ref=f2e680]: "14"
+            - cell "YOGURT PIL DURAZNO 2KG F02192 · UNIDAD" [ref=f2e681]:
+              - generic [ref=f2e686]:
+                - generic [ref=f2e687]: YOGURT PIL DURAZNO 2KG
+                - generic [ref=f2e688]: F02192 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e689]
+            - cell "3 3 venta(s)" [ref=f2e692]:
+              - text: "3"
+              - generic [ref=f2e693]: 3 venta(s)
+            - cell "Bs 0,00" [ref=f2e694]
+            - cell "Bs 30,00" [ref=f2e695]
+            - cell "Bs 30,00" [ref=f2e696]
+            - cell "Bs 0,00" [ref=f2e697]
+            - cell "Bs 90,00" [ref=f2e698]
+            - cell "Bs 90,00" [ref=f2e699]
+            - cell [ref=f2e700]:
+              - status [ref=f2e701]: "11"
+            - cell "14/8/2026, 8:13:22 p. m." [ref=f2e702]
+          - row [ref=f2e703]:
+            - cell [ref=f2e704]:
+              - status [ref=f2e705]: "15"
+            - cell "YOGURT PIL FRUTILLA 2KG F02197 · UNIDAD" [ref=f2e706]:
+              - generic [ref=f2e711]:
+                - generic [ref=f2e712]: YOGURT PIL FRUTILLA 2KG
+                - generic [ref=f2e713]: F02197 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e714]
+            - cell "3 3 venta(s)" [ref=f2e717]:
+              - text: "3"
+              - generic [ref=f2e718]: 3 venta(s)
+            - cell "Bs 0,00" [ref=f2e719]
+            - cell "Bs 30,00" [ref=f2e720]
+            - cell "Bs 30,00" [ref=f2e721]
+            - cell "Bs 0,00" [ref=f2e722]
+            - cell "Bs 90,00" [ref=f2e723]
+            - cell "Bs 90,00" [ref=f2e724]
+            - cell [ref=f2e725]:
+              - status [ref=f2e726]: "6"
+            - cell "15/8/2026, 4:16:45 p. m." [ref=f2e727]
+          - row [ref=f2e728]:
+            - cell [ref=f2e729]:
+              - status [ref=f2e730]: "16"
+            - cell "YOGURELLO FRUTILLA 95ML YG004 · UNIDAD" [ref=f2e731]:
+              - generic [ref=f2e736]:
+                - generic [ref=f2e737]: YOGURELLO FRUTILLA 95ML
+                - generic [ref=f2e738]: YG004 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e739]
+            - cell "558 96 venta(s)" [ref=f2e742]:
+              - text: "558"
+              - generic [ref=f2e743]: 96 venta(s)
+            - cell "Bs 1,07" [ref=f2e744]
+            - cell "Bs 1,23" [ref=f2e745]
+            - cell "Bs 0,16" [ref=f2e746]
+            - cell "Bs 0,00" [ref=f2e747]
+            - cell "Bs 685,75" [ref=f2e748]
+            - cell "Bs 89,00" [ref=f2e749]
+            - cell [ref=f2e750]:
+              - status [ref=f2e751]: "605"
+            - cell "15/8/2026, 8:23:06 p. m." [ref=f2e752]
+          - row [ref=f2e753]:
+            - cell [ref=f2e754]:
+              - status [ref=f2e755]: "17"
+            - cell "CHIQUICHOC 140ML CH140 · UNIDAD" [ref=f2e756]:
+              - generic [ref=f2e761]:
+                - generic [ref=f2e762]: CHIQUICHOC 140ML
+                - generic [ref=f2e763]: CH140 · UNIDAD
+            - cell "LECHES" [ref=f2e764]
+            - cell "166 41 venta(s)" [ref=f2e767]:
+              - text: "166"
+              - generic [ref=f2e768]: 41 venta(s)
+            - cell "Bs 1,70" [ref=f2e769]
+            - cell "Bs 2,20" [ref=f2e770]
+            - cell "Bs 0,50" [ref=f2e771]
+            - cell "Bs 6,00" [ref=f2e772]
+            - cell "Bs 358,50" [ref=f2e773]
+            - cell "Bs 76,30" [ref=f2e774]
+            - cell [ref=f2e775]:
+              - status [ref=f2e776]: "419"
+            - cell "15/8/2026, 7:05:34 p. m." [ref=f2e777]
+          - row [ref=f2e778]:
+            - cell [ref=f2e779]:
+              - status [ref=f2e780]: "18"
+            - cell "YOGURT FRUTADO FRUTILLA 700G F02249 · UNIDAD" [ref=f2e781]:
+              - generic [ref=f2e786]:
+                - generic [ref=f2e787]: YOGURT FRUTADO FRUTILLA 700G
+                - generic [ref=f2e788]: F02249 · UNIDAD
+            - cell "YOGURES Y KÉFIR" [ref=f2e789]
+            - cell "13 13 venta(s)" [ref=f2e792]:
+              - text: "13"
+              - generic [ref=f2e793]: 13 venta(s)
+            - cell "Bs 16,25" [ref=f2e794]
+            - cell "Bs 22,00" [ref=f2e795]
+            - cell "Bs 5,75" [ref=f2e796]
+            - cell "Bs 0,00" [ref=f2e797]
+            - cell "Bs 286,00" [ref=f2e798]
+            - cell "Bs 74,80" [ref=f2e799]
+            - cell [ref=f2e800]:
+              - status [ref=f2e801]: "3"
+            - cell "15/8/2026, 8:20:04 p. m." [ref=f2e802]
+          - row [ref=f2e803]:
+            - cell [ref=f2e804]:
+              - status [ref=f2e805]: "19"
+            - cell "PILFRUT MANZANA 175ML PF003 · UNIDAD" [ref=f2e806]:
+              - generic [ref=f2e811]:
+                - generic [ref=f2e812]: PILFRUT MANZANA 175ML
+                - generic [ref=f2e813]: PF003 · UNIDAD
+            - cell "JUGOS Y NÉCTARES" [ref=f2e814]
+            - cell "368 91 venta(s)" [ref=f2e817]:
+              - text: "368"
+              - generic [ref=f2e818]: 91 venta(s)
+            - cell "Bs 1,06" [ref=f2e819]
+            - cell "Bs 1,26" [ref=f2e820]
+            - cell "Bs 0,20" [ref=f2e821]
+            - cell "Bs 0,00" [ref=f2e822]
+            - cell "Bs 463,90" [ref=f2e823]
+            - cell "Bs 72,20" [ref=f2e824]
+            - cell [ref=f2e825]:
+              - status [ref=f2e826]: "38"
+            - cell "15/8/2026, 8:23:20 p. m." [ref=f2e827]
+          - row [ref=f2e828]:
+            - cell [ref=f2e829]:
+              - status [ref=f2e830]: "20"
+            - cell "DULCE DE LECHE VASITO 250G F03508 · UNIDAD" [ref=f2e831]:
+              - generic [ref=f2e836]:
+                - generic [ref=f2e837]: DULCE DE LECHE VASITO 250G
+                - generic [ref=f2e838]: F03508 · UNIDAD
+            - cell "POSTRES Y DULCES" [ref=f2e839]
+            - cell "6 6 venta(s)" [ref=f2e842]:
+              - text: "6"
+              - generic [ref=f2e843]: 6 venta(s)
+            - cell "Bs 0,00" [ref=f2e844]
+            - cell "Bs 12,00" [ref=f2e845]
+            - cell "Bs 12,00" [ref=f2e846]
+            - cell "Bs 0,00" [ref=f2e847]
+            - cell "Bs 72,00" [ref=f2e848]
+            - cell "Bs 72,00" [ref=f2e849]
+            - cell [ref=f2e850]:
+              - status [ref=f2e851]: "17"
+            - cell "15/8/2026, 7:11:33 p. m." [ref=f2e852]
+      - generic [ref=f2e853]:
+        - generic [ref=f2e854]:
+          - generic [ref=f2e855]: "Filas por página:"
+          - generic [ref=f2e858] [cursor=pointer]:
+            - generic [ref=f2e860]:
+              - generic [ref=f2e861]: "20"
+              - combobox "20" [ref=f2e862]
+            - generic [ref=f2e863]: arrow_drop_down
+        - generic [ref=f2e865]:
+          - generic [ref=f2e866]: 1-20 de 248
+          - button "Primera página" [disabled] [ref=f2e867]:
+            - img [ref=f2e869]: first_page
+          - button "Página anterior" [disabled] [ref=f2e870]:
+            - img [ref=f2e872]: chevron_left
+          - button "Próxima página" [ref=f2e873] [cursor=pointer]:
+            - img [ref=f2e875]: chevron_right
+          - button "Última página" [ref=f2e876] [cursor=pointer]:
+            - img [ref=f2e878]: last_page

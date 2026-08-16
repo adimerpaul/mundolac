@@ -20,6 +20,7 @@ const routes = [
       { path: 'clientes/mapa', component: () => import('pages/clientes/MapaPage.vue') },
       { path: 'pedidos', component: () => import('pages/pedidos/IndexPage.vue') },
       { path: 'pedidos/nuevo', component: () => import('pages/pedidos/CrearPage.vue') },
+      { path: 'reportes/productos-vendidos', component: () => import('pages/reportes/ProductosVendidosPage.vue') },
       { path: 'productos/por-vencer', component: () => import('pages/compras/VencimientosPage.vue'), props: { estado: 'por_vencer' } },
       { path: 'productos/vencidos', component: () => import('pages/compras/VencimientosPage.vue'), props: { estado: 'vencido' } }
     ]

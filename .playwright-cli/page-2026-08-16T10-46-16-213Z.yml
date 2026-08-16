@@ -1,0 +1,185 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e43]:
+    - banner [ref=e44]:
+      - toolbar [ref=e45]:
+        - button "Menu" [ref=e46] [cursor=pointer]:
+          - img [ref=e48]: keyboard_double_arrow_left
+        - generic [ref=e49]: Mundilac
+        - button "Expandir" [ref=e51] [cursor=pointer]:
+          - generic [ref=e52]:
+            - generic [ref=e53]: admin
+            - generic [ref=e59]: expand_more
+    - complementary [ref=e60]:
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - img "Mundilac" [ref=e68]
+          - generic [ref=e69]:
+            - generic [ref=e70]: Mundilac
+            - generic [ref=e71]: Sistema de gestión
+        - generic [ref=e72]: Módulos
+        - list [ref=e73]:
+          - link "Inicio" [ref=e74] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e75]: dashboard
+          - link "Usuarios" [ref=e79] [cursor=pointer]:
+            - /url: /usuarios
+            - generic [ref=e80]: people
+          - link "Productos" [ref=e84] [cursor=pointer]:
+            - /url: /productos
+            - generic [ref=e85]: inventory_2
+          - link "Nueva venta" [ref=e89] [cursor=pointer]:
+            - /url: /ventas/nueva
+            - generic [ref=e90]: point_of_sale
+          - link "Ventas" [ref=e94] [cursor=pointer]:
+            - /url: /ventas
+            - generic [ref=e95]: receipt_long
+          - link "Productos vendidos" [ref=e99] [cursor=pointer]:
+            - /url: /reportes/productos-vendidos
+            - generic [ref=e100]: leaderboard
+          - link "Nueva compra" [ref=e104] [cursor=pointer]:
+            - /url: /compras/nueva
+            - generic [ref=e105]: add_business
+          - link "Compras" [ref=e109] [cursor=pointer]:
+            - /url: /compras
+            - generic [ref=e110]: shopping_bag
+          - link "Proveedores" [ref=e114] [cursor=pointer]:
+            - /url: /proveedores
+            - generic [ref=e115]: groups
+          - link "Por vencer" [ref=e119] [cursor=pointer]:
+            - /url: /productos/por-vencer
+            - generic [ref=e120]: schedule
+          - link "Vencidos" [ref=e124] [cursor=pointer]:
+            - /url: /productos/vencidos
+            - generic [ref=e125]: event_busy
+          - link "Clientes" [ref=e129] [cursor=pointer]:
+            - /url: /clientes
+            - generic [ref=e130]: person_pin_circle
+          - link "Mapa de clientes" [ref=e134] [cursor=pointer]:
+            - /url: /clientes/mapa
+            - generic [ref=e135]: map
+          - link "Crear pedido" [ref=e139] [cursor=pointer]:
+            - /url: /pedidos/nuevo
+            - generic [ref=e140]: add_location_alt
+          - link "Pedidos" [ref=e144] [cursor=pointer]:
+            - /url: /pedidos
+            - generic [ref=e145]: assignment
+          - link "Configuración" [ref=e149] [cursor=pointer]:
+            - /url: /configuracion
+            - generic [ref=e150]: settings
+        - generic [ref=e154]:
+          - generic [ref=e155]: Mundilac v1.0.0
+          - generic [ref=e156]: © 2026 Mundilac
+        - button "Salir" [ref=e157] [cursor=pointer]:
+          - generic [ref=e158]: logout
+    - main [ref=e163]:
+      - generic [ref=e164]:
+        - generic [ref=e165]:
+          - generic [ref=e166]: Hola, ADMINISTRADOR
+          - generic [ref=e167]: Así está funcionando Mundolac
+        - link "Nueva venta" [ref=e168] [cursor=pointer]:
+          - /url: /ventas/nueva
+          - generic [ref=e169]:
+            - img [ref=e170]: point_of_sale
+            - generic [ref=e171]: Nueva venta
+      - generic [ref=e172]:
+        - generic [ref=e174]:
+          - generic [ref=e175]: payments
+          - generic [ref=e178]:
+            - generic [ref=e179]: Ventas totales
+            - generic [ref=e180]: Bs 0,00
+            - generic [ref=e181]: 0 ventas
+        - generic [ref=e183]:
+          - generic [ref=e184]: trending_up
+          - generic [ref=e187]:
+            - generic [ref=e188]: Ganancia estimada
+            - generic [ref=e189]: Bs 0,00
+            - generic [ref=e190]: Ventas menos costo y descuento
+        - generic [ref=e192]:
+          - generic [ref=e193]: inventory_2
+          - generic [ref=e196]:
+            - generic [ref=e197]: Productos vendidos
+            - generic [ref=e198]: "0"
+            - generic [ref=e199]: Unidades acumuladas
+        - generic [ref=e201]:
+          - generic [ref=e202]: receipt_long
+          - generic [ref=e205]:
+            - generic [ref=e206]: Ticket promedio
+            - generic [ref=e207]: Bs 0,00
+            - generic [ref=e208]: Promedio por venta
+      - generic [ref=e209]:
+        - generic [ref=e211]:
+          - generic [ref=e212]:
+            - generic [ref=e213]: Ventas de los últimos 7 días
+            - generic [ref=e214]: Ingresos diarios en bolivianos
+          - generic [ref=e217]:
+            - 'application "area chart with 1 data series: Ventas" [ref=e218]':
+              - generic [ref=e221]:
+                - generic "Bs 6" [ref=e222]
+                - generic "Bs 5" [ref=e223]
+                - generic "Bs 4" [ref=e224]
+                - generic "Bs 3" [ref=e225]
+                - generic "Bs 2" [ref=e226]
+                - generic "Bs 1" [ref=e227]
+                - generic "Bs 0" [ref=e228]
+            - status [ref=e233]
+        - generic [ref=e235]:
+          - generic [ref=e236]:
+            - generic [ref=e237]: Formas de pago
+            - generic [ref=e238]: Distribución del total vendido
+          - generic [ref=e241]:
+            - application "donut chart with 0 data series" [ref=e242]
+            - status [ref=e244]
+      - generic [ref=e245]:
+        - generic [ref=e247]:
+          - generic [ref=e248]:
+            - generic [ref=e249]: Ventas por usuario
+            - generic [ref=e250]: Total vendido por cada cajero
+          - generic [ref=e253]:
+            - 'application "bar chart with 1 data series: Total vendido" [ref=e254]':
+              - generic [ref=e256]:
+                - generic [ref=e260]:
+                  - generic "0" [ref=e261]
+                  - generic "1" [ref=e262]
+                  - generic "2" [ref=e263]
+                  - generic "3" [ref=e264]
+                  - generic "4" [ref=e265]
+                  - generic "5" [ref=e266]
+                  - generic "6" [ref=e267]
+                  - generic "7" [ref=e268]
+                  - generic "8" [ref=e269]
+                  - generic "9" [ref=e270]
+                  - generic "10" [ref=e271]
+                - generic [ref=e273]:
+                  - generic "Bs 12" [ref=e274]
+                  - generic "Bs 11" [ref=e275]
+                  - generic "Bs 10" [ref=e276]
+                  - generic "Bs 9" [ref=e277]
+                  - generic "Bs 8" [ref=e278]
+                  - generic "Bs 7" [ref=e279]
+                  - generic "Bs 6" [ref=e280]
+                  - generic "Bs 5" [ref=e281]
+                  - generic "Bs 4" [ref=e282]
+                  - generic "Bs 3" [ref=e283]
+                  - generic "Bs 2" [ref=e284]
+                  - generic "Bs 1" [ref=e285]
+                  - generic "Bs 0" [ref=e286]
+            - status [ref=e287]
+        - generic [ref=e289]:
+          - generic [ref=e290]:
+            - generic [ref=e291]:
+              - generic [ref=e292]: Productos más vendidos
+              - generic [ref=e293]: Por cantidad de unidades
+            - link [ref=e294] [cursor=pointer]:
+              - /url: /productos
+              - img [ref=e296]: inventory_2
+          - separator [ref=e297]
+          - list [ref=e298]:
+            - listitem [ref=e299]:
+              - generic [ref=e300]: Todavía no hay productos vendidos
+  - alert [ref=e301]:
+    - generic [ref=e302]:
+      - generic [ref=e303]:
+        - img [ref=e304]: check_circle
+        - generic [ref=e305]: Bienvenido ADMINISTRADOR
+      - button [ref=e308] [cursor=pointer]:
+        - img [ref=e310]: close

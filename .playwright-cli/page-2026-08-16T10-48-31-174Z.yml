@@ -1,0 +1,247 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e3]:
+    - banner [ref=f1e4]:
+      - toolbar [ref=f1e5]:
+        - button "Menu" [ref=f1e6] [cursor=pointer]:
+          - img [ref=f1e8]: keyboard_double_arrow_left
+        - generic [ref=f1e9]: Mundilac
+        - button "Expandir" [ref=f1e11] [cursor=pointer]:
+          - generic [ref=f1e12]:
+            - generic [ref=f1e13]: admin
+            - generic [ref=f1e19]: expand_more
+    - complementary [ref=f1e20]:
+      - generic [ref=f1e25]:
+        - generic [ref=f1e26]:
+          - img "Mundilac" [ref=f1e28]
+          - generic [ref=f1e29]:
+            - generic [ref=f1e30]: Mundilac
+            - generic [ref=f1e31]: Sistema de gestión
+        - generic [ref=f1e32]: Módulos
+        - list [ref=f1e33]:
+          - link "Inicio" [ref=f1e34] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f1e35]: dashboard
+          - link "Usuarios" [ref=f1e39] [cursor=pointer]:
+            - /url: /usuarios
+            - generic [ref=f1e40]: people
+          - link "Productos" [ref=f1e44] [cursor=pointer]:
+            - /url: /productos
+            - generic [ref=f1e45]: inventory_2
+          - link "Nueva venta" [ref=f1e49] [cursor=pointer]:
+            - /url: /ventas/nueva
+            - generic [ref=f1e50]: point_of_sale
+          - link "Ventas" [ref=f1e54] [cursor=pointer]:
+            - /url: /ventas
+            - generic [ref=f1e55]: receipt_long
+          - link "Productos vendidos" [ref=f1e59] [cursor=pointer]:
+            - /url: /reportes/productos-vendidos
+            - generic [ref=f1e60]: leaderboard
+          - link "Nueva compra" [ref=f1e64] [cursor=pointer]:
+            - /url: /compras/nueva
+            - generic [ref=f1e65]: add_business
+          - link "Compras" [ref=f1e69] [cursor=pointer]:
+            - /url: /compras
+            - generic [ref=f1e70]: shopping_bag
+          - link "Proveedores" [ref=f1e74] [cursor=pointer]:
+            - /url: /proveedores
+            - generic [ref=f1e75]: groups
+          - link "Por vencer" [ref=f1e79] [cursor=pointer]:
+            - /url: /productos/por-vencer
+            - generic [ref=f1e80]: schedule
+          - link "Vencidos" [ref=f1e84] [cursor=pointer]:
+            - /url: /productos/vencidos
+            - generic [ref=f1e85]: event_busy
+          - link "Clientes" [ref=f1e89] [cursor=pointer]:
+            - /url: /clientes
+            - generic [ref=f1e90]: person_pin_circle
+          - link "Mapa de clientes" [ref=f1e94] [cursor=pointer]:
+            - /url: /clientes/mapa
+            - generic [ref=f1e95]: map
+          - link "Crear pedido" [ref=f1e99] [cursor=pointer]:
+            - /url: /pedidos/nuevo
+            - generic [ref=f1e100]: add_location_alt
+          - link "Pedidos" [ref=f1e104] [cursor=pointer]:
+            - /url: /pedidos
+            - generic [ref=f1e105]: assignment
+          - link "Configuración" [ref=f1e109] [cursor=pointer]:
+            - /url: /configuracion
+            - generic [ref=f1e110]: settings
+        - generic [ref=f1e114]:
+          - generic [ref=f1e115]: Mundilac v1.0.0
+          - generic [ref=f1e116]: © 2026 Mundilac
+        - button "Salir" [ref=f1e117] [cursor=pointer]:
+          - generic [ref=f1e118]: logout
+    - main [ref=f1e123]:
+      - generic [ref=f1e124]:
+        - generic [ref=f1e125]:
+          - generic [ref=f1e126]: Usuarios
+          - generic [ref=f1e127]: Accesos y permisos
+        - button "Nuevo" [ref=f1e128] [cursor=pointer]:
+          - generic [ref=f1e129]:
+            - img [ref=f1e130]: person_add
+            - generic [ref=f1e131]: Nuevo
+      - generic [ref=f1e133]:
+        - generic [ref=f1e137]:
+          - generic [ref=f1e138]: search
+          - textbox [ref=f1e141]:
+            - /placeholder: Buscar usuario
+        - table [ref=f1e143]:
+          - rowgroup [ref=f1e144]:
+            - row [ref=f1e145]:
+              - columnheader "Acciones" [ref=f1e146]
+              - columnheader "Usuario" [ref=f1e147]
+              - columnheader "Correo" [ref=f1e148]
+              - columnheader "Celular" [ref=f1e149]
+              - columnheader "CI" [ref=f1e150]
+              - columnheader "Permisos" [ref=f1e151]
+          - rowgroup [ref=f1e152]:
+            - row [ref=f1e239]:
+              - cell [ref=f1e240]:
+                - button "Expandir" [ref=f1e241] [cursor=pointer]:
+                  - img [ref=f1e157]: more_vert
+              - cell "ADIMER PAUL CHAMBI AJATA @adimer" [ref=f1e159]:
+                - generic [ref=f1e164]:
+                  - generic [ref=f1e165]: ADIMER PAUL CHAMBI AJATA
+                  - generic [ref=f1e166]: "@adimer"
+              - cell "adimer101@gmail.com" [ref=f1e167]
+              - cell "69603027" [ref=f1e168]
+              - cell "7336199" [ref=f1e169]
+              - cell [ref=f1e170]:
+                - status "22 permisos" [ref=f1e171]
+            - row [ref=f1e172]:
+              - cell [ref=f1e173]:
+                - button "Expandir" [ref=f1e174] [cursor=pointer]:
+                  - img [ref=f1e176]: more_vert
+              - cell "ADMINISTRADOR @admin" [ref=f1e178]:
+                - generic [ref=f1e179]:
+                  - generic [ref=f1e180]: person
+                  - generic [ref=f1e183]:
+                    - generic [ref=f1e184]: ADMINISTRADOR
+                    - generic [ref=f1e185]: "@admin"
+              - cell "admin@mundolac.com" [ref=f1e186]
+              - cell [ref=f1e187]
+              - cell "00000000" [ref=f1e188]
+              - cell [ref=f1e189]:
+                - status "22 permisos" [ref=f1e190]
+            - row [ref=f1e191]:
+              - cell [ref=f1e192]:
+                - button "Expandir" [ref=f1e193] [cursor=pointer]:
+                  - img [ref=f1e195]: more_vert
+              - cell "JORGE PORTUGAL @JP" [ref=f1e197]:
+                - generic [ref=f1e198]:
+                  - generic [ref=f1e199]: person
+                  - generic [ref=f1e202]:
+                    - generic [ref=f1e203]: JORGE PORTUGAL
+                    - generic [ref=f1e204]: "@JP"
+              - cell [ref=f1e205]
+              - cell [ref=f1e206]
+              - cell [ref=f1e207]
+              - cell [ref=f1e208]:
+                - status "8 permisos" [ref=f1e209]
+        - generic [ref=f1e210]:
+          - generic [ref=f1e211]:
+            - generic [ref=f1e212]: "Filas por página:"
+            - generic [ref=f1e215] [cursor=pointer]:
+              - generic [ref=f1e217]:
+                - generic [ref=f1e218]: "10"
+                - combobox "10" [ref=f1e219]
+              - generic [ref=f1e220]: arrow_drop_down
+          - generic [ref=f1e222]: 1-3 de 3
+  - generic:
+    - dialog:
+      - generic [ref=f1e244]:
+        - generic [ref=f1e245]:
+          - generic [ref=f1e246]: manage_accounts
+          - generic [ref=f1e249]:
+            - generic [ref=f1e250]: Editar usuario
+            - generic [ref=f1e251]: Datos personales, imagen y permisos
+          - button [ref=f1e252] [cursor=pointer]:
+            - img [ref=f1e254]: close
+        - separator [ref=f1e255]
+        - generic [ref=f1e256]:
+          - generic [ref=f1e257]:
+            - generic [ref=f1e258]:
+              - button "Cambiar" [ref=f1e259] [cursor=pointer]:
+                - generic [ref=f1e263]:
+                  - generic [ref=f1e264]: photo_camera
+                  - generic [ref=f1e265]: Cambiar
+              - generic [ref=f1e266]: Clic o arrastra una imagen
+            - generic [ref=f1e267]:
+              - generic [ref=f1e268]:
+                - generic [ref=f1e269]: badge
+                - text: Información
+              - generic [ref=f1e270]:
+                - generic [ref=f1e274]:
+                  - generic: Nombre completo *
+                  - textbox "Nombre completo *" [ref=f1e275]: ADIMER PAUL CHAMBI AJATA
+                - generic [ref=f1e277]:
+                  - generic:
+                    - generic:
+                      - generic: Usuario *
+                      - textbox "Usuario *" [disabled]: adimer
+                - generic [ref=f1e281]:
+                  - generic: CI
+                  - textbox "CI" [ref=f1e282]: "7336199"
+                - generic [ref=f1e286]:
+                  - generic: Correo
+                  - textbox "Correo" [ref=f1e287]: adimer101@gmail.com
+                - generic [ref=f1e291]:
+                  - generic: Celular
+                  - textbox "Celular" [ref=f1e292]: "69603027"
+          - separator [ref=f1e293]
+          - generic [ref=f1e294]:
+            - generic [ref=f1e295]:
+              - generic [ref=f1e296]: admin_panel_settings
+              - text: Permisos
+            - button "Todos" [ref=f1e297] [cursor=pointer]
+            - button "Ninguno" [ref=f1e300] [cursor=pointer]
+          - generic [ref=f1e303]:
+            - generic [ref=f1e304]:
+              - generic [ref=f1e305]: Panel
+              - checkbox "Ver" [checked] [ref=f1e306] [cursor=pointer]
+            - generic [ref=f1e312]:
+              - generic [ref=f1e313]: Usuarios
+              - checkbox "Crear" [checked] [ref=f1e314] [cursor=pointer]
+              - checkbox "Editar" [checked] [ref=f1e320] [cursor=pointer]
+              - checkbox "Eliminar" [checked] [ref=f1e326] [cursor=pointer]
+              - checkbox "Ver" [checked] [ref=f1e332] [cursor=pointer]
+            - generic [ref=f1e338]:
+              - generic [ref=f1e339]: Permisos
+              - checkbox "Gestionar" [checked] [ref=f1e340] [cursor=pointer]
+            - generic [ref=f1e346]:
+              - generic [ref=f1e347]: Productos
+              - checkbox "Crear" [checked] [ref=f1e348] [cursor=pointer]
+              - checkbox "Editar" [checked] [ref=f1e354] [cursor=pointer]
+              - checkbox "Eliminar" [checked] [ref=f1e360] [cursor=pointer]
+              - checkbox "Ver" [checked] [ref=f1e366] [cursor=pointer]
+            - generic [ref=f1e372]:
+              - generic [ref=f1e373]: Ventas
+              - checkbox "Anular" [checked] [ref=f1e374] [cursor=pointer]
+              - checkbox "Cambiar Pago" [checked] [ref=f1e380] [cursor=pointer]
+              - checkbox "Crear" [checked] [ref=f1e386] [cursor=pointer]
+              - checkbox "Ver" [checked] [ref=f1e392] [cursor=pointer]
+            - generic [ref=f1e398]:
+              - generic [ref=f1e399]: Compras
+              - checkbox "Crear" [checked] [ref=f1e400] [cursor=pointer]
+              - checkbox "Ver" [checked] [ref=f1e406] [cursor=pointer]
+            - generic [ref=f1e412]:
+              - generic [ref=f1e413]: Clientes
+              - checkbox "Gestionar" [checked] [ref=f1e414] [cursor=pointer]
+              - checkbox "Ver" [checked] [ref=f1e420] [cursor=pointer]
+            - generic [ref=f1e426]:
+              - generic [ref=f1e427]: Pedidos
+              - checkbox "Crear" [checked] [ref=f1e428] [cursor=pointer]
+              - checkbox "Ver" [checked] [ref=f1e434] [cursor=pointer]
+            - generic [ref=f1e440]:
+              - generic [ref=f1e441]: Reportes
+              - checkbox "Ver" [checked] [ref=f1e442] [cursor=pointer]
+            - generic [ref=f1e448]:
+              - generic [ref=f1e449]: Configuración
+              - checkbox "Gestionar" [checked] [ref=f1e450] [cursor=pointer]
+        - separator [ref=f1e456]
+        - generic [ref=f1e457]:
+          - button "Cancelar" [ref=f1e458] [cursor=pointer]
+          - button "Guardar" [ref=f1e461] [cursor=pointer]:
+            - generic [ref=f1e462]:
+              - img [ref=f1e463]: save
+              - generic [ref=f1e464]: Guardar

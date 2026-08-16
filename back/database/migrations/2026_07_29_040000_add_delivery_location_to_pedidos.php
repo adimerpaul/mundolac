@@ -13,10 +13,20 @@ return new class extends Migration
             $table->decimal('latitud_entrega', 10, 7)->nullable()->after('direccion_entrega');
             $table->decimal('longitud_entrega', 10, 7)->nullable()->after('latitud_entrega');
         });
-        DB::table('pedidos')->join('clientes', 'clientes.id', '=', 'pedidos.cliente_id')->update([
-            'pedidos.latitud_entrega' => DB::raw('clientes.latitud'),
-            'pedidos.longitud_entrega' => DB::raw('clientes.longitud'),
-        ]);
+        // UPDATE ... JOIN no es portable (falla en SQLite, usado por los tests),
+        // así que el relleno se hace fila por fila.
+        DB::table('pedidos')
+            ->join('clientes', 'clientes.id', '=', 'pedidos.cliente_id')
+            ->orderBy('pedidos.id')
+            ->select('pedidos.id', 'clientes.latitud', 'clientes.longitud')
+            ->chunk(500, function ($pedidos) {
+                foreach ($pedidos as $pedido) {
+                    DB::table('pedidos')->where('id', $pedido->id)->update([
+                        'latitud_entrega' => $pedido->latitud,
+                        'longitud_entrega' => $pedido->longitud,
+                    ]);
+                }
+            });
     }
 
     public function down(): void

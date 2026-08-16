@@ -67,7 +67,7 @@
               <div class="permissions-grid">
                 <div v-for="group in permissionGroups" :key="group.name" class="permission-group">
                   <div class="text-caption text-weight-bold text-primary">{{group.name}}</div>
-                  <q-checkbox v-for="p in group.items" :key="p.id" v-model="selectedPermissions" :val="p.id" :label="p.name.replace(` ${group.name}`,'')" dense size="sm"/>
+                  <q-checkbox v-for="p in group.items" :key="p.id" v-model="selectedPermissions" :val="p.id" :label="p.etiqueta||p.name" dense size="sm"><q-tooltip>{{p.name}}</q-tooltip></q-checkbox>
                 </div>
               </div>
             </template>
@@ -89,10 +89,18 @@ const columns=[{name:'actions',label:'Acciones',align:'left'},{name:'user',label
 const can=p=>proxy.$store.hasPermission(p),required=v=>!!v||'Campo requerido'
 const avatarUrl=filename=>`${proxy.$imgBase}/images/${filename}`
 const filtered=computed(()=>{const q=(search.value||'').toLowerCase();return rows.value.filter(u=>[u.name,u.username,u.email,u.ci].some(v=>(v||'').toLowerCase().includes(q)))})
-const permissionModules=['Usuarios','Productos','Ventas','Compras','Clientes','Pedidos','Configuración','Permisos']
-const permissionGroups=computed(()=>permissionModules
-  .map(name=>({name,items:permissions.value.filter(p=>p.name.endsWith(` ${name}`))}))
-  .filter(group=>group.items.length))
+// Los grupos salen del campo `modulo` de cada permiso, así siempre se listan todos.
+const permissionGroups=computed(()=>{
+  const grupos=new Map()
+  permissions.value.forEach(permiso=>{
+    const modulo=permiso.modulo||'Otros',orden=Number(permiso.orden??99)
+    if(!grupos.has(modulo))grupos.set(modulo,{name:modulo,orden,items:[]})
+    const grupo=grupos.get(modulo)
+    grupo.orden=Math.min(grupo.orden,orden)
+    grupo.items.push(permiso)
+  })
+  return [...grupos.values()].sort((a,b)=>a.orden-b.orden||a.name.localeCompare(b.name))
+})
 function load(){loading.value=true;proxy.$axios.get('/users').then(r=>rows.value=r.data).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudieron cargar los usuarios')).finally(()=>loading.value=false)}
 async function openForm(row=null){clearPreview();avatarFile.value=null;dragging.value=false;Object.assign(form,empty(),row||{});selectedPermissions.value=(row?.permissions||[]).map(p=>p.id);if(can('Gestionar Permisos')){try{permissions.value=(await proxy.$axios.get('/permissions')).data}catch(e){proxy.$alert.error(e.response?.data?.message||'No se pudieron cargar los permisos')}}dialog.value=true}
 function closeForm(){dialog.value=false;clearPreview();avatarFile.value=null}

@@ -1,0 +1,158 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e3]:
+    - banner [ref=f1e4]:
+      - toolbar [ref=f1e5]:
+        - button "Menu" [ref=f1e6] [cursor=pointer]:
+          - img [ref=f1e8]: keyboard_double_arrow_left
+        - generic [ref=f1e9]: Mundilac
+        - button "Expandir" [ref=f1e11] [cursor=pointer]:
+          - generic [ref=f1e12]:
+            - generic [ref=f1e13]: admin
+            - generic [ref=f1e19]: expand_more
+    - complementary [ref=f1e20]:
+      - generic [ref=f1e25]:
+        - generic [ref=f1e26]:
+          - img "Mundilac" [ref=f1e28]
+          - generic [ref=f1e29]:
+            - generic [ref=f1e30]: Mundilac
+            - generic [ref=f1e31]: Sistema de gestión
+        - generic [ref=f1e32]: Módulos
+        - list [ref=f1e33]:
+          - link "Inicio" [ref=f1e34] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f1e35]: dashboard
+          - link "Usuarios" [ref=f1e39] [cursor=pointer]:
+            - /url: /usuarios
+            - generic [ref=f1e40]: people
+          - link "Productos" [ref=f1e44] [cursor=pointer]:
+            - /url: /productos
+            - generic [ref=f1e45]: inventory_2
+          - link "Nueva venta" [ref=f1e49] [cursor=pointer]:
+            - /url: /ventas/nueva
+            - generic [ref=f1e50]: point_of_sale
+          - link "Ventas" [ref=f1e54] [cursor=pointer]:
+            - /url: /ventas
+            - generic [ref=f1e55]: receipt_long
+          - link "Productos vendidos" [ref=f1e59] [cursor=pointer]:
+            - /url: /reportes/productos-vendidos
+            - generic [ref=f1e60]: leaderboard
+          - link "Nueva compra" [ref=f1e64] [cursor=pointer]:
+            - /url: /compras/nueva
+            - generic [ref=f1e65]: add_business
+          - link "Compras" [ref=f1e69] [cursor=pointer]:
+            - /url: /compras
+            - generic [ref=f1e70]: shopping_bag
+          - link "Proveedores" [ref=f1e74] [cursor=pointer]:
+            - /url: /proveedores
+            - generic [ref=f1e75]: groups
+          - link "Por vencer" [ref=f1e79] [cursor=pointer]:
+            - /url: /productos/por-vencer
+            - generic [ref=f1e80]: schedule
+          - link "Vencidos" [ref=f1e84] [cursor=pointer]:
+            - /url: /productos/vencidos
+            - generic [ref=f1e85]: event_busy
+          - link "Clientes" [ref=f1e89] [cursor=pointer]:
+            - /url: /clientes
+            - generic [ref=f1e90]: person_pin_circle
+          - link "Mapa de clientes" [ref=f1e94] [cursor=pointer]:
+            - /url: /clientes/mapa
+            - generic [ref=f1e95]: map
+          - link "Crear pedido" [ref=f1e99] [cursor=pointer]:
+            - /url: /pedidos/nuevo
+            - generic [ref=f1e100]: add_location_alt
+          - link "Pedidos" [ref=f1e104] [cursor=pointer]:
+            - /url: /pedidos
+            - generic [ref=f1e105]: assignment
+          - link "Configuración" [ref=f1e109] [cursor=pointer]:
+            - /url: /configuracion
+            - generic [ref=f1e110]: settings
+        - generic [ref=f1e114]:
+          - generic [ref=f1e115]: Mundilac v1.0.0
+          - generic [ref=f1e116]: © 2026 Mundilac
+        - button "Salir" [ref=f1e117] [cursor=pointer]:
+          - generic [ref=f1e118]: logout
+    - main [ref=f1e123]:
+      - generic [ref=f1e124]:
+        - generic [ref=f1e125]:
+          - generic [ref=f1e126]: Usuarios
+          - generic [ref=f1e127]: Accesos y permisos
+        - button "Nuevo" [ref=f1e128] [cursor=pointer]:
+          - generic [ref=f1e129]:
+            - img [ref=f1e130]: person_add
+            - generic [ref=f1e131]: Nuevo
+      - generic [ref=f1e133]:
+        - generic [ref=f1e137]:
+          - generic [ref=f1e138]: search
+          - textbox [ref=f1e141]:
+            - /placeholder: Buscar usuario
+        - table [ref=f1e143]:
+          - rowgroup [ref=f1e144]:
+            - row [ref=f1e145]:
+              - columnheader "Acciones" [ref=f1e146]
+              - columnheader "Usuario" [ref=f1e147]
+              - columnheader "Correo" [ref=f1e148]
+              - columnheader "Celular" [ref=f1e149]
+              - columnheader "CI" [ref=f1e150]
+              - columnheader "Permisos" [ref=f1e151]
+          - rowgroup [ref=f1e152]:
+            - row [ref=f1e153]:
+              - cell [ref=f1e154]:
+                - button "Colapsar" [expanded] [ref=f1e155] [cursor=pointer]:
+                  - img [ref=f1e157]: more_vert
+              - cell "ADIMER PAUL CHAMBI AJATA @adimer" [ref=f1e159]:
+                - generic [ref=f1e164]:
+                  - generic [ref=f1e165]: ADIMER PAUL CHAMBI AJATA
+                  - generic [ref=f1e166]: "@adimer"
+              - cell "adimer101@gmail.com" [ref=f1e167]
+              - cell "69603027" [ref=f1e168]
+              - cell "7336199" [ref=f1e169]
+              - cell [ref=f1e170]:
+                - status "22 permisos" [ref=f1e171]
+            - row [ref=f1e172]:
+              - cell [ref=f1e173]:
+                - button "Expandir" [ref=f1e174] [cursor=pointer]:
+                  - img [ref=f1e176]: more_vert
+              - cell "ADMINISTRADOR @admin" [ref=f1e178]:
+                - generic [ref=f1e179]:
+                  - generic [ref=f1e180]: person
+                  - generic [ref=f1e183]:
+                    - generic [ref=f1e184]: ADMINISTRADOR
+                    - generic [ref=f1e185]: "@admin"
+              - cell "admin@mundolac.com" [ref=f1e186]
+              - cell [ref=f1e187]
+              - cell "00000000" [ref=f1e188]
+              - cell [ref=f1e189]:
+                - status "22 permisos" [ref=f1e190]
+            - row [ref=f1e191]:
+              - cell [ref=f1e192]:
+                - button "Expandir" [ref=f1e193] [cursor=pointer]:
+                  - img [ref=f1e195]: more_vert
+              - cell "JORGE PORTUGAL @JP" [ref=f1e197]:
+                - generic [ref=f1e198]:
+                  - generic [ref=f1e199]: person
+                  - generic [ref=f1e202]:
+                    - generic [ref=f1e203]: JORGE PORTUGAL
+                    - generic [ref=f1e204]: "@JP"
+              - cell [ref=f1e205]
+              - cell [ref=f1e206]
+              - cell [ref=f1e207]
+              - cell [ref=f1e208]:
+                - status "8 permisos" [ref=f1e209]
+        - generic [ref=f1e210]:
+          - generic [ref=f1e211]:
+            - generic [ref=f1e212]: "Filas por página:"
+            - generic [ref=f1e215] [cursor=pointer]:
+              - generic [ref=f1e217]:
+                - generic [ref=f1e218]: "10"
+                - combobox "10" [ref=f1e219]
+              - generic [ref=f1e220]: arrow_drop_down
+          - generic [ref=f1e222]: 1-3 de 3
+  - menu [active] [ref=f1e224]:
+    - list [ref=f1e225]:
+      - button "Editar y permisos" [ref=f1e226] [cursor=pointer]:
+        - generic [ref=f1e227]: edit
+      - button "Restablecer clave" [ref=f1e230] [cursor=pointer]:
+        - generic [ref=f1e231]: lock_reset
+      - separator [ref=f1e234]
+      - button "Eliminar" [ref=f1e235] [cursor=pointer]:
+        - generic [ref=f1e236]: delete

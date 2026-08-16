@@ -41,7 +41,7 @@ class VentaController extends Controller
 
     public function dashboard(Request $request)
     {
-        $this->authorizeAction($request, 'Ver Ventas');
+        $this->authorizeAction($request, 'Ver Panel');
         $sales = Venta::where('estado', 'COMPLETADA');
         $total = (float) (clone $sales)->sum('total');
         $count = (clone $sales)->count();
@@ -184,7 +184,9 @@ class VentaController extends Controller
                     ->orderByRaw('fecha_vencimiento IS NULL')
                     ->orderBy('fecha_vencimiento')->orderBy('id')->lockForUpdate()->get();
                 foreach ($lots as $lot) {
-                    if ($remaining <= 0.0001) break;
+                    if ($remaining <= 0.0001) {
+                        break;
+                    }
                     $taken = min($remaining, (float) $lot->cantidad_disponible);
                     $lot->decrement('cantidad_disponible', $taken);
                     DB::table('venta_detalle_lotes')->insert([
@@ -238,6 +240,56 @@ class VentaController extends Controller
         });
 
         return response()->json($venta->fresh());
+    }
+
+    public function changePayment(Request $request, Venta $venta)
+    {
+        $this->authorizeAction($request, 'Cambiar Pago Ventas');
+        $data = $request->validate([
+            'tipo_pago' => ['required', 'in:EFECTIVO,QR,COMBINADO'],
+            'monto_efectivo' => ['nullable', 'numeric', 'min:0'],
+            'monto_qr' => ['nullable', 'numeric', 'min:0'],
+            'motivo' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $updated = DB::transaction(function () use ($request, $venta, $data) {
+            // Se relee con bloqueo: si llegan dos peticiones a la vez (doble clic),
+            // la segunda espera y encuentra pago_cambiado = true.
+            $sale = Venta::whereKey($venta->id)->lockForUpdate()->firstOrFail();
+
+            abort_if($sale->pago_cambiado, 422, 'El método de pago de esta venta ya fue cambiado una vez y no se puede volver a modificar.');
+            abort_if($sale->estado !== 'COMPLETADA', 422, 'Solo se puede cambiar el método de pago de una venta COMPLETADA.');
+            abort_if($sale->tipo_pago === $data['tipo_pago'], 422, "La venta ya está registrada como {$data['tipo_pago']}.");
+
+            $total = round((float) $sale->total, 2);
+            $cash = match ($data['tipo_pago']) {
+                'EFECTIVO' => $total,
+                'QR' => 0.0,
+                default => round((float) ($data['monto_efectivo'] ?? 0), 2),
+            };
+            $qr = match ($data['tipo_pago']) {
+                'QR' => $total,
+                'EFECTIVO' => 0.0,
+                default => round((float) ($data['monto_qr'] ?? 0), 2),
+            };
+            abort_if(abs(($cash + $qr) - $total) > 0.009, 422, 'Los montos de efectivo y QR deben sumar el total de la venta');
+
+            $sale->update([
+                'tipo_pago_original' => $sale->tipo_pago,
+                'tipo_pago' => $data['tipo_pago'],
+                'monto_efectivo' => $cash,
+                'monto_qr' => $qr,
+                'pago_cambiado' => true,
+                'pago_cambiado_en' => now(),
+                'pago_cambiado_user_id' => $request->user()->id,
+                'pago_cambiado_por' => $request->user()->name,
+                'pago_cambiado_motivo' => $data['motivo'] ?? null,
+            ]);
+
+            return $sale;
+        });
+
+        return response()->json($updated);
     }
 
     private function authorizeAction(Request $request, string $permission): void

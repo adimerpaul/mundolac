@@ -5,7 +5,7 @@
       <q-space/><q-btn v-if="$store.hasPermission('Crear Ventas')" unelevated color="white" text-color="primary" icon="point_of_sale" label="Nueva venta" no-caps to="/ventas/nueva"/>
     </div>
 
-    <template v-if="$store.hasPermission('Ver Ventas')">
+    <template v-if="$store.hasPermission('Ver Panel')">
       <div class="kpi-grid q-mb-sm">
         <q-card v-for="item in kpis" :key="item.label" flat bordered class="kpi-card">
           <q-card-section class="row items-center q-pa-sm">
@@ -56,7 +56,7 @@ const paymentSeries=computed(()=>data.pagos.map(i=>Number(i.total)))
 const paymentOptions=computed(()=>({...baseChart,labels:data.pagos.map(i=>i.nombre),colors:['#21ba45','#2196f3','#9c27b0'],legend:{position:'bottom'},plotOptions:{pie:{donut:{size:'66%',labels:{show:true,total:{show:true,label:'Total',formatter:()=>`Bs ${money(data.indicadores.ventas)}`}}}}}}))
 const userSeries=computed(()=>[{name:'Total vendido',data:data.usuarios.map(i=>Number(i.total))}])
 const userOptions=computed(()=>({...baseChart,chart:{...baseChart.chart,type:'bar'},colors:['#26a69a'],plotOptions:{bar:{borderRadius:6,horizontal:true,barHeight:'58%'}},xaxis:{categories:data.usuarios.map(i=>i.nombre),labels:{formatter:v=>`Bs ${Number(v).toFixed(0)}`}}}))
-onMounted(()=>{if(proxy.$store.hasPermission('Ver Ventas'))proxy.$axios.get('/dashboard').then(r=>Object.assign(data,r.data)).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo cargar el panel'))})
+onMounted(()=>{if(proxy.$store.hasPermission('Ver Panel'))proxy.$axios.get('/dashboard').then(r=>Object.assign(data,r.data)).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo cargar el panel'))})
 </script>
 
 <style scoped>

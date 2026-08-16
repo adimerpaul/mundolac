@@ -220,7 +220,7 @@ class UserController extends Controller
     {
         $this->requirePermission($request, ['Crear Usuarios', 'Editar Usuarios', 'Gestionar Permisos']);
 
-        return response()->json(Permission::orderBy('name')->get());
+        return response()->json(Permission::orderBy('orden')->orderBy('modulo')->orderBy('name')->get());
     }
 
     public function userPermissions(Request $request, $id)

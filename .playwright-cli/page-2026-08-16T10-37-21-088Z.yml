@@ -1,0 +1,657 @@
+- generic [ref=f1e3]:
+  - banner [ref=f1e4]:
+    - toolbar [ref=f1e5]:
+      - button "Menu" [ref=f1e6] [cursor=pointer]:
+        - img [ref=f1e8]: keyboard_double_arrow_left
+      - generic [ref=f1e9]: Mundilac
+      - button "Expandir" [ref=f1e11] [cursor=pointer]:
+        - generic [ref=f1e12]:
+          - generic [ref=f1e13]: admin
+          - generic [ref=f1e17]: expand_more
+  - complementary [ref=f1e18]:
+    - generic [ref=f1e23]:
+      - generic [ref=f1e24]:
+        - img "Mundilac" [ref=f1e26]
+        - generic [ref=f1e27]:
+          - generic [ref=f1e28]: Mundilac
+          - generic [ref=f1e29]: Sistema de gestión
+      - generic [ref=f1e30]: Módulos
+      - list [ref=f1e31]:
+        - link "Inicio" [ref=f1e32] [cursor=pointer]:
+          - /url: /
+          - generic [ref=f1e33]: dashboard
+        - link "Usuarios" [ref=f1e37] [cursor=pointer]:
+          - /url: /usuarios
+          - generic [ref=f1e38]: people
+        - link "Productos" [ref=f1e42] [cursor=pointer]:
+          - /url: /productos
+          - generic [ref=f1e43]: inventory_2
+        - link "Nueva venta" [ref=f1e47] [cursor=pointer]:
+          - /url: /ventas/nueva
+          - generic [ref=f1e48]: point_of_sale
+        - link "Ventas" [ref=f1e52] [cursor=pointer]:
+          - /url: /ventas
+          - generic [ref=f1e53]: receipt_long
+        - link "Productos vendidos" [ref=f1e57] [cursor=pointer]:
+          - /url: /reportes/productos-vendidos
+          - generic [ref=f1e58]: leaderboard
+        - link "Nueva compra" [ref=f1e62] [cursor=pointer]:
+          - /url: /compras/nueva
+          - generic [ref=f1e63]: add_business
+        - link "Compras" [ref=f1e67] [cursor=pointer]:
+          - /url: /compras
+          - generic [ref=f1e68]: shopping_bag
+        - link "Proveedores" [ref=f1e72] [cursor=pointer]:
+          - /url: /proveedores
+          - generic [ref=f1e73]: groups
+        - link "Por vencer" [ref=f1e77] [cursor=pointer]:
+          - /url: /productos/por-vencer
+          - generic [ref=f1e78]: schedule
+        - link "Vencidos" [ref=f1e82] [cursor=pointer]:
+          - /url: /productos/vencidos
+          - generic [ref=f1e83]: event_busy
+        - link "Clientes" [ref=f1e87] [cursor=pointer]:
+          - /url: /clientes
+          - generic [ref=f1e88]: person_pin_circle
+        - link "Mapa de clientes" [ref=f1e92] [cursor=pointer]:
+          - /url: /clientes/mapa
+          - generic [ref=f1e93]: map
+        - link "Crear pedido" [ref=f1e97] [cursor=pointer]:
+          - /url: /pedidos/nuevo
+          - generic [ref=f1e98]: add_location_alt
+        - link "Pedidos" [ref=f1e102] [cursor=pointer]:
+          - /url: /pedidos
+          - generic [ref=f1e103]: assignment
+        - link "Configuración" [ref=f1e107] [cursor=pointer]:
+          - /url: /configuracion
+          - generic [ref=f1e108]: settings
+      - generic [ref=f1e112]:
+        - generic [ref=f1e113]: Mundilac v1.0.0
+        - generic [ref=f1e114]: © 2026 Mundilac
+      - button "Salir" [ref=f1e115] [cursor=pointer]:
+        - generic [ref=f1e116]: logout
+  - main [ref=f1e121]:
+    - generic [ref=f1e122]:
+      - generic [ref=f1e123]:
+        - generic [ref=f1e124]: Reporte de productos vendidos
+        - generic [ref=f1e125]: Ranking entre fechas por cantidad, ingresos, ganancia y precios
+      - button "Excel" [ref=f1e126] [cursor=pointer]:
+        - generic [ref=f1e127]:
+          - img [ref=f1e128]: table_view
+          - generic [ref=f1e129]: Excel
+    - generic [ref=f1e130]:
+      - generic [ref=f1e131]:
+        - generic [ref=f1e132]: ANÁLISIS RÁPIDO
+        - generic [ref=f1e133]:
+          - button "Más vendidos" [ref=f1e134] [cursor=pointer]:
+            - generic [ref=f1e135]: local_fire_department
+          - button "Menos vendidos" [active] [ref=f1e137] [cursor=pointer]:
+            - generic [ref=f1e138]: trending_down
+          - button "Mayor ingreso" [ref=f1e140] [cursor=pointer]:
+            - generic [ref=f1e141]: payments
+          - button "Mayor ganancia" [ref=f1e143] [cursor=pointer]:
+            - generic [ref=f1e144]: savings
+          - button "Venta más cara" [ref=f1e146] [cursor=pointer]:
+            - generic [ref=f1e147]: arrow_upward
+          - button "Venta más barata" [ref=f1e149] [cursor=pointer]:
+            - generic [ref=f1e150]: arrow_downward
+          - button "Compra más cara" [ref=f1e152] [cursor=pointer]:
+            - generic [ref=f1e153]: shopping_cart
+          - button "Compra más barata" [ref=f1e155] [cursor=pointer]:
+            - generic [ref=f1e156]: shopping_cart_checkout
+      - separator [ref=f1e158]
+      - generic [ref=f1e159]:
+        - generic [ref=f1e160]: PERIODO
+        - generic [ref=f1e161]:
+          - generic [ref=f1e162]:
+            - button "Hoy" [ref=f1e163] [cursor=pointer]
+            - button "7 días" [ref=f1e165] [cursor=pointer]
+            - button "30 días" [ref=f1e167] [cursor=pointer]
+            - button "Este mes" [ref=f1e169] [cursor=pointer]
+            - button "Este año" [ref=f1e171] [cursor=pointer]
+            - button "Todo" [ref=f1e173] [cursor=pointer]
+          - generic [ref=f1e178]:
+            - generic: Desde
+            - textbox "Desde" [ref=f1e179]: 2026-08-01
+          - generic [ref=f1e183]:
+            - generic: Hasta
+            - textbox "Hasta" [ref=f1e184]: 2026-08-16
+          - generic [ref=f1e187] [cursor=pointer]:
+            - generic [ref=f1e188]:
+              - generic: Vendedor
+              - combobox "Vendedor" [ref=f1e190]
+            - generic [ref=f1e191]: arrow_drop_down
+      - separator [ref=f1e193]
+      - generic [ref=f1e194]:
+        - generic [ref=f1e195]:
+          - generic [ref=f1e198]:
+            - generic [ref=f1e199]: search
+            - textbox [ref=f1e202]:
+              - /placeholder: Buscar producto, código o código de barras
+          - generic [ref=f1e205] [cursor=pointer]:
+            - generic [ref=f1e206]:
+              - generic: Categoría
+              - combobox "Categoría" [ref=f1e208]
+            - generic [ref=f1e209]: arrow_drop_down
+          - generic [ref=f1e213] [cursor=pointer]:
+            - generic [ref=f1e214]:
+              - generic: Ordenar por
+              - generic [ref=f1e215]:
+                - generic [ref=f1e216]: Cantidad vendida
+                - combobox "Ordenar por" [ref=f1e217]: Cantidad vendida
+            - generic [ref=f1e218]: arrow_drop_down
+          - generic [ref=f1e221]:
+            - button [ref=f1e222] [cursor=pointer]:
+              - generic [ref=f1e223]: south
+            - button [pressed] [ref=f1e225] [cursor=pointer]:
+              - generic [ref=f1e226]: north
+        - button "Expandir \"Filtros avanzados\"" [ref=f1e230] [cursor=pointer]:
+          - generic [ref=f1e231]: tune
+          - generic [ref=f1e233]: Filtros avanzados
+          - generic [ref=f1e235]: arrow_drop_down
+    - generic [ref=f1e237]:
+      - generic [ref=f1e240]:
+        - generic [ref=f1e241]: inventory_2
+        - generic [ref=f1e244]:
+          - generic [ref=f1e245]: Productos
+          - generic [ref=f1e246]: "309"
+      - generic [ref=f1e249]:
+        - generic [ref=f1e250]: local_shipping
+        - generic [ref=f1e253]:
+          - generic [ref=f1e254]: Unidades vendidas
+          - generic [ref=f1e255]: "7.313"
+      - generic [ref=f1e258]:
+        - generic [ref=f1e259]: payments
+        - generic [ref=f1e262]:
+          - generic [ref=f1e263]: Total vendido
+          - generic [ref=f1e264]: Bs 42.860,75
+      - generic [ref=f1e267]:
+        - generic [ref=f1e268]: trending_up
+        - generic [ref=f1e271]:
+          - generic [ref=f1e272]: Ganancia
+          - generic [ref=f1e273]: Bs 6.998,07
+    - generic [ref=f1e310]:
+      - generic [ref=f1e311]:
+        - generic [ref=f1e312]: Top 10 · Cantidad vendida
+        - generic [ref=f1e313]: Del 2026-08-01 al 2026-08-16
+      - generic [ref=f1e889]:
+        - 'application "bar chart with 1 data series: Cantidad vendida" [ref=f1e890]':
+          - generic [ref=f1e892]:
+            - generic [ref=f1e897]:
+              - generic "AGUA PURA VIDA 3L" [ref=f1e898]
+              - generic "AGUA PURA VIDA 500 ML" [ref=f1e899]
+              - generic "AGUA SACHET 500 ML" [ref=f1e900]
+              - generic "AVENA INSTANTANEA CAJA 300 GR" [ref=f1e901]: AVENA INSTANTANEA CAJA 300...
+              - generic "BEBIDA REFRESCANTE TORONJITO 80ML" [ref=f1e902]: BEBIDA REFRESCANTE TORONJI...
+              - generic "CASCADA 2L DURAZNO" [ref=f1e903]
+              - generic "CASCADA FRESA 2L" [ref=f1e904]
+              - generic "CASCADA PAPAYA 2L" [ref=f1e905]
+              - generic "CEREAL BOLSA CHOCOLITAS CRICK 750G" [ref=f1e906]: CEREAL BOLSA CHOCOLITAS CR...
+              - generic "COKA QUINA 330ML" [ref=f1e907]
+            - generic [ref=f1e909]:
+              - generic "2" [ref=f1e910]
+              - generic "1,8" [ref=f1e911]
+              - generic "1,6" [ref=f1e912]
+              - generic "1,4" [ref=f1e913]
+              - generic "1,2" [ref=f1e914]
+              - generic "1" [ref=f1e915]
+              - generic "0,8" [ref=f1e916]
+              - generic "0,6" [ref=f1e917]
+              - generic "0,4" [ref=f1e918]
+              - generic "0,2" [ref=f1e919]
+              - generic "0" [ref=f1e920]
+        - status [ref=f1e921]
+        - tooltip
+    - generic [ref=f1e275]:
+      - table [ref=f1e277]:
+        - rowgroup [ref=f1e278]:
+          - row [ref=f1e279]:
+            - columnheader "#" [ref=f1e280]
+            - columnheader "Producto" [ref=f1e281] [cursor=pointer]:
+              - text: Producto
+              - generic [ref=f1e282]: arrow_upward
+            - columnheader "Categoría" [ref=f1e283]
+            - columnheader "Cantidad" [ref=f1e284] [cursor=pointer]:
+              - generic [ref=f1e285]: arrow_upward
+              - text: Cantidad
+            - columnheader "P. compra" [ref=f1e286] [cursor=pointer]:
+              - generic [ref=f1e287]: arrow_upward
+              - text: P. compra
+            - columnheader "P. venta" [ref=f1e288] [cursor=pointer]:
+              - generic [ref=f1e289]: arrow_upward
+              - text: P. venta
+            - columnheader "Margen" [ref=f1e290] [cursor=pointer]:
+              - generic [ref=f1e291]: arrow_upward
+              - text: Margen
+            - columnheader "Descuento" [ref=f1e292]
+            - columnheader "Total vendido" [ref=f1e293] [cursor=pointer]:
+              - generic [ref=f1e294]: arrow_upward
+              - text: Total vendido
+            - columnheader "Ganancia" [ref=f1e295] [cursor=pointer]:
+              - generic [ref=f1e296]: arrow_upward
+              - text: Ganancia
+            - columnheader "Stock" [ref=f1e297] [cursor=pointer]:
+              - text: Stock
+              - generic [ref=f1e298]: arrow_upward
+            - columnheader "Última venta" [ref=f1e299] [cursor=pointer]:
+              - text: Última venta
+              - generic [ref=f1e300]: arrow_upward
+        - rowgroup [ref=f1e363]:
+          - row [ref=f1e922]:
+            - cell [ref=f1e923]:
+              - status [ref=f1e924]: "1"
+            - cell "AGUA PURA VIDA 3L PUR-VID3 · ML" [ref=f1e925]:
+              - generic [ref=f1e930]:
+                - generic [ref=f1e931]: AGUA PURA VIDA 3L
+                - generic [ref=f1e932]: PUR-VID3 · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e933]
+            - cell "0 0 venta(s)" [ref=f1e936]:
+              - text: "0"
+              - generic [ref=f1e937]: 0 venta(s)
+            - cell "Bs 7,00" [ref=f1e938]
+            - cell "Bs 8,50" [ref=f1e939]
+            - cell "Bs 1,50" [ref=f1e940]
+            - cell "Bs 0,00" [ref=f1e941]
+            - cell "Bs 0,00" [ref=f1e942]
+            - cell "Bs 0,00" [ref=f1e943]
+            - cell [ref=f1e944]:
+              - status [ref=f1e945]: "33"
+            - cell "Sin ventas" [ref=f1e946]
+          - row [ref=f1e947]:
+            - cell [ref=f1e948]:
+              - status [ref=f1e949]: "2"
+            - cell "AGUA PURA VIDA 500 ML F04229 · UNIDAD" [ref=f1e950]:
+              - generic [ref=f1e955]:
+                - generic [ref=f1e956]: AGUA PURA VIDA 500 ML
+                - generic [ref=f1e957]: F04229 · UNIDAD
+            - cell "AGUAS Y GASEOSAS" [ref=f1e958]
+            - cell "0 0 venta(s)" [ref=f1e961]:
+              - text: "0"
+              - generic [ref=f1e962]: 0 venta(s)
+            - cell "Bs 2,60" [ref=f1e963]
+            - cell "Bs 3,50" [ref=f1e964]
+            - cell "Bs 0,90" [ref=f1e965]
+            - cell "Bs 0,00" [ref=f1e966]
+            - cell "Bs 0,00" [ref=f1e967]
+            - cell "Bs 0,00" [ref=f1e968]
+            - cell [ref=f1e969]:
+              - status [ref=f1e970]: "2"
+            - cell "Sin ventas" [ref=f1e971]
+          - row [ref=f1e972]:
+            - cell [ref=f1e973]:
+              - status [ref=f1e974]: "3"
+            - cell "AGUA SACHET 500 ML D7704 · ML" [ref=f1e975]:
+              - generic [ref=f1e980]:
+                - generic [ref=f1e981]: AGUA SACHET 500 ML
+                - generic [ref=f1e982]: D7704 · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e983]
+            - cell "0 0 venta(s)" [ref=f1e986]:
+              - text: "0"
+              - generic [ref=f1e987]: 0 venta(s)
+            - cell "Bs 0,67" [ref=f1e988]
+            - cell "Bs 1,00" [ref=f1e989]
+            - cell "Bs 0,33" [ref=f1e990]
+            - cell "Bs 0,00" [ref=f1e991]
+            - cell "Bs 0,00" [ref=f1e992]
+            - cell "Bs 0,00" [ref=f1e993]
+            - cell [ref=f1e994]:
+              - status [ref=f1e995]: "0"
+            - cell "Sin ventas" [ref=f1e996]
+          - row [ref=f1e997]:
+            - cell [ref=f1e998]:
+              - status [ref=f1e999]: "4"
+            - cell "AVENA INSTANTANEA CAJA 300 GR AVEN2131 · GR" [ref=f1e1000]:
+              - generic [ref=f1e1005]:
+                - generic [ref=f1e1006]: AVENA INSTANTANEA CAJA 300 GR
+                - generic [ref=f1e1007]: AVEN2131 · GR
+            - cell "GALLETAS Y CEREALES" [ref=f1e1008]
+            - cell "0 0 venta(s)" [ref=f1e1011]:
+              - text: "0"
+              - generic [ref=f1e1012]: 0 venta(s)
+            - cell "Bs 11,67" [ref=f1e1013]
+            - cell "Bs 15,00" [ref=f1e1014]
+            - cell "Bs 3,33" [ref=f1e1015]
+            - cell "Bs 0,00" [ref=f1e1016]
+            - cell "Bs 0,00" [ref=f1e1017]
+            - cell "Bs 0,00" [ref=f1e1018]
+            - cell [ref=f1e1019]:
+              - status [ref=f1e1020]: "27"
+            - cell "Sin ventas" [ref=f1e1021]
+          - row [ref=f1e1022]:
+            - cell [ref=f1e1023]:
+              - status [ref=f1e1024]: "5"
+            - cell "BEBIDA REFRESCANTE TORONJITO 80ML SG80 · UNIDAD" [ref=f1e1025]:
+              - generic [ref=f1e1030]:
+                - generic [ref=f1e1031]: BEBIDA REFRESCANTE TORONJITO 80ML
+                - generic [ref=f1e1032]: SG80 · UNIDAD
+            - cell "JUGOS Y NÉCTARES" [ref=f1e1033]
+            - cell "0 0 venta(s)" [ref=f1e1036]:
+              - text: "0"
+              - generic [ref=f1e1037]: 0 venta(s)
+            - cell "Bs 0,42" [ref=f1e1038]
+            - cell "Bs 0,50" [ref=f1e1039]
+            - cell "Bs 0,08" [ref=f1e1040]
+            - cell "Bs 0,00" [ref=f1e1041]
+            - cell "Bs 0,00" [ref=f1e1042]
+            - cell "Bs 0,00" [ref=f1e1043]
+            - cell [ref=f1e1044]:
+              - status [ref=f1e1045]: "0"
+            - cell "Sin ventas" [ref=f1e1046]
+          - row [ref=f1e1047]:
+            - cell [ref=f1e1048]:
+              - status [ref=f1e1049]: "6"
+            - cell "CASCADA 2L DURAZNO CASCDUR · ML" [ref=f1e1050]:
+              - generic [ref=f1e1055]:
+                - generic [ref=f1e1056]: CASCADA 2L DURAZNO
+                - generic [ref=f1e1057]: CASCDUR · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1058]
+            - cell "0 0 venta(s)" [ref=f1e1061]:
+              - text: "0"
+              - generic [ref=f1e1062]: 0 venta(s)
+            - cell "Bs 7,93" [ref=f1e1063]
+            - cell "Bs 10,00" [ref=f1e1064]
+            - cell "Bs 2,07" [ref=f1e1065]
+            - cell "Bs 0,00" [ref=f1e1066]
+            - cell "Bs 0,00" [ref=f1e1067]
+            - cell "Bs 0,00" [ref=f1e1068]
+            - cell [ref=f1e1069]:
+              - status [ref=f1e1070]: "7"
+            - cell "Sin ventas" [ref=f1e1071]
+          - row [ref=f1e1072]:
+            - cell [ref=f1e1073]:
+              - status [ref=f1e1074]: "7"
+            - cell "CASCADA FRESA 2L CASC-4132 · ML" [ref=f1e1075]:
+              - generic [ref=f1e1080]:
+                - generic [ref=f1e1081]: CASCADA FRESA 2L
+                - generic [ref=f1e1082]: CASC-4132 · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1083]
+            - cell "0 0 venta(s)" [ref=f1e1086]:
+              - text: "0"
+              - generic [ref=f1e1087]: 0 venta(s)
+            - cell "Bs 7,93" [ref=f1e1088]
+            - cell "Bs 10,00" [ref=f1e1089]
+            - cell "Bs 2,07" [ref=f1e1090]
+            - cell "Bs 0,00" [ref=f1e1091]
+            - cell "Bs 0,00" [ref=f1e1092]
+            - cell "Bs 0,00" [ref=f1e1093]
+            - cell [ref=f1e1094]:
+              - status [ref=f1e1095]: "7"
+            - cell "Sin ventas" [ref=f1e1096]
+          - row [ref=f1e1097]:
+            - cell [ref=f1e1098]:
+              - status [ref=f1e1099]: "8"
+            - cell "CASCADA PAPAYA 2L CASCPA8999 · ML" [ref=f1e1100]:
+              - generic [ref=f1e1105]:
+                - generic [ref=f1e1106]: CASCADA PAPAYA 2L
+                - generic [ref=f1e1107]: CASCPA8999 · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1108]
+            - cell "0 0 venta(s)" [ref=f1e1111]:
+              - text: "0"
+              - generic [ref=f1e1112]: 0 venta(s)
+            - cell "Bs 7,93" [ref=f1e1113]
+            - cell "Bs 10,00" [ref=f1e1114]
+            - cell "Bs 2,07" [ref=f1e1115]
+            - cell "Bs 0,00" [ref=f1e1116]
+            - cell "Bs 0,00" [ref=f1e1117]
+            - cell "Bs 0,00" [ref=f1e1118]
+            - cell [ref=f1e1119]:
+              - status [ref=f1e1120]: "1"
+            - cell "Sin ventas" [ref=f1e1121]
+          - row [ref=f1e1122]:
+            - cell [ref=f1e1123]:
+              - status [ref=f1e1124]: "9"
+            - cell "CEREAL BOLSA CHOCOLITAS CRICK 750G SG750 · GR" [ref=f1e1125]:
+              - generic [ref=f1e1130]:
+                - generic [ref=f1e1131]: CEREAL BOLSA CHOCOLITAS CRICK 750G
+                - generic [ref=f1e1132]: SG750 · GR
+            - cell "GALLETAS Y CEREALES" [ref=f1e1133]
+            - cell "0 0 venta(s)" [ref=f1e1136]:
+              - text: "0"
+              - generic [ref=f1e1137]: 0 venta(s)
+            - cell "Bs 27,00" [ref=f1e1138]
+            - cell "Bs 31,00" [ref=f1e1139]
+            - cell "Bs 4,00" [ref=f1e1140]
+            - cell "Bs 0,00" [ref=f1e1141]
+            - cell "Bs 0,00" [ref=f1e1142]
+            - cell "Bs 0,00" [ref=f1e1143]
+            - cell [ref=f1e1144]:
+              - status [ref=f1e1145]: "3"
+            - cell "Sin ventas" [ref=f1e1146]
+          - row [ref=f1e1147]:
+            - cell [ref=f1e1148]:
+              - status [ref=f1e1149]: "10"
+            - cell "COKA QUINA 330ML CAS757 · UNIDAD" [ref=f1e1150]:
+              - generic [ref=f1e1155]:
+                - generic [ref=f1e1156]: COKA QUINA 330ML
+                - generic [ref=f1e1157]: CAS757 · UNIDAD
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1158]
+            - cell "0 0 venta(s)" [ref=f1e1161]:
+              - text: "0"
+              - generic [ref=f1e1162]: 0 venta(s)
+            - cell "Bs 2,13" [ref=f1e1163]
+            - cell "Bs 3,00" [ref=f1e1164]
+            - cell "Bs 0,87" [ref=f1e1165]
+            - cell "Bs 0,00" [ref=f1e1166]
+            - cell "Bs 0,00" [ref=f1e1167]
+            - cell "Bs 0,00" [ref=f1e1168]
+            - cell [ref=f1e1169]:
+              - status [ref=f1e1170]: "17"
+            - cell "Sin ventas" [ref=f1e1171]
+          - row [ref=f1e1172]:
+            - cell [ref=f1e1173]:
+              - status [ref=f1e1174]: "11"
+            - cell "FANTA NARANJA 2L FAN-4866 · ML" [ref=f1e1175]:
+              - generic [ref=f1e1180]:
+                - generic [ref=f1e1181]: FANTA NARANJA 2L
+                - generic [ref=f1e1182]: FAN-4866 · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1183]
+            - cell "0 0 venta(s)" [ref=f1e1186]:
+              - text: "0"
+              - generic [ref=f1e1187]: 0 venta(s)
+            - cell "Bs 12,66" [ref=f1e1188]
+            - cell "Bs 16,00" [ref=f1e1189]
+            - cell "Bs 3,34" [ref=f1e1190]
+            - cell "Bs 0,00" [ref=f1e1191]
+            - cell "Bs 0,00" [ref=f1e1192]
+            - cell "Bs 0,00" [ref=f1e1193]
+            - cell [ref=f1e1194]:
+              - status [ref=f1e1195]: "4"
+            - cell "Sin ventas" [ref=f1e1196]
+          - row [ref=f1e1197]:
+            - cell [ref=f1e1198]:
+              - status [ref=f1e1199]: "12"
+            - cell "FANTA NARANJA 3L FANT-3385 · ML" [ref=f1e1200]:
+              - generic [ref=f1e1205]:
+                - generic [ref=f1e1206]: FANTA NARANJA 3L
+                - generic [ref=f1e1207]: FANT-3385 · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1208]
+            - cell "0 0 venta(s)" [ref=f1e1211]:
+              - text: "0"
+              - generic [ref=f1e1212]: 0 venta(s)
+            - cell "Bs 18,60" [ref=f1e1213]
+            - cell "Bs 20,00" [ref=f1e1214]
+            - cell "Bs 1,40" [ref=f1e1215]
+            - cell "Bs 0,00" [ref=f1e1216]
+            - cell "Bs 0,00" [ref=f1e1217]
+            - cell "Bs 0,00" [ref=f1e1218]
+            - cell [ref=f1e1219]:
+              - status [ref=f1e1220]: "10"
+            - cell "Sin ventas" [ref=f1e1221]
+          - row [ref=f1e1222]:
+            - cell [ref=f1e1223]:
+              - status [ref=f1e1224]: "13"
+            - cell "FANTA PAPYA 3L FANT-PA-3052 · ML" [ref=f1e1225]:
+              - generic [ref=f1e1230]:
+                - generic [ref=f1e1231]: FANTA PAPYA 3L
+                - generic [ref=f1e1232]: FANT-PA-3052 · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1233]
+            - cell "0 0 venta(s)" [ref=f1e1236]:
+              - text: "0"
+              - generic [ref=f1e1237]: 0 venta(s)
+            - cell "Bs 18,60" [ref=f1e1238]
+            - cell "Bs 20,00" [ref=f1e1239]
+            - cell "Bs 1,40" [ref=f1e1240]
+            - cell "Bs 0,00" [ref=f1e1241]
+            - cell "Bs 0,00" [ref=f1e1242]
+            - cell "Bs 0,00" [ref=f1e1243]
+            - cell [ref=f1e1244]:
+              - status [ref=f1e1245]: "6"
+            - cell "Sin ventas" [ref=f1e1246]
+          - row [ref=f1e1247]:
+            - cell [ref=f1e1248]:
+              - status [ref=f1e1249]: "14"
+            - cell "GALLETA CARSA JIRAFA 1KG SG255 · GR" [ref=f1e1250]:
+              - generic [ref=f1e1255]:
+                - generic [ref=f1e1256]: GALLETA CARSA JIRAFA 1KG
+                - generic [ref=f1e1257]: SG255 · GR
+            - cell "GALLETAS Y CEREALES" [ref=f1e1258]
+            - cell "0 0 venta(s)" [ref=f1e1261]:
+              - text: "0"
+              - generic [ref=f1e1262]: 0 venta(s)
+            - cell "Bs 27,00" [ref=f1e1263]
+            - cell "Bs 30,00" [ref=f1e1264]
+            - cell "Bs 3,00" [ref=f1e1265]
+            - cell "Bs 0,00" [ref=f1e1266]
+            - cell "Bs 0,00" [ref=f1e1267]
+            - cell "Bs 0,00" [ref=f1e1268]
+            - cell [ref=f1e1269]:
+              - status [ref=f1e1270]: "13"
+            - cell "Sin ventas" [ref=f1e1271]
+          - row [ref=f1e1272]:
+            - cell [ref=f1e1273]:
+              - status [ref=f1e1274]: "15"
+            - cell "GALLETA KREAM CRICK 220G SG253 · GR" [ref=f1e1275]:
+              - generic [ref=f1e1280]:
+                - generic [ref=f1e1281]: GALLETA KREAM CRICK 220G
+                - generic [ref=f1e1282]: SG253 · GR
+            - cell "GALLETAS Y CEREALES" [ref=f1e1283]
+            - cell "0 0 venta(s)" [ref=f1e1286]:
+              - text: "0"
+              - generic [ref=f1e1287]: 0 venta(s)
+            - cell "Bs 0,00" [ref=f1e1288]
+            - cell "Bs 8,00" [ref=f1e1289]
+            - cell "Bs 8,00" [ref=f1e1290]
+            - cell "Bs 0,00" [ref=f1e1291]
+            - cell "Bs 0,00" [ref=f1e1292]
+            - cell "Bs 0,00" [ref=f1e1293]
+            - cell [ref=f1e1294]:
+              - status [ref=f1e1295]: "0"
+            - cell "Sin ventas" [ref=f1e1296]
+          - row [ref=f1e1297]:
+            - cell [ref=f1e1298]:
+              - status [ref=f1e1299]: "16"
+            - cell "GALLETAS CON CHISPAS DE CHOCOLATE SAN GABRIEL SAN-BAN · GR" [ref=f1e1300]:
+              - generic [ref=f1e1305]:
+                - generic [ref=f1e1306]: GALLETAS CON CHISPAS DE CHOCOLATE SAN GABRIEL
+                - generic [ref=f1e1307]: SAN-BAN · GR
+            - cell "GALLETAS Y CEREALES" [ref=f1e1308]
+            - cell "0 0 venta(s)" [ref=f1e1311]:
+              - text: "0"
+              - generic [ref=f1e1312]: 0 venta(s)
+            - cell "Bs 11,00" [ref=f1e1313]
+            - cell "Bs 15,00" [ref=f1e1314]
+            - cell "Bs 4,00" [ref=f1e1315]
+            - cell "Bs 0,00" [ref=f1e1316]
+            - cell "Bs 0,00" [ref=f1e1317]
+            - cell "Bs 0,00" [ref=f1e1318]
+            - cell [ref=f1e1319]:
+              - status [ref=f1e1320]: "0"
+            - cell "Sin ventas" [ref=f1e1321]
+          - row [ref=f1e1322]:
+            - cell [ref=f1e1323]:
+              - status [ref=f1e1324]: "17"
+            - cell "JUGO DEL VALLE CITRUS 300 ML DELV-3000 · ML" [ref=f1e1325]:
+              - generic [ref=f1e1330]:
+                - generic [ref=f1e1331]: JUGO DEL VALLE CITRUS 300 ML
+                - generic [ref=f1e1332]: DELV-3000 · ML
+            - cell "JUGOS Y NÉCTARES" [ref=f1e1333]
+            - cell "0 0 venta(s)" [ref=f1e1336]:
+              - text: "0"
+              - generic [ref=f1e1337]: 0 venta(s)
+            - cell "Bs 3,30" [ref=f1e1338]
+            - cell "Bs 4,00" [ref=f1e1339]
+            - cell "Bs 0,70" [ref=f1e1340]
+            - cell "Bs 0,00" [ref=f1e1341]
+            - cell "Bs 0,00" [ref=f1e1342]
+            - cell "Bs 0,00" [ref=f1e1343]
+            - cell [ref=f1e1344]:
+              - status [ref=f1e1345]: "4"
+            - cell "Sin ventas" [ref=f1e1346]
+          - row [ref=f1e1347]:
+            - cell [ref=f1e1348]:
+              - status [ref=f1e1349]: "18"
+            - cell "JUGO DEL VALLE CITRUS NARANJA 3L DELV-CITR56633 · ML" [ref=f1e1350]:
+              - generic [ref=f1e1355]:
+                - generic [ref=f1e1356]: JUGO DEL VALLE CITRUS NARANJA 3L
+                - generic [ref=f1e1357]: DELV-CITR56633 · ML
+            - cell "JUGOS Y NÉCTARES" [ref=f1e1358]
+            - cell "0 0 venta(s)" [ref=f1e1361]:
+              - text: "0"
+              - generic [ref=f1e1362]: 0 venta(s)
+            - cell "Bs 16,30" [ref=f1e1363]
+            - cell "Bs 20,00" [ref=f1e1364]
+            - cell "Bs 3,70" [ref=f1e1365]
+            - cell "Bs 0,00" [ref=f1e1366]
+            - cell "Bs 0,00" [ref=f1e1367]
+            - cell "Bs 0,00" [ref=f1e1368]
+            - cell [ref=f1e1369]:
+              - status [ref=f1e1370]: "10"
+            - cell "Sin ventas" [ref=f1e1371]
+          - row [ref=f1e1372]:
+            - cell [ref=f1e1373]:
+              - status [ref=f1e1374]: "19"
+            - cell "JUGO DEL VALLE TROPICAL ROJO 2L DEL-TRO · ML" [ref=f1e1375]:
+              - generic [ref=f1e1380]:
+                - generic [ref=f1e1381]: JUGO DEL VALLE TROPICAL ROJO 2L
+                - generic [ref=f1e1382]: DEL-TRO · ML
+            - cell "AGUAS Y GASEOSAS" [ref=f1e1383]
+            - cell "0 0 venta(s)" [ref=f1e1386]:
+              - text: "0"
+              - generic [ref=f1e1387]: 0 venta(s)
+            - cell "Bs 11,50" [ref=f1e1388]
+            - cell "Bs 12,50" [ref=f1e1389]
+            - cell "Bs 1,00" [ref=f1e1390]
+            - cell "Bs 0,00" [ref=f1e1391]
+            - cell "Bs 0,00" [ref=f1e1392]
+            - cell "Bs 0,00" [ref=f1e1393]
+            - cell [ref=f1e1394]:
+              - status [ref=f1e1395]: "5"
+            - cell "Sin ventas" [ref=f1e1396]
+          - row [ref=f1e1397]:
+            - cell [ref=f1e1398]:
+              - status [ref=f1e1399]: "20"
+            - cell "JUGO PURA VIDA CEREZA MANZANA 2L PURAVID-CER · ML" [ref=f1e1400]:
+              - generic [ref=f1e1405]:
+                - generic [ref=f1e1406]: JUGO PURA VIDA CEREZA MANZANA 2L
+                - generic [ref=f1e1407]: PURAVID-CER · ML
+            - cell "JUGOS Y NÉCTARES" [ref=f1e1408]
+            - cell "0 0 venta(s)" [ref=f1e1411]:
+              - text: "0"
+              - generic [ref=f1e1412]: 0 venta(s)
+            - cell "Bs 13,00" [ref=f1e1413]
+            - cell "Bs 15,00" [ref=f1e1414]
+            - cell "Bs 2,00" [ref=f1e1415]
+            - cell "Bs 0,00" [ref=f1e1416]
+            - cell "Bs 0,00" [ref=f1e1417]
+            - cell "Bs 0,00" [ref=f1e1418]
+            - cell [ref=f1e1419]:
+              - status [ref=f1e1420]: "22"
+            - cell "Sin ventas" [ref=f1e1421]
+      - generic [ref=f1e304]:
+        - generic [ref=f1e864]:
+          - generic [ref=f1e865]: "Filas por página:"
+          - generic [ref=f1e868] [cursor=pointer]:
+            - generic [ref=f1e870]:
+              - generic [ref=f1e871]: "20"
+              - combobox "20" [ref=f1e872]
+            - generic [ref=f1e873]: arrow_drop_down
+        - generic [ref=f1e875]:
+          - generic [ref=f1e876]: 1-20 de 309
+          - button "Primera página" [disabled] [ref=f1e877]:
+            - img [ref=f1e879]: first_page
+          - button "Página anterior" [disabled] [ref=f1e880]:
+            - img [ref=f1e882]: chevron_left
+          - button "Próxima página" [ref=f1e883] [cursor=pointer]:
+            - img [ref=f1e885]: chevron_right
+          - button "Última página" [ref=f1e886] [cursor=pointer]:
+            - img [ref=f1e888]: last_page
