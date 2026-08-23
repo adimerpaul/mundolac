@@ -73,12 +73,26 @@ class _PrincipalVistaState extends State<PrincipalVista> {
         escaneando: carrito.escaneando && _pestana == 0,
         alTocar: _nuevaVenta,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: const _CentroBajo(10),
       bottomNavigationBar: _MenuInferior(
         pestana: _pestana,
         alCambiar: _cambiar,
       ),
     );
+  }
+}
+
+/// `centerDocked` bajado unos píxeles para que el círculo sobresalga menos y
+/// no se monte sobre el botón "Revisar Orden" del punto de venta.
+class _CentroBajo extends FloatingActionButtonLocation {
+  const _CentroBajo(this.desplazamiento);
+
+  final double desplazamiento;
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry geometria) {
+    final base = FloatingActionButtonLocation.centerDocked.getOffset(geometria);
+    return Offset(base.dx, base.dy + desplazamiento);
   }
 }
 

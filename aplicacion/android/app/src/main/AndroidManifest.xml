@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- La app consume la API de Mundolac. Se habilita cleartext para poder
+         apuntar a un servidor local (http://192.168.x.x:8000) durante pruebas. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
-        android:label="aplicacion"
+        android:label="Mundolac Ventas"
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

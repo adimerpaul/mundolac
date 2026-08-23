@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/entorno.dart';
 import '../../core/formato.dart';
 import '../../core/tema.dart';
 import '../../vistamodelos/productos_vistamodelo.dart';
@@ -155,10 +156,10 @@ class CuentaVista extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        const Center(
+        Center(
           child: Text(
-            'Mundolac Ventas · v1.0.0',
-            style: TextStyle(color: AppColores.textoSuave, fontSize: 12),
+            'Mundolac Ventas · v${Entorno.version}',
+            style: const TextStyle(color: AppColores.textoSuave, fontSize: 12),
           ),
         ),
       ],

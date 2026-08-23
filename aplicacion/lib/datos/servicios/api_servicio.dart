@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
+import '../../core/entorno.dart';
+
 /// Error de negocio devuelto por la API (mensaje ya listo para mostrar).
 class ApiExcepcion implements Exception {
   ApiExcepcion(this.mensaje, {this.codigo = 0});
@@ -23,7 +25,8 @@ class ApiExcepcion implements Exception {
 class ApiServicio {
   ApiServicio({String? urlBase, this.token}) : urlBase = urlBase ?? urlPorDefecto;
 
-  static const String urlPorDefecto = 'https://bmundolac.tuprogam.com/api';
+  /// URL del archivo .env del entorno activo.
+  static String get urlPorDefecto => Entorno.apiUrl;
 
   /// URL base de la API. Se puede cambiar desde la pantalla de login.
   String urlBase;

@@ -44,10 +44,10 @@ class _ProductosVistaState extends State<ProductosVista> {
     }
   }
 
-  Future<void> _agregarAlCarrito(Producto producto) async {
-    await context.read<VentaVistaModelo>().agregar(producto);
-    if (mounted) mostrarMensaje(context, '${producto.nombre} agregado a la venta');
-  }
+  /// El aviso ("agregado" o el motivo por el que no se pudo) lo emite el
+  /// ViewModel del punto de venta, así no se muestran dos mensajes.
+  Future<void> _agregarAlCarrito(Producto producto) =>
+      context.read<VentaVistaModelo>().agregar(producto);
 
   @override
   Widget build(BuildContext context) {
@@ -65,19 +65,23 @@ class _ProductosVistaState extends State<ProductosVista> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
                   onChanged: vm.buscar,
+                  style: const TextStyle(fontSize: 14),
                   decoration: const InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 11),
                     hintText: 'Buscar en el catálogo',
-                    prefixIcon: Icon(Icons.search, size: 21),
+                    prefixIcon: Icon(Icons.search, size: 19),
+                    prefixIconConstraints: BoxConstraints(minWidth: 38, minHeight: 38),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Material(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -85,15 +89,15 @@ class _ProductosVistaState extends State<ProductosVista> {
                   onTap: vm.sincronizando ? null : _sincronizar,
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
-                    height: 48,
-                    width: 48,
+                    height: 42,
+                    width: 42,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: AppColores.borde),
                     ),
                     child: vm.sincronizando
                         ? const Padding(
-                            padding: EdgeInsets.all(13),
+                            padding: EdgeInsets.all(11),
                             child: CircularProgressIndicator(
                               strokeWidth: 2.2,
                               color: AppColores.verde,
@@ -118,34 +122,34 @@ class _ProductosVistaState extends State<ProductosVista> {
           child: vm.cargando && vm.productos.isEmpty
               ? const Center(child: CircularProgressIndicator(color: AppColores.verde))
               : vm.productos.isEmpty
-                  ? EstadoVacio(
-                      icono: Icons.inventory_2_outlined,
-                      titulo: vm.catalogoVacio ? 'Catálogo vacío' : 'Sin resultados',
-                      detalle: vm.catalogoVacio
-                          ? 'Sincronice para descargar los productos del servidor.'
-                          : 'Pruebe con otro nombre o código.',
-                      accion: vm.catalogoVacio
-                          ? ElevatedButton.icon(
-                              onPressed: _sincronizar,
-                              icon: const Icon(Icons.sync),
-                              label: const Text('Sincronizar ahora'),
-                            )
-                          : null,
-                    )
-                  : RefreshIndicator(
-                      onRefresh: _sincronizar,
-                      color: AppColores.verde,
-                      child: ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(14, 4, 14, 16),
-                        itemCount: vm.productos.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
-                        itemBuilder: (context, indice) => _FilaProducto(
-                          producto: vm.productos[indice],
-                          puedeVender: sesion.puedeVender,
-                          alAgregar: () => _agregarAlCarrito(vm.productos[indice]),
-                        ),
-                      ),
+              ? EstadoVacio(
+                  icono: Icons.inventory_2_outlined,
+                  titulo: vm.catalogoVacio ? 'Catálogo vacío' : 'Sin resultados',
+                  detalle: vm.catalogoVacio
+                      ? 'Sincronice para descargar los productos del servidor.'
+                      : 'Pruebe con otro nombre o código.',
+                  accion: vm.catalogoVacio
+                      ? ElevatedButton.icon(
+                          onPressed: _sincronizar,
+                          icon: const Icon(Icons.sync),
+                          label: const Text('Sincronizar ahora'),
+                        )
+                      : null,
+                )
+              : RefreshIndicator(
+                  onRefresh: _sincronizar,
+                  color: AppColores.verde,
+                  child: ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(12, 2, 12, 12),
+                    itemCount: vm.productos.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 6),
+                    itemBuilder: (context, indice) => _FilaProducto(
+                      producto: vm.productos[indice],
+                      puedeVender: sesion.puedeVender,
+                      alAgregar: () => _agregarAlCarrito(vm.productos[indice]),
                     ),
+                  ),
+                ),
         ),
       ],
     );
@@ -153,11 +157,7 @@ class _ProductosVistaState extends State<ProductosVista> {
 }
 
 class _FilaProducto extends StatelessWidget {
-  const _FilaProducto({
-    required this.producto,
-    required this.puedeVender,
-    required this.alAgregar,
-  });
+  const _FilaProducto({required this.producto, required this.puedeVender, required this.alAgregar});
 
   final Producto producto;
   final bool puedeVender;
@@ -169,28 +169,34 @@ class _FilaProducto extends StatelessWidget {
     final stockBajo = producto.stock > 0 && producto.stock <= 5;
 
     return Tarjeta(
+      padding: const EdgeInsets.fromLTRB(10, 7, 6, 7),
       hijo: Row(
         children: [
-          FotoProducto(foto: producto.foto, tamano: 52),
-          const SizedBox(width: 12),
+          FotoProducto(foto: producto.foto, tamano: 40, radio: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   producto.nombre,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w600, color: AppColores.texto),
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w600,
+                    color: AppColores.texto,
+                    height: 1.2,
+                  ),
                 ),
-                const SizedBox(height: 3),
                 Text(
                   '${producto.codigo}${producto.categoria == null ? '' : ' · ${producto.categoria}'}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 11.5, color: AppColores.textoSuave),
+                  style: const TextStyle(fontSize: 11, color: AppColores.textoSuave, height: 1.3),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 3),
                 Row(
                   children: [
                     Text(
@@ -198,20 +204,21 @@ class _FilaProducto extends StatelessWidget {
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         color: AppColores.verde,
-                        fontSize: 14,
+                        fontSize: 13,
+                        height: 1.2,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Etiqueta(
-                      texto: sinStock
-                          ? 'Sin stock'
-                          : '${producto.stock} ${producto.unidad}',
-                      color: sinStock
-                          ? AppColores.rojo
-                          : stockBajo
-                              ? AppColores.ambar
-                              : AppColores.textoSuave,
-                      icono: sinStock || stockBajo ? Icons.warning_amber_rounded : null,
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Etiqueta(
+                        texto: sinStock ? 'Sin stock' : '${producto.stock} ${producto.unidad}',
+                        color: sinStock
+                            ? AppColores.rojo
+                            : stockBajo
+                            ? AppColores.ambar
+                            : AppColores.textoSuave,
+                        icono: sinStock || stockBajo ? Icons.warning_amber_rounded : null,
+                      ),
                     ),
                   ],
                 ),
@@ -221,7 +228,8 @@ class _FilaProducto extends StatelessWidget {
           if (puedeVender)
             IconButton(
               onPressed: sinStock ? null : alAgregar,
-              icon: const Icon(Icons.add_shopping_cart),
+              icon: const Icon(Icons.add_shopping_cart, size: 21),
+              visualDensity: VisualDensity.compact,
               color: AppColores.verde,
               tooltip: 'Agregar a la venta',
             ),

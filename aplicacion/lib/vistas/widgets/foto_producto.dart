@@ -27,7 +27,7 @@ class FotoProducto extends StatelessWidget {
             : Image.network(
                 url,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _respaldo(),
+                errorBuilder: (_, _, _) => _respaldo(),
                 loadingBuilder: (context, hijo, progreso) =>
                     progreso == null ? hijo : _respaldo(),
               ),

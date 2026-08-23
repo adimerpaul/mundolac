@@ -42,6 +42,7 @@ dependencies:
   provider: ^6.1.5+1
   intl: ^0.20.2
   mobile_scanner: ^7.4.0
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +54,20 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+# Icono de la app (logo Mundilac). Regenerar con:
+#   dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: assets/icono/logo.png
+  # Icono adaptativo de Android: el logo va sobre fondo blanco y con margen
+  # para que el recorte circular no le coma los bordes.
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/icono/logo.png
+  adaptive_icon_foreground_inset: 20
+  min_sdk_android: 24
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -64,6 +79,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Archivos de entorno: .env.development se usa en debug y .env.production
+  # en release (ver lib/core/entorno.dart).
+  assets:
+    - .env.development
+    - .env.production
+    - assets/icono/logo.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

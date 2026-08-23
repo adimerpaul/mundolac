@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import '../datos/repositorios/carrito_repositorio.dart';
 import '../datos/repositorios/producto_repositorio.dart';
 import '../modelos/item_carrito.dart';
@@ -16,14 +18,18 @@ class VentaVistaModelo extends VistaModeloBase {
   final List<ItemCarrito> _items = [];
   List<Producto> _resultados = [];
   String _busqueda = '';
-  String? _aviso;
   bool _escaneando = false;
   Timer? _rebote;
+
+  /// Mensajes puntuales para la vista (producto agregado, sin stock, …).
+  ///
+  /// Va aparte de `notifyListeners` a propósito: la vista lo escucha con un
+  /// listener y muestra el aviso fuera del `build`, nunca durante uno.
+  final ValueNotifier<String?> avisos = ValueNotifier<String?>(null);
 
   List<ItemCarrito> get items => List.unmodifiable(_items);
   List<Producto> get resultados => List.unmodifiable(_resultados);
   String get busqueda => _busqueda;
-  String? get aviso => _aviso;
   bool get escaneando => _escaneando;
   bool get buscando => _busqueda.trim().isNotEmpty;
   bool get vacio => _items.isEmpty;
@@ -31,6 +37,11 @@ class VentaVistaModelo extends VistaModeloBase {
   int get cantidadItems => _items.fold(0, (suma, item) => suma + item.cantidad);
   int get lineas => _items.length;
   double get subtotal => _items.fold(0.0, (suma, item) => suma + item.total);
+
+  /// Cantidad total comprometida de un producto sumando todas sus líneas.
+  int cantidadDeProducto(int productoId, {int? exceptoLinea}) => _items
+      .where((item) => item.productoId == productoId && item.id != exceptoLinea)
+      .fold(0, (suma, item) => suma + item.cantidad);
 
   Future<void> iniciar() async {
     await ejecutar(() async {
@@ -69,44 +80,45 @@ class VentaVistaModelo extends VistaModeloBase {
     buscar('');
   }
 
-  Future<void> agregar(Producto producto, {int cantidad = 1}) async {
-    final indice = _items.indexWhere((item) => item.productoId == producto.id);
-    final actual = indice >= 0 ? _items[indice].cantidad : 0;
-    final deseada = actual + cantidad;
+  /// Agrega el producto **como una línea nueva**, aunque ya esté en el carrito.
+  /// Devuelve `false` si no hay stock suficiente contando las demás líneas.
+  Future<bool> agregar(Producto producto, {int cantidad = 1}) async {
+    final comprometido = cantidadDeProducto(producto.id);
 
     if (producto.stock <= 0) {
-      _mostrarAviso('${producto.nombre} no tiene stock disponible');
-      return;
+      _avisar('${producto.nombre} no tiene stock disponible');
+      return false;
     }
-    if (deseada > producto.stock) {
-      _mostrarAviso('Sólo hay ${producto.stock} ${producto.unidad} de ${producto.nombre}');
-      return;
+    if (comprometido + cantidad > producto.stock) {
+      _avisar(
+        'Sólo quedan ${producto.stock - comprometido} ${producto.unidad} '
+        'de ${producto.nombre}',
+      );
+      return false;
     }
 
-    final item = indice >= 0
-        ? _items[indice].copiar(cantidad: deseada)
-        : ItemCarrito.desdeProducto(producto, cantidad: cantidad);
-
-    if (indice >= 0) {
-      _items[indice] = item;
-    } else {
-      _items.add(item);
-    }
+    final item = ItemCarrito.desdeProducto(producto, cantidad: cantidad);
+    final id = await _carritos.agregar(item);
+    _items.add(item.copiar(id: id));
     notificar();
-    await _carritos.guardar(item);
+    _avisar('${producto.nombre} agregado');
+    return true;
   }
 
   Future<void> cambiarCantidad(ItemCarrito item, int cantidad) async {
     if (cantidad <= 0) return quitar(item);
-    if (cantidad > item.stock) {
-      _mostrarAviso('Sólo hay ${item.stock} ${item.unidad} de ${item.nombre}');
+
+    final otras = cantidadDeProducto(item.productoId, exceptoLinea: item.id);
+    if (otras + cantidad > item.stock) {
+      _avisar('Sólo quedan ${item.stock - otras} ${item.unidad} de ${item.nombre}');
       return;
     }
-    final indice = _items.indexWhere((i) => i.productoId == item.productoId);
+
+    final indice = _items.indexWhere((i) => i.id == item.id);
     if (indice < 0) return;
     _items[indice] = item.copiar(cantidad: cantidad);
     notificar();
-    await _carritos.actualizarCantidad(item.productoId, cantidad);
+    if (item.id != null) await _carritos.actualizarCantidad(item.id!, cantidad);
   }
 
   Future<void> aumentar(ItemCarrito item) => cambiarCantidad(item, item.cantidad + 1);
@@ -114,9 +126,9 @@ class VentaVistaModelo extends VistaModeloBase {
   Future<void> disminuir(ItemCarrito item) => cambiarCantidad(item, item.cantidad - 1);
 
   Future<void> quitar(ItemCarrito item) async {
-    _items.removeWhere((i) => i.productoId == item.productoId);
+    _items.removeWhere((i) => i.id == item.id);
     notificar();
-    await _carritos.quitar(item.productoId);
+    if (item.id != null) await _carritos.quitar(item.id!);
   }
 
   Future<void> limpiar() async {
@@ -129,12 +141,10 @@ class VentaVistaModelo extends VistaModeloBase {
   Future<bool> agregarPorCodigo(String codigo) async {
     final producto = await _productos.porCodigoBarras(codigo);
     if (producto == null) {
-      _mostrarAviso('Código $codigo no registrado');
+      _avisar('Código $codigo no registrado');
       return false;
     }
-    await agregar(producto);
-    if (_aviso == null) _mostrarAviso('${producto.nombre} agregado');
-    return true;
+    return agregar(producto);
   }
 
   /// Tras registrar una venta el carrito ya se vació en la base local.
@@ -146,20 +156,17 @@ class VentaVistaModelo extends VistaModeloBase {
     notificar();
   }
 
-  void _mostrarAviso(String mensaje) {
-    _aviso = mensaje;
-    notificar();
-  }
-
-  void limpiarAviso() {
-    if (_aviso == null) return;
-    _aviso = null;
-    notificar();
+  void _avisar(String mensaje) {
+    // El null intermedio hace que el aviso se emita aunque se repita el texto
+    // (agregar dos veces el mismo producto, por ejemplo).
+    avisos.value = null;
+    avisos.value = mensaje;
   }
 
   @override
   void dispose() {
     _rebote?.cancel();
+    avisos.dispose();
     super.dispose();
   }
 }

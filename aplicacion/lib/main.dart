@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'core/entorno.dart';
 import 'core/tema.dart';
 import 'datos/repositorios/carrito_repositorio.dart';
 import 'datos/repositorios/producto_repositorio.dart';
@@ -16,8 +17,9 @@ import 'vistamodelos/ventas_vistamodelo.dart';
 import 'vistas/login/login_vista.dart';
 import 'vistas/principal/principal_vista.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Entorno.cargar();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -36,13 +38,13 @@ class AplicacionMundolac extends StatelessWidget {
         Provider<ApiServicio>(create: (_) => ApiServicio()),
         Provider<CarritoRepositorio>(create: (_) => CarritoRepositorio()),
         ProxyProvider<ApiServicio, SesionRepositorio>(
-          update: (_, api, __) => SesionRepositorio(api),
+          update: (_, api, _) => SesionRepositorio(api),
         ),
         ProxyProvider<ApiServicio, ProductoRepositorio>(
-          update: (_, api, __) => ProductoRepositorio(api),
+          update: (_, api, _) => ProductoRepositorio(api),
         ),
         ProxyProvider<ApiServicio, VentaRepositorio>(
-          update: (_, api, __) => VentaRepositorio(api),
+          update: (_, api, _) => VentaRepositorio(api),
         ),
         ChangeNotifierProvider<SesionVistaModelo>(
           create: (contexto) => SesionVistaModelo(
@@ -122,9 +124,22 @@ class _Cargando extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(child: CircularProgressIndicator(color: AppColores.verde)),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset('assets/icono/logo.png', height: 132, width: 132),
+            const SizedBox(height: 22),
+            const SizedBox(
+              height: 26,
+              width: 26,
+              child: CircularProgressIndicator(strokeWidth: 2.6, color: AppColores.verde),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

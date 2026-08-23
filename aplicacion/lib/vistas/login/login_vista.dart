@@ -85,30 +85,21 @@ class _LoginVistaState extends State<LoginVista> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Container(
-                      height: 76,
-                      width: 76,
-                      decoration: BoxDecoration(
-                        color: AppColores.verde,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Icon(Icons.storefront, color: Colors.white, size: 38),
-                    ),
-                    const SizedBox(height: 22),
-                    const Text(
-                      'Mundolac',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        color: AppColores.texto,
+                    Center(
+                      child: Image.asset(
+                        'assets/icono/logo.png',
+                        height: 128,
+                        width: 128,
+                        filterQuality: FilterQuality.medium,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 16),
                     const Text(
                       'Ventas móviles de la distribuidora',
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: AppColores.textoSuave, fontSize: 15),
                     ),
-                    const SizedBox(height: 34),
+                    const SizedBox(height: 30),
                     TextFormField(
                       controller: _usuario,
                       textInputAction: TextInputAction.next,

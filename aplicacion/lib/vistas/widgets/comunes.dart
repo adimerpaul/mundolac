@@ -19,35 +19,63 @@ class EstadoVacio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: const BoxDecoration(color: AppColores.verdeSuave, shape: BoxShape.circle),
-              child: Icon(icono, size: 34, color: AppColores.verde),
+    // Se adapta al alto disponible: con el escáner abierto queda poco espacio,
+    // así que el contenido se encoge y, si aún no entra, se puede desplazar.
+    return LayoutBuilder(
+      builder: (context, restricciones) {
+        final apretado = restricciones.maxHeight < 230;
+        final tamanoIcono = apretado ? 24.0 : 34.0;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 26, vertical: apretado ? 12 : 28),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: restricciones.maxHeight.isFinite
+                  ? restricciones.maxHeight - (apretado ? 24 : 56)
+                  : 0,
             ),
-            const SizedBox(height: 16),
-            Text(
-              titulo,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColores.texto),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(apretado ? 12 : 18),
+                  decoration: const BoxDecoration(
+                    color: AppColores.verdeSuave,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icono, size: tamanoIcono, color: AppColores.verde),
+                ),
+                SizedBox(height: apretado ? 10 : 16),
+                Text(
+                  titulo,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: apretado ? 14 : 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColores.texto,
+                  ),
+                ),
+                if (detalle != null) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    detalle!,
+                    textAlign: TextAlign.center,
+                    maxLines: apretado ? 2 : 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColores.textoSuave,
+                      height: 1.35,
+                      fontSize: apretado ? 12 : 14,
+                    ),
+                  ),
+                ],
+                if (accion != null) ...[SizedBox(height: apretado ? 12 : 18), accion!],
+              ],
             ),
-            if (detalle != null) ...[
-              const SizedBox(height: 6),
-              Text(
-                detalle!,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColores.textoSuave, height: 1.4),
-              ),
-            ],
-            if (accion != null) ...[const SizedBox(height: 18), accion!],
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -111,17 +139,43 @@ class Tarjeta extends StatelessWidget {
   }
 }
 
+/// Aviso flotante. Aparece **arriba** para no tapar el carrito ni el botón de
+/// cobro, que es donde está la vista del vendedor.
 void mostrarMensaje(BuildContext context, String mensaje, {bool esError = false}) {
+  final medidas = MediaQuery.of(context);
+  final alto = medidas.size.height;
+  final margenSuperior = medidas.padding.top + kToolbarHeight + 8;
+  // El SnackBar flotante se sube dejando casi todo el alto como margen inferior.
+  final margenInferior = (alto - margenSuperior - 64).clamp(0.0, alto);
+
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        content: Text(mensaje),
+        content: Row(
+          children: [
+            Icon(
+              esError ? Icons.error_outline : Icons.check_circle_outline,
+              color: Colors.white,
+              size: 18,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                mensaje,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ],
+        ),
         backgroundColor: esError ? AppColores.rojo : AppColores.verdeOscuro,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        margin: EdgeInsets.fromLTRB(12, 0, 12, margenInferior),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        duration: const Duration(seconds: 2),
+        duration: Duration(milliseconds: esError ? 2600 : 1400),
       ),
     );
 }

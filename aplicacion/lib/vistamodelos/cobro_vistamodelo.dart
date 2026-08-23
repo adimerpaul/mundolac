@@ -18,15 +18,7 @@ enum TipoPago {
 
 /// ViewModel de la pantalla "Revisar orden": descuento, forma de pago y cobro.
 class CobroVistaModelo extends VistaModeloBase {
-  CobroVistaModelo({
-    required List<ItemCarrito> items,
-    required VentaRepositorio ventas,
-    required CarritoRepositorio carritos,
-    required ProductoRepositorio productos,
-  })  : _items = items,
-        _ventas = ventas,
-        _carritos = carritos,
-        _productos = productos;
+  CobroVistaModelo(this._items, this._ventas, this._carritos, this._productos);
 
   final List<ItemCarrito> _items;
   final VentaRepositorio _ventas;
@@ -121,9 +113,14 @@ class CobroVistaModelo extends VistaModeloBase {
       );
 
       await _carritos.limpiar();
-      await _productos.descontarStock({
-        for (final item in _items) item.productoId: item.cantidad,
-      });
+
+      // Varias líneas pueden ser del mismo producto: se suman antes de
+      // descontar el stock cacheado.
+      final descuentos = <int, int>{};
+      for (final item in _items) {
+        descuentos[item.productoId] = (descuentos[item.productoId] ?? 0) + item.cantidad;
+      }
+      await _productos.descontarStock(descuentos);
 
       return venta;
     });

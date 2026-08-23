@@ -23,10 +23,10 @@ class CobroVista extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => CobroVistaModelo(
-        items: items,
-        ventas: context.read<VentaRepositorio>(),
-        carritos: context.read<CarritoRepositorio>(),
-        productos: context.read<ProductoRepositorio>(),
+        items,
+        context.read<VentaRepositorio>(),
+        context.read<CarritoRepositorio>(),
+        context.read<ProductoRepositorio>(),
       ),
       child: const _CobroCuerpo(),
     );

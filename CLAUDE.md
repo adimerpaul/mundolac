@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `back/` — API REST en Laravel 13 (PHP 8.3) + una landing pública renderizada con Blade.
 - `front/` — SPA en Quasar v2 / Vue 3 que consume la API.
+- `aplicacion/` — app Flutter (sólo Android) para vendedores: login + ventas.
 
 Todo el dominio, la UI, los mensajes y los nombres de permisos están **en español**. Mantener esa convención (`Producto`, `Venta`, `Compra`, `Pedido`, `Cliente`, `Proveedor`, `Lote`, `Configuracion`).
 
@@ -40,6 +41,19 @@ npm run build                 # quasar build → front/dist
 `npm run test` es un placeholder; no hay tests de frontend.
 
 `.env.development` apunta a `http://localhost:8000/api`; `.env.production` a `https://bmundolac.tuprogam.com/api`. Ambos están en `.gitignore` (usar `.env.example` como plantilla). **`front/dist/` sí se versiona** (la línea `/dist` está comentada en `front/.gitignore`) — el build se commitea para el despliegue.
+
+### App móvil (`cd aplicacion`)
+
+```bash
+flutter pub get
+flutter run                   # dispositivo o emulador Android
+flutter analyze               # análisis estático (debe salir limpio)
+flutter build apk --release
+```
+
+App Flutter **sólo Android** en **MVVM** (`modelos/` + `datos/` → `vistamodelos/` → `vistas/`, cableado con `provider` en `main.dart`). Hace login, guarda sesión/catálogo/carrito en **SQLite** (`sqflite`) y registra ventas contra `POST /api/ventas`; respeta los permisos `Crear Ventas`, `Ver Ventas` y `Ver Productos`.
+
+La URL de la API sale de `.env.development` (debug, `http://192.168.1.7:8000/api`) o `.env.production` (release, `https://bmundolac.tuprogam.com/api`) vía `flutter_dotenv`; **ambos archivos se versionan** porque están declarados como `assets` en `pubspec.yaml`. Desde el login se puede apuntar a otro servidor y ese valor, guardado en SQLite, tiene prioridad. Detalle en `aplicacion/README.md`.
 
 ## Arquitectura
 

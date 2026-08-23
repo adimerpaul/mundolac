@@ -110,7 +110,7 @@ class _VentasVistaState extends State<VentasVista> {
                         controller: _desplazamiento,
                         padding: const EdgeInsets.fromLTRB(14, 8, 14, 16),
                         itemCount: vm.ventas.length + (vm.cargandoMas ? 1 : 0),
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
+                        separatorBuilder: (_, _) => const SizedBox(height: 8),
                         itemBuilder: (context, indice) {
                           if (indice >= vm.ventas.length) {
                             return const Padding(
@@ -158,7 +158,7 @@ class _Filtros extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: RangoFecha.values.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
               itemBuilder: (context, indice) {
                 final opcion = RangoFecha.values[indice];
                 final activo = opcion == rango;
