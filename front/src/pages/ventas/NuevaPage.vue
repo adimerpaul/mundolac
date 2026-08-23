@@ -8,13 +8,22 @@
       <div class="col-12 col-md-6">
         <q-card flat bordered>
           <q-card-section class="row q-pa-sm">
-            <q-input ref="searchInput" v-model="search" dense outlined autofocus clearable debounce="250" class="col" placeholder="Buscar nombre, código o escanear código de barras" @update:model-value="reloadProducts" @keyup.enter="addExact">
+            <q-input ref="searchInput" v-model="search" dense outlined autofocus clearable debounce="250" class="col" placeholder="Buscar nombre, código o escanear código de barras" :loading="scanning" @update:model-value="reloadProducts" @clear="clearSearch" @keyup.esc="clearSearch" @keyup.enter="addExact">
               <template #prepend><q-icon name="qr_code_scanner"/></template>
+              <template #append><q-btn v-if="search" dense flat round size="sm" icon="backspace" color="grey-7" @click="clearSearch"><q-tooltip>Limpiar (Esc)</q-tooltip></q-btn></template>
             </q-input>
             <q-select v-model="category" :options="categories" option-label="nombre" dense outlined clearable label="Categoría" style="min-width:150px" @update:model-value="reloadProducts"/>
             <q-btn dense unelevated no-caps color="primary" icon="sync" label="Actualizar precio" size="md" :loading="loadingProducts" @click="reloadProducts"/>
           </q-card-section>
           <q-separator/>
+          <q-slide-transition>
+            <div v-if="lastAdded" class="q-px-sm q-pt-sm">
+              <q-banner dense rounded class="bg-green-1 text-green-9 added-banner">
+                <template #avatar><q-icon name="check_circle" color="positive"/></template>
+                Producto agregado: <b>{{lastAdded.nombre}}</b> · en el carrito: <b>{{lastAdded.cantidad}}</b>
+              </q-banner>
+            </div>
+          </q-slide-transition>
           <q-card-section class="q-pa-sm product-grid">
             <q-card v-for="product in products" :key="product.id" flat bordered class="product-card cursor-pointer" :class="{'product-card--empty':product.stock_inicial<=0}" @click="add(product)">
               <div class="product-image"><img v-if="product.foto" :src="photoUrl(product.foto)"/><q-icon v-else name="inventory_2" size="42px" color="grey-4"/></div>
@@ -73,11 +82,12 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, onMounted, ref, watch } from 'vue'
+import { computed, getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue'
 import { printSale } from '../../addons/ventaPrint'
 const {proxy}=getCurrentInstance()
 const products=ref([]),categories=ref([]),cart=ref([]),search=ref(''),category=ref(null),discount=ref(0),observation=ref(''),saving=ref(false),searchInput=ref(null)
-const page=ref(1),lastPage=ref(1),loadingProducts=ref(false)
+const page=ref(1),lastPage=ref(1),loadingProducts=ref(false),scanning=ref(false),lastAdded=ref(null)
+let addedTimer=null
 const paymentType=ref('EFECTIVO'),paymentTypes=['EFECTIVO','QR','COMBINADO'],cashAmount=ref(0),qrAmount=ref(0)
 const photoUrl=path=>`${proxy.$imgBase}/images/${path}`,money=v=>Number(v||0).toFixed(2)
 const subtotal=computed(()=>cart.value.reduce((sum,i)=>sum+Number(i.precio_venta)*i.cantidad,0))
@@ -88,17 +98,37 @@ const paymentDifference=computed(()=>Number((total.value-(Number(cashAmount.valu
 watch([paymentType,total],()=>{if(paymentType.value==='EFECTIVO'){cashAmount.value=total.value;qrAmount.value=0}else if(paymentType.value==='QR'){cashAmount.value=0;qrAmount.value=total.value}else if(Number(cashAmount.value)+Number(qrAmount.value)===0){cashAmount.value=total.value;qrAmount.value=0}})
 function loadProducts(){loadingProducts.value=true;proxy.$axios.get('/productos',{params:{q:search.value,categoria_id:category.value?.id,per_page:15,page:page.value}}).then(({data})=>{products.value=data.data;lastPage.value=data.last_page||1;if(page.value>lastPage.value){page.value=lastPage.value;loadProducts()}}).finally(()=>{loadingProducts.value=false})}
 function reloadProducts(){page.value=1;loadProducts()}
-function add(product){if(product.stock_inicial<=0)return proxy.$alert.error('Producto sin stock');const item=cart.value.find(i=>i.id===product.id);if(item){if(item.cantidad>=product.stock_inicial)return proxy.$alert.error('No hay más stock');item.cantidad++;syncLineTotal(item)}else cart.value.push({...product,cantidad:1,total_editable:Number(product.precio_venta).toFixed(2)})}
-function addExact(){const q=(search.value||'').trim().toUpperCase();const product=products.value.find(p=>p.codigo?.toUpperCase()===q||p.codigo_barras?.toUpperCase()===q);if(product){add(product);search.value='';reloadProducts()}}
+function add(product){if(product.stock_inicial<=0)return proxy.$alert.error('Producto sin stock')
+  const item=cart.value.find(i=>i.id===product.id)
+  if(item){item.stock_inicial=product.stock_inicial;if(item.cantidad>=product.stock_inicial)return proxy.$alert.error('No hay más stock');item.cantidad++;syncLineTotal(item);notifyAdded(item)}
+  else{const nuevo={...product,cantidad:1,total_editable:Number(product.precio_venta).toFixed(2)};cart.value.push(nuevo);notifyAdded(nuevo)}}
+// Aviso visible arriba de la grilla; el scanner es rápido y el Notify se pierde entre lecturas.
+function notifyAdded(item){lastAdded.value={nombre:item.nombre,cantidad:item.cantidad};clearTimeout(addedTimer);addedTimer=setTimeout(()=>{lastAdded.value=null},3000)}
+function focusSearch(){searchInput.value?.focus()}
+function clearSearch(){const tenia=!!search.value;search.value='';page.value=1;if(tenia)loadProducts();focusSearch()}
+const findExact=(code,list)=>{const t=code.toUpperCase();return list.find(p=>p.codigo?.toUpperCase()===t||p.codigo_barras?.toUpperCase()===t)||null}
+// El Enter del lector llega antes que el debounce de la búsqueda, así que si el
+// código no está en la página cargada se resuelve contra el backend: escanear el
+// mismo producto dos veces seguidas vuelve a sumarlo.
+async function addExact(){const code=(search.value||'').trim();if(!code||scanning.value)return
+  const local=findExact(code,products.value)
+  if(local){add(local);clearSearch();return}
+  scanning.value=true
+  try{const {data}=await proxy.$axios.get('/productos',{params:{q:code,per_page:20}})
+    const found=findExact(code,data.data)||(data.data.length===1?data.data[0]:null)
+    if(found){add(found);clearSearch()}else proxy.$alert.warning(`Sin coincidencias para "${code}"`)}
+  catch{proxy.$alert.error('No se pudo buscar el producto')}
+  finally{scanning.value=false;focusSearch()}}
 function changeQty(item,amount){const next=item.cantidad+amount;if(next<=0)return removeItem(item);if(next>item.stock_inicial)return proxy.$alert.error('Stock insuficiente');item.cantidad=next;syncLineTotal(item)}
 function validateQty(item){const value=Math.floor(Number(item.cantidad)||1);if(value>item.stock_inicial){item.cantidad=item.stock_inicial;proxy.$alert.error('La cantidad fue ajustada al stock disponible')}else item.cantidad=Math.max(1,value);syncLineTotal(item)}
 function syncLineTotal(item){item.total_editable=(Number(item.precio_venta||0)*Number(item.cantidad||0)).toFixed(2)}
 function applyLineTotal(item){const totalValue=Math.max(0,Number(item.total_editable)||0),quantity=Math.max(1,Number(item.cantidad)||1);item.total_editable=totalValue.toFixed(2);item.precio_venta=Number((totalValue/quantity).toFixed(4))}
 function removeItem(item){cart.value=cart.value.filter(i=>i.id!==item.id)}
-function confirmSale(){cart.value.forEach(item=>{const requestedTotal=item.total_editable;validateQty(item);item.total_editable=requestedTotal;applyLineTotal(item)});if(cart.value.some(i=>Number(i.precio_venta)<0||i.precio_venta===''))return proxy.$alert.error('Revisa los precios de venta');if(paymentType.value==='COMBINADO'&&paymentDifference.value!==0)return proxy.$alert.error('Efectivo y QR deben sumar el total');proxy.$alert.dialog(`¿Confirmar venta por Bs ${money(total.value)}?`).onOk(async()=>{saving.value=true;try{const {data}=await proxy.$axios.post('/ventas',{descuento:validDiscount.value,tipo_pago:paymentType.value,monto_efectivo:cashAmount.value,monto_qr:qrAmount.value,observacion:observation.value,detalles:cart.value.map(i=>({producto_id:i.id,cantidad:i.cantidad,precio_venta:i.precio_venta}))});proxy.$alert.success(`Venta ${data.numero} registrada`);printSale(data,proxy.$store.company,proxy.$imgBase);cart.value=[];discount.value=0;observation.value='';paymentType.value='EFECTIVO';loadProducts();searchInput.value?.focus()}catch(e){proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo registrar la venta')}finally{saving.value=false}})}
+function confirmSale(){cart.value.forEach(item=>{const requestedTotal=item.total_editable;validateQty(item);item.total_editable=requestedTotal;applyLineTotal(item)});if(cart.value.some(i=>Number(i.precio_venta)<0||i.precio_venta===''))return proxy.$alert.error('Revisa los precios de venta');if(paymentType.value==='COMBINADO'&&paymentDifference.value!==0)return proxy.$alert.error('Efectivo y QR deben sumar el total');proxy.$alert.dialog(`¿Confirmar venta por Bs ${money(total.value)}?`).onOk(async()=>{saving.value=true;try{const {data}=await proxy.$axios.post('/ventas',{descuento:validDiscount.value,tipo_pago:paymentType.value,monto_efectivo:cashAmount.value,monto_qr:qrAmount.value,observacion:observation.value,detalles:cart.value.map(i=>({producto_id:i.id,cantidad:i.cantidad,precio_venta:i.precio_venta}))});proxy.$alert.success(`Venta ${data.numero} registrada`);printSale(data,proxy.$store.company,proxy.$imgBase);cart.value=[];discount.value=0;observation.value='';paymentType.value='EFECTIVO';lastAdded.value=null;clearTimeout(addedTimer);loadProducts();focusSearch()}catch(e){proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo registrar la venta')}finally{saving.value=false}})}
 onMounted(()=>{loadProducts();proxy.$axios.get('/productos-catalogos').then(r=>categories.value=r.data.categorias)})
+onUnmounted(()=>clearTimeout(addedTimer))
 </script>
 
 <style scoped>
-.product-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;min-height:250px}.product-card{transition:.15s;overflow:hidden}.product-card:hover{border-color:#1976d2;transform:translateY(-1px)}.product-card--empty{opacity:.55}.product-image{height:46px;background:#f5f7f6;display:flex;align-items:center;justify-content:center}.product-image img{width:100%;height:100%;object-fit:contain}.product-name{height:27px;font-size:9px;line-height:1.15}.product-card .text-primary{font-size:9px}.product-card .q-badge{font-size:7px;padding:2px}.refresh-price-btn{min-height:24px;padding:0 6px;font-size:9px}.cart-card{position:sticky;top:62px}.cart-list{max-height:38vh;overflow:auto}.line-editor{display:flex;align-items:flex-end;gap:6px;flex-wrap:nowrap;margin-top:3px}.price-label,.total-label{font-size:10px;color:#607d8b;display:flex;align-items:flex-start;flex-direction:column;gap:1px;white-space:nowrap}.price-input,.qty-input,.total-input{width:72px;height:23px;border:1px solid #cfd8dc;border-radius:4px;padding:1px 4px;font-size:12px;color:#263238;background:#fff}.qty-input{width:55px}.total-input{width:76px;font-weight:700;color:#1565c0}.price-input:focus,.qty-input:focus,.total-input:focus{outline:1px solid #1976d2;border-color:#1976d2}@media(max-width:1023px){.cart-card{position:static}.product-grid{grid-template-columns:repeat(6,minmax(80px,1fr));min-height:0;overflow-x:auto}}@media(max-width:599px){.product-grid{grid-template-columns:repeat(3,minmax(0,1fr));overflow-x:visible}.line-editor{flex-wrap:wrap}}
+.product-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;min-height:250px}.product-card{transition:.15s;overflow:hidden}.product-card:hover{border-color:#1976d2;transform:translateY(-1px)}.product-card--empty{opacity:.55}.product-image{height:46px;background:#f5f7f6;display:flex;align-items:center;justify-content:center}.product-image img{width:100%;height:100%;object-fit:contain}.product-name{height:27px;font-size:9px;line-height:1.15}.product-card .text-primary{font-size:9px}.product-card .q-badge{font-size:7px;padding:2px}.refresh-price-btn{min-height:24px;padding:0 6px;font-size:9px}.added-banner{font-size:12px}.cart-card{position:sticky;top:62px}.cart-list{max-height:38vh;overflow:auto}.line-editor{display:flex;align-items:flex-end;gap:6px;flex-wrap:nowrap;margin-top:3px}.price-label,.total-label{font-size:10px;color:#607d8b;display:flex;align-items:flex-start;flex-direction:column;gap:1px;white-space:nowrap}.price-input,.qty-input,.total-input{width:72px;height:23px;border:1px solid #cfd8dc;border-radius:4px;padding:1px 4px;font-size:12px;color:#263238;background:#fff}.qty-input{width:55px}.total-input{width:76px;font-weight:700;color:#1565c0}.price-input:focus,.qty-input:focus,.total-input:focus{outline:1px solid #1976d2;border-color:#1976d2}@media(max-width:1023px){.cart-card{position:static}.product-grid{grid-template-columns:repeat(6,minmax(80px,1fr));min-height:0;overflow-x:auto}}@media(max-width:599px){.product-grid{grid-template-columns:repeat(3,minmax(0,1fr));overflow-x:visible}.line-editor{flex-wrap:wrap}}
 </style>

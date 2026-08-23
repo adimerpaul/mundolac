@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class PedidosExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     public function __construct(private readonly Collection $pedidos) {}
+
     public function collection(): Collection
     {
         return $this->pedidos->map(fn ($p) => [
@@ -18,6 +19,7 @@ class PedidosExport implements FromCollection, ShouldAutoSize, WithHeadings
             $p->tipo_pago, $p->detalles_count, $p->total, $p->estado, $p->usuario_nombre,
         ]);
     }
+
     public function headings(): array
     {
         return ['N.º Pedido', 'Fecha y hora', 'Cliente', 'Fecha entrega', 'Dirección entrega', 'Pago', 'Productos', 'Total', 'Estado', 'Usuario'];

@@ -1,23 +1,28 @@
 <template>
   <q-page class="q-pa-sm">
-    <div class="row items-center q-mb-sm"><div><div class="text-subtitle1 text-weight-bold">Ventas</div><div class="text-caption text-grey-7">Resumen e historial de ventas</div></div><q-space/>
+    <div class="row items-center q-mb-xs"><div><div class="text-subtitle1 text-weight-bold">Ventas</div><div class="text-caption text-grey-7">Resumen e historial de ventas</div></div><q-space/>
       <q-btn-dropdown dense flat color="primary" icon="download" label="Exportar" no-caps class="q-mr-xs"><q-list dense><q-item clickable v-close-popup @click="download('excel')"><q-item-section avatar><q-icon name="table_view" color="positive"/></q-item-section><q-item-section>Excel</q-item-section></q-item><q-item clickable v-close-popup @click="download('pdf')"><q-item-section avatar><q-icon name="picture_as_pdf" color="negative"/></q-item-section><q-item-section>PDF</q-item-section></q-item></q-list></q-btn-dropdown>
       <q-btn v-if="can('Crear Ventas')" dense unelevated color="positive" icon="add_shopping_cart" label="Nueva venta" no-caps to="/ventas/nueva"/>
     </div>
 
-    <div class="row q-col-gutter-sm q-mb-sm">
-      <div v-for="card in cards" :key="card.label" class="col-6 col-md-3"><q-card flat bordered :class="`summary-card bg-${card.color}-1 text-${card.color}-9`"><q-card-section class="row items-center q-pa-sm"><q-avatar :color="card.color" text-color="white" :icon="card.icon" size="36px"/><div class="q-ml-sm"><div class="text-caption">{{card.label}}</div><div class="text-h6 text-weight-bold">{{card.money?'Bs ':''}}{{card.money?money(card.value):card.value}}</div></div></q-card-section></q-card></div>
+    <div class="row q-col-gutter-xs q-mb-xs">
+      <div v-for="card in cards" :key="card.label" class="col-6 col-md-3"><q-card flat bordered :class="`summary-card bg-${card.color}-1 text-${card.color}-9`"><q-card-section class="row items-center q-pa-xs"><q-avatar :color="card.color" text-color="white" :icon="card.icon" size="28px"/><div class="q-ml-sm"><div class="text-caption card-label">{{card.label}}</div><div class="text-subtitle1 text-weight-bold">{{card.money?'Bs ':''}}{{card.money?money(card.value):card.value}}</div></div></q-card-section></q-card></div>
     </div>
 
     <q-card flat bordered>
-      <q-card-section class="row q-col-gutter-sm q-pa-sm">
-        <q-input v-model="search" dense outlined debounce="300" clearable placeholder="Buscar número, usuario o estado" class="col-12 col-md-4" @update:model-value="load"><template #prepend><q-icon name="search"/></template></q-input>
-        <q-select v-model="user" :options="summary.usuarios" option-label="name" dense outlined clearable label="Usuario" class="col-12 col-md-3" @update:model-value="load"/>
-        <q-input v-model="from" dense outlined type="date" label="Desde" class="col-6 col-md-2" @update:model-value="load"/><q-input v-model="to" dense outlined type="date" label="Hasta" class="col-6 col-md-2" @update:model-value="load"/>
+      <q-card-section class="row items-center q-gutter-xs q-pa-xs filtros">
+        <q-input v-model="search" dense outlined debounce="300" clearable placeholder="Buscar número, usuario o estado" class="col-grow campo-busqueda" @update:model-value="load"><template #prepend><q-icon name="search" size="18px"/></template></q-input>
+        <q-select v-model="user" :options="summary.usuarios" option-label="name" dense outlined clearable label="Usuario" class="campo-usuario" @update:model-value="load"/>
+        <q-input v-model="from" dense outlined stack-label type="date" label="Desde" class="campo-fecha" @update:model-value="load"/>
+        <q-input v-model="to" dense outlined stack-label type="date" label="Hasta" class="campo-fecha" @update:model-value="load"/>
+        <q-input v-model="horaFrom" dense outlined stack-label type="time" label="Hora desde" class="campo-hora" @update:model-value="load"/>
+        <q-input v-model="horaTo" dense outlined stack-label type="time" label="Hora hasta" class="campo-hora" @update:model-value="load"/>
+        <q-btn dense flat round icon="restart_alt" color="grey-7" size="sm" @click="resetFilters"><q-tooltip>Restablecer filtros (hoy 00:01 – 23:59)</q-tooltip></q-btn>
       </q-card-section>
       <q-table dense flat :rows="rows" :columns="columns" row-key="id" :loading="loading" v-model:pagination="pagination" :rows-per-page-options="[10,20,50,100,0]" @request="onRequest">
         <template #body-cell-total="p"><q-td :props="p"><b>Bs {{money(p.value)}}</b></q-td></template>
         <template #body-cell-tipo_pago="p"><q-td :props="p"><q-chip dense square :color="paymentColor(p.value)" text-color="white" :icon="payIcon(p.value)">{{p.value}}</q-chip><q-icon v-if="p.row.pago_cambiado" name="published_with_changes" color="orange-8" size="18px"><q-tooltip class="text-body2">Pago cambiado de <b>{{p.row.tipo_pago_original}}</b> a <b>{{p.value}}</b><br>{{p.row.pago_cambiado_por}} · {{formatDate(p.row.pago_cambiado_en)}}<template v-if="p.row.pago_cambiado_motivo"><br>Motivo: {{p.row.pago_cambiado_motivo}}</template></q-tooltip></q-icon></q-td></template>
+        <template #body-cell-detalles="p"><q-td :props="p" class="productos-cell"><div v-for="d in (p.row.detalles||[])" :key="d.id" class="producto-linea"><span class="text-weight-bold text-grey-9">{{qty(d)}}</span> <span class="text-primary">{{d.nombre}}</span></div><span v-if="!(p.row.detalles||[]).length" class="text-grey-6">—</span></q-td></template>
         <template #body-cell-estado="p"><q-td :props="p"><q-badge :color="p.value==='COMPLETADA'?'positive':'negative'" :label="p.value"/></q-td></template>
         <template #body-cell-actions="p"><q-td :props="p"><q-btn-dropdown dense flat color="primary" icon="more_vert" dropdown-icon="none"><q-list dense style="min-width:150px"><q-item clickable v-close-popup @click="showDetail(p.row)"><q-item-section avatar><q-icon name="visibility" color="primary"/></q-item-section><q-item-section>Ver detalle</q-item-section></q-item><q-item clickable v-close-popup @click="printRow(p.row)"><q-item-section avatar><q-icon name="print" color="blue-grey"/></q-item-section><q-item-section>Imprimir</q-item-section></q-item><q-separator/><q-item v-if="canChangePayment(p.row)" clickable v-close-popup class="text-orange-9" @click="openPayment(p.row)"><q-item-section avatar><q-icon name="swap_horiz"/></q-item-section><q-item-section><q-item-label>Cambiar pago</q-item-label><q-item-label caption class="text-orange-9">Solo una vez</q-item-label></q-item-section></q-item><q-item v-else-if="can('Cambiar Pago Ventas')&&p.row.pago_cambiado" clickable disable><q-item-section avatar><q-icon name="lock"/></q-item-section><q-item-section><q-item-label>Pago ya cambiado</q-item-label><q-item-label caption>No se puede repetir</q-item-label></q-item-section></q-item><q-item v-if="can('Anular Ventas')&&p.row.estado==='COMPLETADA'" clickable v-close-popup class="text-negative" @click="cancel(p.row)"><q-item-section avatar><q-icon name="cancel"/></q-item-section><q-item-section>Anular</q-item-section></q-item></q-list></q-btn-dropdown></q-td></template>
       </q-table>
@@ -66,12 +71,15 @@
 <script setup>
 import {computed,getCurrentInstance,reactive,ref} from 'vue'
 import {printSale} from '../../addons/ventaPrint'
-const {proxy}=getCurrentInstance(),rows=ref([]),loading=ref(false),search=ref(''),from=ref(''),to=ref(''),user=ref(null),dialog=ref(false),selected=reactive({}),summary=reactive({efectivo:0,qr:0,total:0,descuento:0,cantidad:0,usuarios:[]})
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+const {proxy}=getCurrentInstance(),rows=ref([]),loading=ref(false),search=ref(''),from=ref(today()),to=ref(today()),horaFrom=ref('00:01'),horaTo=ref('23:59'),user=ref(null),dialog=ref(false),selected=reactive({}),summary=reactive({efectivo:0,qr:0,total:0,descuento:0,cantidad:0,usuarios:[]})
 const pagination=ref({page:1,rowsPerPage:20,rowsNumber:0}),money=v=>Number(v||0).toFixed(2),can=p=>proxy.$store.hasPermission(p)
 const cards=computed(()=>[{label:'Total vendido',value:summary.total,money:true,icon:'trending_up',color:'primary'},{label:'Efectivo',value:summary.efectivo,money:true,icon:'payments',color:'green'},{label:'QR',value:summary.qr,money:true,icon:'qr_code_2',color:'blue'},{label:'Ventas',value:summary.cantidad,money:false,icon:'receipt_long',color:'purple'}])
-const columns=[{name:'actions',label:'',align:'left'},{name:'numero',label:'Nº venta',field:'numero',align:'left'},{name:'fecha',label:'Fecha',field:r=>formatDate(r.fecha),align:'left'},{name:'usuario',label:'Usuario',field:'usuario_nombre',align:'left'},{name:'tipo_pago',label:'Pago',field:'tipo_pago',align:'center'},{name:'detalles',label:'Productos',field:'detalles_count',align:'center'},{name:'descuento',label:'Descuento',field:'descuento',format:v=>`Bs ${money(v)}`,align:'right'},{name:'total',label:'Total',field:'total',align:'right'},{name:'estado',label:'Estado',field:'estado',align:'center'}]
+const columns=[{name:'actions',label:'',align:'left'},{name:'numero',label:'Nº venta',field:'numero',align:'left'},{name:'fecha',label:'Fecha',field:r=>formatDate(r.fecha),align:'left'},{name:'usuario',label:'Usuario',field:'usuario_nombre',align:'left'},{name:'tipo_pago',label:'Pago',field:'tipo_pago',align:'center'},{name:'detalles',label:'Productos',field:'detalles',align:'left'},{name:'descuento',label:'Descuento',field:'descuento',format:v=>`Bs ${money(v)}`,align:'right'},{name:'total',label:'Total',field:'total',align:'right'},{name:'estado',label:'Estado',field:'estado',align:'center'}]
 const detailColumns=[{name:'codigo',label:'Código',field:'codigo',align:'left'},{name:'nombre',label:'Producto',field:'nombre',align:'left'},{name:'cantidad',label:'Cant.',field:'cantidad',align:'center'},{name:'precio',label:'Precio',field:'precio_venta',format:v=>`Bs ${money(v)}`,align:'right'},{name:'total',label:'Total',field:'total',align:'right'}]
-const params=()=>({q:search.value,desde:from.value,hasta:to.value,user_id:user.value?.id}),paymentColor=v=>v==='EFECTIVO'?'green':v==='QR'?'blue':'purple'
+const params=()=>({q:search.value,desde:from.value,hasta:to.value,hora_desde:horaFrom.value,hora_hasta:horaTo.value,user_id:user.value?.id})
+const qty=d=>`${Number(d.cantidad)}${d.unidad&&d.unidad!=='UNIDAD'?d.unidad.toLowerCase():''}`
+const paymentColor=v=>v==='EFECTIVO'?'green':v==='QR'?'blue':'purple'
 const payIcon=v=>v==='QR'?'qr_code_2':v==='EFECTIVO'?'payments':'account_balance_wallet'
 const payDialog=ref(false),paySaving=ref(false)
 const payForm=reactive({id:null,numero:'',total:0,actual:'',tipo_pago:'QR',monto_efectivo:0,monto_qr:0,motivo:''})
@@ -80,6 +88,7 @@ const paySum=computed(()=>(Number(payForm.monto_efectivo)||0)+(Number(payForm.mo
 const payDiff=computed(()=>Math.abs(payForm.total-paySum.value)<0.005?0:payForm.total-paySum.value)
 const payInvalid=computed(()=>!payForm.tipo_pago||payForm.tipo_pago===payForm.actual||(payForm.tipo_pago==='COMBINADO'&&(payDiff.value!==0||Number(payForm.monto_efectivo)<0||Number(payForm.monto_qr)<0)))
 const canChangePayment=row=>can('Cambiar Pago Ventas')&&row.estado==='COMPLETADA'&&!row.pago_cambiado
+function resetFilters(){search.value='';user.value=null;from.value=today();to.value=today();horaFrom.value='00:01';horaTo.value='23:59';load()}
 function formatDate(v){return v?new Date(v).toLocaleString('es-BO'):''}function load(){onRequest({pagination:pagination.value})}function loadSummary(){proxy.$axios.get('/ventas-resumen',{params:params()}).then(r=>Object.assign(summary,r.data))}
 function onRequest({pagination:p}){loading.value=true;proxy.$axios.get('/ventas',{params:{...params(),page:p.page,per_page:p.rowsPerPage}}).then(r=>{rows.value=r.data.data;pagination.value={...p,rowsNumber:r.data.total};loadSummary()}).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudieron cargar las ventas')).finally(()=>loading.value=false)}
 function printSelected(){printSale(selected,proxy.$store.company,proxy.$imgBase)}
@@ -97,4 +106,22 @@ async function download(type){try{const response=await proxy.$axios.get(`/ventas
 load()
 </script>
 
-<style scoped>.summary-card{border-radius:10px}</style>
+<style scoped>
+.summary-card{border-radius:8px}
+.card-label{line-height:1.1}
+/* Los inputs nativos date/time necesitan ancho fijo: en columnas de grilla el
+   selector del navegador recorta la hora y se ve incompleta. */
+.filtros{row-gap:4px}
+.campo-busqueda{min-width:180px}
+.campo-usuario{width:150px}
+.campo-fecha{width:150px}
+.campo-hora{width:130px}
+.filtros :deep(.q-field__control){height:36px}
+.filtros :deep(.q-field__native){font-size:12px}
+.filtros :deep(.q-field__label){font-size:11px}
+.productos-cell{white-space:normal;max-width:360px;padding-top:3px;padding-bottom:3px}
+.producto-linea{font-size:11px;line-height:1.25}
+:deep(.q-table th),:deep(.q-table td){font-size:12px;padding:3px 8px}
+:deep(.q-table th){white-space:nowrap}
+@media(max-width:599px){.campo-usuario,.campo-fecha,.campo-hora{width:calc(50% - 6px)}}
+</style>

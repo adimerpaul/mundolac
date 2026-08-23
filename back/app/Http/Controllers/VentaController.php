@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\VentasExport;
+use App\Exports\VentasReporteExport;
+use App\Models\Configuracion;
 use App\Models\Lote;
 use App\Models\Producto;
 use App\Models\User;
@@ -17,7 +18,8 @@ class VentaController extends Controller
     public function index(Request $request)
     {
         $this->authorizeAction($request, 'Ver Ventas');
-        $query = $this->filteredQuery($request)->withCount('detalles')->latest('fecha');
+        $query = $this->filteredQuery($request)
+            ->with(['detalles:id,venta_id,nombre,cantidad,unidad'])->latest('fecha');
 
         $perPage = (int) $request->input('per_page', 20);
 
@@ -84,8 +86,43 @@ class VentaController extends Controller
     public function exportExcel(Request $request)
     {
         $this->authorizeAction($request, 'Ver Ventas');
+        $ventas = $this->filteredQuery($request)->with('detalles')->latest('fecha')->get();
 
-        return Excel::download(new VentasExport($this->filteredQuery($request)->latest('fecha')->get()), 'ventas_'.now()->format('Ymd_His').'.xlsx');
+        return Excel::download(
+            new VentasReporteExport($ventas, $this->exportMeta($request)),
+            'ventas_'.now()->format('Ymd_His').'.xlsx'
+        );
+    }
+
+    /** Datos de cabecera del Excel: empresa, quién lo generó y los filtros aplicados. */
+    private function exportMeta(Request $request): array
+    {
+        $filtros = [];
+        if ($desde = $request->date('desde')) {
+            $filtros[] = 'Desde '.$desde->format('d/m/Y');
+        }
+        if ($hasta = $request->date('hasta')) {
+            $filtros[] = 'Hasta '.$hasta->format('d/m/Y');
+        }
+        if ($horaDesde = $this->parseTime($request->input('hora_desde'), '00')) {
+            $filtros[] = 'Hora desde '.substr($horaDesde, 0, 5);
+        }
+        if ($horaHasta = $this->parseTime($request->input('hora_hasta'), '59')) {
+            $filtros[] = 'Hora hasta '.substr($horaHasta, 0, 5);
+        }
+        if ($userId = $request->integer('user_id')) {
+            $filtros[] = 'Usuario: '.(User::find($userId)?->name ?? $userId);
+        }
+        if ($search = trim((string) $request->input('q'))) {
+            $filtros[] = 'Búsqueda: '.$search;
+        }
+
+        return [
+            'empresa' => Configuracion::first()?->nombre_empresa ?? 'MUNDOLAC',
+            'generado_por' => $request->user()?->name ?? '—',
+            'generado_en' => now()->format('d/m/Y H:i:s'),
+            'filtros' => $filtros ? implode(' · ', $filtros) : 'Sin filtros (todas las ventas)',
+        ];
     }
 
     public function exportPdf(Request $request)
@@ -217,11 +254,31 @@ class VentaController extends Controller
         if ($to = $request->date('hasta')) {
             $query->whereDate('fecha', '<=', $to);
         }
+        // La hora se aplica como franja horaria del día: cada fecha del rango
+        // se filtra entre hora_desde y hora_hasta (por defecto 00:01 y 23:59).
+        if ($fromTime = $this->parseTime($request->input('hora_desde'), '00')) {
+            $query->whereTime('fecha', '>=', $fromTime);
+        }
+        if ($toTime = $this->parseTime($request->input('hora_hasta'), '59')) {
+            $query->whereTime('fecha', '<=', $toTime);
+        }
         if ($userId = $request->integer('user_id')) {
             $query->where('user_id', $userId);
         }
 
         return $query;
+    }
+
+    private function parseTime($value, string $defaultSeconds): ?string
+    {
+        if (! preg_match('/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/', trim((string) $value), $m)) {
+            return null;
+        }
+        if ((int) $m[1] > 23 || (int) $m[2] > 59) {
+            return null;
+        }
+
+        return sprintf('%02d:%02d:%02d', $m[1], $m[2], $m[3] ?? $defaultSeconds);
     }
 
     public function cancel(Request $request, Venta $venta)
