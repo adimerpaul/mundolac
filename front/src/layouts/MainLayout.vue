@@ -145,6 +145,7 @@ const links = [
   { title: 'Mapa de clientes', icon: 'map', link: '/clientes/mapa', can: 'Ver Clientes' },
   { title: 'Crear pedido', icon: 'add_location_alt', link: '/pedidos/nuevo', can: 'Crear Pedidos' },
   { title: 'Pedidos', icon: 'assignment', link: '/pedidos', can: 'Ver Pedidos' },
+  { title: 'Deudores', icon: 'account_balance_wallet', link: '/pedidos/deudores', can: 'Ver Deudores' },
   { title: 'Configuración', icon: 'settings', link: '/configuracion', can: 'Gestionar Configuración' },
 ]
 

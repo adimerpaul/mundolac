@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\CompraController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CompraController;
 use App\Http\Controllers\ConfiguracionController;
-use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaController;
@@ -24,6 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::put('/users/{id}/reset-password', [UserController::class, 'resetPassword']);
     Route::put('/users/{id}/password', [UserController::class, 'setPassword']);
+<<<<<<< HEAD
+=======
+    Route::delete('/users/{id}/tokens', [UserController::class, 'revokeTokens']);
+>>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
     Route::post('/users/{id}/avatar', [UserController::class, 'uploadAvatar']);
     Route::get('/permissions', [UserController::class, 'permissions']);
     Route::get('/users/{id}/permissions', [UserController::class, 'userPermissions']);
@@ -51,6 +55,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ventas/{venta}', [VentaController::class, 'show']);
     Route::put('/ventas/{venta}/anular', [VentaController::class, 'cancel']);
     Route::put('/ventas/{venta}/tipo-pago', [VentaController::class, 'changePayment']);
+    Route::post('/ventas/{venta}/pagos', [VentaController::class, 'registerPayment']);
+    Route::put('/pagos/{pago}/anular', [VentaController::class, 'cancelPayment']);
+    Route::post('/ventas-movimientos', [VentaController::class, 'storeMovement']);
 
     Route::get('/compras', [CompraController::class, 'index']);
     Route::get('/compras-resumen', [CompraController::class, 'summary']);
@@ -73,11 +80,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reportes/productos-vendidos', [ReporteController::class, 'productosVendidos']);
     Route::get('/reportes/productos-vendidos/excel', [ReporteController::class, 'productosVendidosExcel']);
     Route::get('/pedidos-clientes', [PedidoController::class, 'clients']);
+    Route::get('/pedidos-deudores', [PedidoController::class, 'debtors']);
     Route::get('/pedidos', [PedidoController::class, 'index']);
     Route::post('/pedidos', [PedidoController::class, 'store']);
     Route::get('/pedidos-exportar/excel', [PedidoController::class, 'exportExcel']);
     Route::get('/pedidos-exportar/pdf', [PedidoController::class, 'exportPdf']);
     Route::get('/pedidos-imprimir', [PedidoController::class, 'printData']);
     Route::get('/pedidos/{pedido}', [PedidoController::class, 'show']);
+    Route::put('/pedidos/{pedido}', [PedidoController::class, 'update']);
     Route::put('/pedidos/{pedido}/estado', [PedidoController::class, 'status']);
 });
