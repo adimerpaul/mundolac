@@ -39,36 +39,41 @@ class VentasHojaExport implements FromArray, WithEvents, WithTitle
 
         foreach ($this->ventas as $venta) {
             $detalles = $venta->detalles;
+            // Los egresos salen de caja: se muestran en negativo para que las columnas sumen neto.
+            $signo = $venta->tipo === 'EGRESO' ? -1 : 1;
             $filas[] = [
                 $venta->numero,
                 $venta->fecha?->format('d/m/Y'),
                 $venta->fecha?->format('H:i:s'),
                 $venta->usuario_nombre,
-                $venta->tipo_pago,
-                (float) $venta->monto_efectivo,
-                (float) $venta->monto_qr,
+                $venta->tipo === 'VENTA' ? $venta->tipo_pago : "{$venta->tipo} · {$venta->tipo_pago}",
+                $signo * (float) $venta->monto_efectivo,
+                $signo * (float) $venta->monto_qr,
                 (float) $detalles->sum('cantidad'),
                 $detalles->map(fn ($d) => trim($d->cantidad.' '.$d->nombre))->implode(', '),
                 (float) $venta->subtotal,
                 (float) $venta->descuento,
-                (float) $venta->total,
+                $signo * (float) $venta->total,
                 $venta->estado,
                 $venta->observacion,
             ];
         }
 
-        // Los importes solo suman ventas completadas: las anuladas no mueven dinero.
+        // Los importes solo suman movimientos completados: los anulados no mueven dinero.
+        // Efectivo y QR = caja neta (ventas cobradas + ingresos − egresos); Total = lo vendido.
         $completadas = $this->ventas->where('estado', 'COMPLETADA');
+        $neto = fn (string $campo) => (float) $completadas->sum(fn ($v) => ($v->tipo === 'EGRESO' ? -1 : 1) * (float) $v->{$campo});
+        $soloVentas = $completadas->where('tipo', 'VENTA');
         $this->filaTotales = count($filas) + 1;
         $filas[] = [
-            'TOTALES', null, null, $completadas->count().' completadas', null,
-            (float) $completadas->sum('monto_efectivo'),
-            (float) $completadas->sum('monto_qr'),
+            'TOTALES', null, null, $soloVentas->count().' ventas', null,
+            $neto('monto_efectivo'),
+            $neto('monto_qr'),
             (float) $completadas->sum(fn ($v) => $v->detalles->sum('cantidad')),
             null,
-            (float) $completadas->sum('subtotal'),
-            (float) $completadas->sum('descuento'),
-            (float) $completadas->sum('total'),
+            (float) $soloVentas->sum('subtotal'),
+            (float) $soloVentas->sum('descuento'),
+            (float) $soloVentas->sum('total'),
             null, null,
         ];
 

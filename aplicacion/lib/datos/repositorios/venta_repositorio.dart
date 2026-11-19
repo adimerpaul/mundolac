@@ -49,6 +49,7 @@ class VentaRepositorio {
   }) async {
     final respuesta = await _api.obtener('/ventas', parametros: {
       'q': busqueda,
+      'tipo': 'VENTA', // el vendedor no ve ingresos/egresos de caja
       'desde': desde == null ? null : _soloFecha(desde),
       'hasta': hasta == null ? null : _soloFecha(hasta),
       'page': pagina,

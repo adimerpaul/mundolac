@@ -75,7 +75,7 @@ class UserController extends Controller
     {
         $this->requirePermission($request, 'Ver Usuarios');
 
-        return User::with('permissions:id,name')->orderBy('name')->get();
+        return User::with('permissions:id,name')->withCount('tokens')->orderBy('name')->get();
     }
 
     public function store(Request $request)
@@ -151,6 +151,44 @@ class UserController extends Controller
         User::findOrFail($id)->update(['password' => bcrypt('123456')]);
 
         return response()->json(['message' => 'Contraseña restablecida a 123456']);
+    }
+
+    public function setPassword(Request $request, $id)
+    {
+        $this->requirePermission($request, 'Editar Usuarios');
+
+        $request->validate([
+            'password' => 'required|string|min:6',
+            'password_confirmation' => 'required|same:password',
+            'cerrar_sesiones' => 'sometimes|boolean',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->update(['password' => bcrypt($request->password)]);
+
+        $cerradas = $request->boolean('cerrar_sesiones') ? $this->deleteTokens($request, $user) : 0;
+
+        return response()->json(['message' => 'Contraseña actualizada', 'sesiones_cerradas' => $cerradas]);
+    }
+
+    public function revokeTokens(Request $request, $id)
+    {
+        $this->requirePermission($request, 'Editar Usuarios');
+
+        $cerradas = $this->deleteTokens($request, User::findOrFail($id));
+
+        return response()->json(['message' => 'Sesiones cerradas', 'sesiones_cerradas' => $cerradas]);
+    }
+
+    /** Borra los tokens Sanctum del usuario; si es uno mismo, conserva la sesión actual. */
+    private function deleteTokens(Request $request, User $user): int
+    {
+        $query = $user->tokens();
+        if ($request->user()->id === $user->id) {
+            $query->where('id', '!=', $request->user()->currentAccessToken()->id);
+        }
+
+        return $query->delete();
     }
 
     // ── Avatar ───────────────────────────────────────────────

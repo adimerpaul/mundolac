@@ -12,4 +12,6 @@ class Pedido extends Model
     protected $casts = ['fecha' => 'datetime', 'fecha_entrega' => 'date', 'total' => 'decimal:2', 'latitud_entrega' => 'decimal:7', 'longitud_entrega' => 'decimal:7'];
     public function detalles() { return $this->hasMany(PedidoDetalle::class); }
     public function cliente() { return $this->belongsTo(Cliente::class); }
+    public function ventas() { return $this->hasMany(Venta::class); }
+    public function venta() { return $this->hasOne(Venta::class)->where('tipo', 'VENTA')->where('estado', 'COMPLETADA'); }
 }

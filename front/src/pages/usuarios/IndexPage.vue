@@ -9,11 +9,14 @@
         <template #top><q-input v-model="search" dense outlined debounce="200" placeholder="Buscar usuario" clearable style="width:290px"><template #prepend><q-icon name="search" size="18px"/></template></q-input></template>
         <template #body-cell-user="p"><q-td :props="p"><div class="row items-center no-wrap q-gutter-xs"><q-avatar size="32px" color="blue-1" text-color="primary"><img v-if="p.row.avatar" :src="avatarUrl(p.row.avatar)"/><q-icon v-else name="person"/></q-avatar><div><div class="text-weight-medium">{{p.row.name}}</div><div class="text-caption text-grey-7">@{{p.row.username}}</div></div></div></q-td></template>
         <template #body-cell-permissions="p"><q-td :props="p"><q-badge outline color="primary" :label="`${p.row.permissions?.length||0} permisos`"/></q-td></template>
+        <template #body-cell-sessions="p"><q-td :props="p"><q-badge :color="p.row.tokens_count?'positive':'grey-5'" :label="p.row.tokens_count?`${p.row.tokens_count} activa${p.row.tokens_count>1?'s':''}`:'Ninguna'"/></q-td></template>
         <template #body-cell-actions="p"><q-td :props="p" class="text-left">
           <q-btn-dropdown dense flat color="primary" icon="more_vert" dropdown-icon="none">
             <q-list dense style="min-width:170px">
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openForm(p.row)"><q-item-section avatar><q-icon name="edit" color="primary"/></q-item-section><q-item-section>Editar y permisos</q-item-section></q-item>
+              <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openPassword(p.row)"><q-item-section avatar><q-icon name="password" color="primary"/></q-item-section><q-item-section>Cambiar contraseña</q-item-section></q-item>
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="resetPassword(p.row)"><q-item-section avatar><q-icon name="lock_reset" color="orange"/></q-item-section><q-item-section>Restablecer clave</q-item-section></q-item>
+              <q-item v-if="can('Editar Usuarios')" clickable v-close-popup :disable="!p.row.tokens_count" @click="revokeSessions(p.row)"><q-item-section avatar><q-icon name="logout" color="deep-orange"/></q-item-section><q-item-section>Cerrar sesiones</q-item-section></q-item>
               <q-separator/>
               <q-item v-if="can('Eliminar Usuarios')&&p.row.id!==proxy.$store.user.id" clickable v-close-popup class="text-negative" @click="remove(p.row)"><q-item-section avatar><q-icon name="delete"/></q-item-section><q-item-section>Eliminar</q-item-section></q-item>
             </q-list>
@@ -76,6 +79,26 @@
         </q-form>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="pwdDialog" persistent>
+      <q-card style="width:400px;max-width:96vw">
+        <q-form @submit="savePassword">
+          <q-card-section class="row items-center q-py-sm bg-blue-1">
+            <q-icon name="password" color="primary" size="24px" class="q-mr-sm"/>
+            <div><div class="text-subtitle1 text-weight-bold">Cambiar contraseña</div><div class="text-caption text-grey-7">{{pwd.name}} (@{{pwd.username}})</div></div>
+            <q-space/><q-btn flat round dense icon="close" v-close-popup/>
+          </q-card-section>
+          <q-card-section class="q-gutter-sm">
+            <q-input v-model="pwd.password" dense outlined :type="pwd.show?'text':'password'" label="Nueva contraseña *" autofocus :rules="[v=>v?.length>=6||'Mínimo 6 caracteres']" hide-bottom-space>
+              <template #append><q-icon :name="pwd.show?'visibility_off':'visibility'" class="cursor-pointer" @click="pwd.show=!pwd.show"/></template>
+            </q-input>
+            <q-input v-model="pwd.password_confirmation" dense outlined :type="pwd.show?'text':'password'" label="Repetir contraseña *" :rules="[v=>v===pwd.password||'Las contraseñas no coinciden']" hide-bottom-space/>
+            <q-checkbox v-model="pwd.cerrar_sesiones" dense size="sm" label="Cerrar las sesiones abiertas de este usuario"/>
+          </q-card-section>
+          <q-separator/><q-card-actions align="right" class="q-py-xs"><q-btn dense flat label="Cancelar" no-caps v-close-popup/><q-btn dense unelevated color="primary" icon="save" label="Guardar" no-caps type="submit" :loading="saving"/></q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -85,7 +108,8 @@ const { proxy }=getCurrentInstance()
 const rows=ref([]),search=ref(''),loading=ref(false),saving=ref(false),dialog=ref(false),permissions=ref([]),selectedPermissions=ref([])
 const avatarFile=ref(null),avatarPreview=ref(''),dragging=ref(false),fileInput=ref(null)
 const empty=()=>({id:null,name:'',username:'',email:'',celular:'',ci:'',password:'123456',avatar:null}),form=reactive(empty())
-const columns=[{name:'actions',label:'Acciones',align:'left'},{name:'user',label:'Usuario',field:'name',align:'left'},{name:'email',label:'Correo',field:'email',align:'left'},{name:'celular',label:'Celular',field:'celular',align:'left'},{name:'ci',label:'CI',field:'ci',align:'left'},{name:'permissions',label:'Permisos',align:'center'}]
+const columns=[{name:'actions',label:'Acciones',align:'left'},{name:'user',label:'Usuario',field:'name',align:'left'},{name:'email',label:'Correo',field:'email',align:'left'},{name:'celular',label:'Celular',field:'celular',align:'left'},{name:'ci',label:'CI',field:'ci',align:'left'},{name:'permissions',label:'Permisos',align:'center'},{name:'sessions',label:'Sesiones',align:'center'}]
+const pwdDialog=ref(false),pwd=reactive({id:null,name:'',username:'',password:'',password_confirmation:'',cerrar_sesiones:true,show:false})
 const can=p=>proxy.$store.hasPermission(p),required=v=>!!v||'Campo requerido'
 const avatarUrl=filename=>`${proxy.$imgBase}/images/${filename}`
 const filtered=computed(()=>{const q=(search.value||'').toLowerCase();return rows.value.filter(u=>[u.name,u.username,u.email,u.ci].some(v=>(v||'').toLowerCase().includes(q)))})
@@ -110,6 +134,9 @@ function rejectAvatar(){proxy.$alert.error('Selecciona una imagen de hasta 8 MB'
 function dropAvatar(event){dragging.value=false;const file=event.dataTransfer?.files?.[0];if(!file)return;if(!file.type.startsWith('image/')||file.size>8388608){rejectAvatar();return}avatarFile.value=file;selectAvatar(file)}
 async function save(){saving.value=true;try{let user;if(form.id){user=(await proxy.$axios.put(`/users/${form.id}`,form)).data}else{user=(await proxy.$axios.post('/users',form)).data}if(avatarFile.value){const data=new FormData();data.append('avatar',avatarFile.value);const uploaded=await proxy.$axios.post(`/users/${user.id}/avatar`,data);user.avatar=uploaded.data.avatar}if(can('Gestionar Permisos'))await proxy.$axios.put(`/users/${user.id}/permissions`,{permissions:selectedPermissions.value});proxy.$alert.success('Usuario guardado');closeForm();load()}catch(e){proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo guardar')}finally{saving.value=false}}
 function resetPassword(u){proxy.$alert.dialog(`¿Restablecer la contraseña de ${u.name} a 123456?`).onOk(()=>proxy.$axios.put(`/users/${u.id}/reset-password`).then(()=>proxy.$alert.success('Contraseña restablecida')).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo restablecer')))}
+function openPassword(u){Object.assign(pwd,{id:u.id,name:u.name,username:u.username,password:'',password_confirmation:'',cerrar_sesiones:true,show:false});pwdDialog.value=true}
+function savePassword(){saving.value=true;proxy.$axios.put(`/users/${pwd.id}/password`,{password:pwd.password,password_confirmation:pwd.password_confirmation,cerrar_sesiones:pwd.cerrar_sesiones}).then(r=>{const n=r.data.sesiones_cerradas;proxy.$alert.success(n?`Contraseña actualizada y ${n} sesión(es) cerrada(s)`:'Contraseña actualizada');pwdDialog.value=false;load()}).catch(e=>proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo cambiar la contraseña')).finally(()=>saving.value=false)}
+function revokeSessions(u){const self=u.id===proxy.$store.user.id;proxy.$alert.dialog(self?'¿Cerrar tus otras sesiones abiertas? (Esta se mantiene)':`¿Cerrar todas las sesiones de ${u.name}? Tendrá que volver a iniciar sesión.`).onOk(()=>proxy.$axios.delete(`/users/${u.id}/tokens`).then(r=>{proxy.$alert.success(`${r.data.sesiones_cerradas} sesión(es) cerrada(s)`);load()}).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudieron cerrar las sesiones')))}
 function remove(u){proxy.$alert.dialog(`¿Eliminar al usuario ${u.name}?`).onOk(()=>proxy.$axios.delete(`/users/${u.id}`).then(()=>{proxy.$alert.success('Usuario eliminado');load()}).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo eliminar')))}
 onMounted(load)
 </script>
