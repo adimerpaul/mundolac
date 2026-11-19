@@ -6,6 +6,7 @@
         <div class="text-caption text-grey-7">Inventario inicial, precios e imágenes</div>
       </div>
       <q-space />
+      <q-btn dense flat color="positive" icon="table_view" label="Excel" no-caps class="q-mr-xs" :loading="exporting" @click="exportExcel" />
       <q-btn v-if="can('Editar Productos')" dense flat color="primary" icon="category" label="Categorías" no-caps class="q-mr-xs" @click="openCategories" />
       <q-btn v-if="can('Crear Productos')" dense color="primary" icon="add" label="Nuevo" no-caps @click="openForm()" />
     </div>
@@ -67,8 +68,11 @@
                      outlined dense label="Precio compra *" prefix="Bs" class="col-12 col-sm-4" :rules="[nonNegative]" />
             <q-input v-model.number="form.precio_venta" type="number" step="0.01" min="0"
                      outlined dense label="Precio venta *" prefix="Bs" class="col-12 col-sm-4" :rules="[nonNegative]" />
-            <q-input v-model.number="form.stock_inicial" type="number" min="0"
-                     outlined dense label="Stock inicial *" class="col-12 col-sm-4" :rules="[nonNegative]" />
+            <q-input v-model.number="form.stock_inicial" type="number" min="0" :readonly="!can('Editar Stock Productos')"
+                     outlined dense label="Stock inicial *" class="col-12 col-sm-4" :rules="[nonNegative]"
+                     :hint="can('Editar Stock Productos') ? '' : 'Requiere permiso para modificar'">
+              <template v-if="!can('Editar Stock Productos')" #append><q-icon name="lock" size="18px" color="grey-7"/></template>
+            </q-input>
             </div>
           </q-card-section>
           <q-card-actions align="right">
@@ -141,6 +145,15 @@ function onRequest ({ pagination: p }) {
     .then(({ data }) => { rows.value=data.data; pagination.value={ ...p, rowsNumber:data.total } })
     .catch(e => proxy.$alert.error(e.response?.data?.message || 'No se pudieron cargar los productos'))
     .finally(() => { loading.value=false })
+}
+const exporting = ref(false)
+async function exportExcel () {
+  exporting.value = true
+  try {
+    const response = await proxy.$axios.get('/productos-exportar/excel', { params:{ q:search.value, categoria_id:category.value?.id }, responseType:'blob' })
+    const url = URL.createObjectURL(response.data), a = document.createElement('a')
+    a.href = url; a.download = `inventario_productos_${new Date().toISOString().slice(0,10)}.xlsx`; a.click(); URL.revokeObjectURL(url)
+  } catch { proxy.$alert.error('No se pudo exportar el Excel') } finally { exporting.value = false }
 }
 function loadCatalogs () {
   return proxy.$axios.get('/productos-catalogos').then(({data}) => {

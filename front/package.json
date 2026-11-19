@@ -17,6 +17,7 @@
     "@quasar/icongenie": "^6.1.2",
     "apexcharts": "^6.6.1",
     "axios": "^1.2.1",
+    "html5-qrcode": "^2.3.8",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.1",
     "printd": "^1.6.0",

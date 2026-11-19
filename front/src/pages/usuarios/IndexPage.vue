@@ -14,6 +14,7 @@
             <q-list dense style="min-width:170px">
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openForm(p.row)"><q-item-section avatar><q-icon name="edit" color="primary"/></q-item-section><q-item-section>Editar y permisos</q-item-section></q-item>
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="resetPassword(p.row)"><q-item-section avatar><q-icon name="lock_reset" color="orange"/></q-item-section><q-item-section>Restablecer clave</q-item-section></q-item>
+              <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openPassword(p.row)"><q-item-section avatar><q-icon name="key" color="teal"/></q-item-section><q-item-section>Cambiar contraseña</q-item-section></q-item>
               <q-separator/>
               <q-item v-if="can('Eliminar Usuarios')&&p.row.id!==proxy.$store.user.id" clickable v-close-popup class="text-negative" @click="remove(p.row)"><q-item-section avatar><q-icon name="delete"/></q-item-section><q-item-section>Eliminar</q-item-section></q-item>
             </q-list>
@@ -76,6 +77,26 @@
         </q-form>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="pwd.open" persistent>
+      <q-card style="width:380px;max-width:96vw">
+        <q-form @submit="savePassword">
+          <q-card-section class="row items-center q-py-sm bg-blue-1">
+            <q-avatar size="34px" color="primary" text-color="white" icon="key" class="q-mr-sm"/>
+            <div><div class="text-subtitle1 text-weight-bold">Cambiar contraseña</div><div class="text-caption text-grey-7">{{pwd.user?.name}} (@{{pwd.user?.username}})</div></div>
+            <q-space/><q-btn flat round dense icon="close" v-close-popup/>
+          </q-card-section>
+          <q-separator/>
+          <q-card-section class="q-gutter-sm">
+            <q-input v-model="pwd.password" dense outlined :type="pwd.show?'text':'password'" label="Nueva contraseña *" autofocus :rules="[v=>v?.length>=6||'Mínimo 6 caracteres']" hide-bottom-space>
+              <template #append><q-icon :name="pwd.show?'visibility_off':'visibility'" class="cursor-pointer" @click="pwd.show=!pwd.show"/></template>
+            </q-input>
+            <q-input v-model="pwd.confirm" dense outlined :type="pwd.show?'text':'password'" label="Confirmar contraseña *" :rules="[v=>v===pwd.password||'Las contraseñas no coinciden']" hide-bottom-space/>
+          </q-card-section>
+          <q-separator/><q-card-actions align="right" class="q-py-xs"><q-btn dense flat label="Cancelar" no-caps v-close-popup/><q-btn dense unelevated color="primary" icon="save" label="Guardar" no-caps type="submit" :loading="pwd.saving"/></q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -84,6 +105,7 @@ import { computed, getCurrentInstance, onMounted, reactive, ref } from 'vue'
 const { proxy }=getCurrentInstance()
 const rows=ref([]),search=ref(''),loading=ref(false),saving=ref(false),dialog=ref(false),permissions=ref([]),selectedPermissions=ref([])
 const avatarFile=ref(null),avatarPreview=ref(''),dragging=ref(false),fileInput=ref(null)
+const pwd=reactive({open:false,user:null,password:'',confirm:'',show:false,saving:false})
 const empty=()=>({id:null,name:'',username:'',email:'',celular:'',ci:'',password:'123456',avatar:null}),form=reactive(empty())
 const columns=[{name:'actions',label:'Acciones',align:'left'},{name:'user',label:'Usuario',field:'name',align:'left'},{name:'email',label:'Correo',field:'email',align:'left'},{name:'celular',label:'Celular',field:'celular',align:'left'},{name:'ci',label:'CI',field:'ci',align:'left'},{name:'permissions',label:'Permisos',align:'center'}]
 const can=p=>proxy.$store.hasPermission(p),required=v=>!!v||'Campo requerido'
@@ -110,6 +132,8 @@ function rejectAvatar(){proxy.$alert.error('Selecciona una imagen de hasta 8 MB'
 function dropAvatar(event){dragging.value=false;const file=event.dataTransfer?.files?.[0];if(!file)return;if(!file.type.startsWith('image/')||file.size>8388608){rejectAvatar();return}avatarFile.value=file;selectAvatar(file)}
 async function save(){saving.value=true;try{let user;if(form.id){user=(await proxy.$axios.put(`/users/${form.id}`,form)).data}else{user=(await proxy.$axios.post('/users',form)).data}if(avatarFile.value){const data=new FormData();data.append('avatar',avatarFile.value);const uploaded=await proxy.$axios.post(`/users/${user.id}/avatar`,data);user.avatar=uploaded.data.avatar}if(can('Gestionar Permisos'))await proxy.$axios.put(`/users/${user.id}/permissions`,{permissions:selectedPermissions.value});proxy.$alert.success('Usuario guardado');closeForm();load()}catch(e){proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo guardar')}finally{saving.value=false}}
 function resetPassword(u){proxy.$alert.dialog(`¿Restablecer la contraseña de ${u.name} a 123456?`).onOk(()=>proxy.$axios.put(`/users/${u.id}/reset-password`).then(()=>proxy.$alert.success('Contraseña restablecida')).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo restablecer')))}
+function openPassword(u){Object.assign(pwd,{open:true,user:u,password:'',confirm:'',show:false,saving:false})}
+function savePassword(){pwd.saving=true;proxy.$axios.put(`/users/${pwd.user.id}/password`,{password:pwd.password,password_confirmation:pwd.confirm}).then(()=>{proxy.$alert.success('Contraseña actualizada');pwd.open=false}).catch(e=>proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo cambiar la contraseña')).finally(()=>pwd.saving=false)}
 function remove(u){proxy.$alert.dialog(`¿Eliminar al usuario ${u.name}?`).onOk(()=>proxy.$axios.delete(`/users/${u.id}`).then(()=>{proxy.$alert.success('Usuario eliminado');load()}).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo eliminar')))}
 onMounted(load)
 </script>

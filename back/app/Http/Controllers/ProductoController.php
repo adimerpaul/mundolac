@@ -2,17 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductosExport;
 use App\Models\Categoria;
+use App\Models\Configuracion;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductoController extends Controller
 {
     public function index(Request $request)
     {
         $this->authorizeAction($request, 'Ver Productos');
+        $query = $this->filteredQuery($request);
+        $perPage = (int) $request->input('per_page', 20);
+
+        return response()->json($query->paginate($perPage === 0 ? 500 : min(max($perPage, 1), 500)));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $this->authorizeAction($request, 'Ver Productos');
+        $productos = $this->filteredQuery($request)->get();
+        $config = Configuracion::first();
+
+        $filtros = array_filter([
+            ($q = trim((string) $request->input('q'))) !== '' ? "Búsqueda \"{$q}\"" : null,
+            $request->integer('categoria_id') ? 'Categoría '.(Categoria::find($request->integer('categoria_id'))?->nombre ?? '—') : null,
+        ]);
+        $user = $request->user();
+        $meta = [
+            'empresa' => $config?->nombre_empresa ?: 'Mundolac',
+            'nit' => $config?->nit,
+            'filtros' => $filtros ? implode(' · ', $filtros) : 'Todos los productos',
+            'generado_por' => $user->name ?: $user->username,
+        ];
+
+        return Excel::download(
+            new ProductosExport($productos, $user->hasPermissionTo('Ver Ganancias'), $meta),
+            'inventario_productos_'.now()->format('Ymd_His').'.xlsx'
+        );
+    }
+
+    private function filteredQuery(Request $request)
+    {
         $query = Producto::with('categoriaRelacion:id,nombre,color')->orderBy('nombre');
 
         if ($search = trim((string) $request->input('q'))) {
@@ -25,9 +60,7 @@ class ProductoController extends Controller
             $query->where('categoria_id', $categoriaId);
         }
 
-        $perPage = (int) $request->input('per_page', 20);
-
-        return response()->json($query->paginate($perPage === 0 ? 500 : min(max($perPage, 1), 500)));
+        return $query;
     }
 
     public function catalogos(Request $request)
@@ -115,8 +148,14 @@ class ProductoController extends Controller
             'unidad' => ['required', 'string', 'max:20'],
             'precio_compra' => ['required', 'numeric', 'min:0'],
             'precio_venta' => ['required', 'numeric', 'min:0'],
-            'stock_inicial' => ['required', 'integer', 'min:0'],
+            'stock_inicial' => ['nullable', 'integer', 'min:0'],
         ]);
+        // La cantidad solo se modifica con permiso; sin él se conserva (o queda en 0 al crear).
+        if (! $request->user()?->hasPermissionTo('Editar Stock Productos')) {
+            unset($data['stock_inicial']);
+        } else {
+            $data['stock_inicial'] ??= $producto?->stock_inicial ?? 0;
+        }
         foreach (['codigo', 'nombre', 'categoria', 'unidad'] as $field) {
             $data[$field] = isset($data[$field]) && $data[$field] !== null
                 ? mb_strtoupper(trim($data[$field])) : null;

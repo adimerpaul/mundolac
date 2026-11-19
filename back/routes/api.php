@@ -23,12 +23,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::put('/users/{id}/reset-password', [UserController::class, 'resetPassword']);
+    Route::put('/users/{id}/password', [UserController::class, 'setPassword']);
     Route::post('/users/{id}/avatar', [UserController::class, 'uploadAvatar']);
     Route::get('/permissions', [UserController::class, 'permissions']);
     Route::get('/users/{id}/permissions', [UserController::class, 'userPermissions']);
     Route::put('/users/{id}/permissions', [UserController::class, 'updateUserPermissions']);
 
     Route::get('/productos', [ProductoController::class, 'index']);
+    Route::get('/productos-exportar/excel', [ProductoController::class, 'exportExcel']);
     Route::get('/productos-catalogos', [ProductoController::class, 'catalogos']);
     Route::post('/categorias', [ProductoController::class, 'storeCategoria']);
     Route::put('/categorias/{categoria}', [ProductoController::class, 'updateCategoria']);

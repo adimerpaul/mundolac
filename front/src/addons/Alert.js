@@ -74,7 +74,7 @@ export class Alert {
     })
   }
 
-  static dialog (title, message) {
+  static dialog (title, message, { focusOk = false } = {}) {
     return Dialog.create({
       component: Icon,
       componentProps: {
@@ -82,6 +82,7 @@ export class Alert {
         message,
         icon: 'warning',
         color: 'negative',
+        focusOk
       }
     })
   }

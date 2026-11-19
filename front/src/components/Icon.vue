@@ -14,7 +14,7 @@
             <q-btn color="red" label="Cancelar" @click="onDialogHide" rounded unelevated class="full-width text-white" no-caps />
           </div>
           <div class="col-6">
-            <q-btn color="green" label="OK" @click="onOKClick" rounded unelevated class="full-width text-white" no-caps />
+            <q-btn color="green" label="OK" :autofocus="focusOk" @click="onOKClick" rounded unelevated class="full-width text-white" no-caps />
           </div>
         </div>
       </q-card-section>
@@ -35,7 +35,8 @@ defineProps({
   title: String,
   message: String,
   icon: String,
-  color: String
+  color: String,
+  focusOk: Boolean
 })
 
 function onOKClick () {

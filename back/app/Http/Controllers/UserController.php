@@ -153,6 +153,19 @@ class UserController extends Controller
         return response()->json(['message' => 'Contraseña restablecida a 123456']);
     }
 
+    public function setPassword(Request $request, $id)
+    {
+        $this->requirePermission($request, 'Editar Usuarios');
+
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        User::findOrFail($id)->update(['password' => bcrypt($request->password)]);
+
+        return response()->json(['message' => 'Contraseña actualizada']);
+    }
+
     // ── Avatar ───────────────────────────────────────────────
 
     public function uploadAvatar(Request $request, $id)
