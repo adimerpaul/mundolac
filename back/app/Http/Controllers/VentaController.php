@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use App\Exports\VentasExport;
-=======
-use App\Exports\VentasReporteExport;
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
 use App\Models\Configuracion;
 use App\Models\Lote;
 use App\Models\Pago;
@@ -14,11 +10,8 @@ use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\User;
 use App\Models\Venta;
-<<<<<<< HEAD
 use App\Models\VentaDetalle;
-=======
 use App\Services\VentaService;
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -34,16 +27,11 @@ class VentaController extends Controller
     {
         $this->authorizeAction($request, 'Ver Ventas');
         $query = $this->filteredQuery($request)
-<<<<<<< HEAD
-            ->withCount('detalles')
-            ->with('detalles:id,venta_id,nombre,unidad,cantidad,total')
-            ->when($request->user()->hasPermissionTo('Ver Ganancias'), fn ($q) => $q->addSelect(['ganancia' => VentaDetalle::selectRaw(
+            ->with(['detalles:id,venta_id,nombre,cantidad,unidad,total', 'pedido:id,numero,cliente_nombre'])
+            ->when($request->user()->hasPermissionTo('Ver Ganancias'), fn ($q) => $q->addSelect(['ventas.*', 'ganancia' => VentaDetalle::selectRaw(
                 'COALESCE(SUM(((precio_venta - precio_compra) * cantidad) - descuento), 0)'
             )->whereColumn('venta_detalles.venta_id', 'ventas.id')]))
             ->latest('fecha');
-=======
-            ->with(['detalles:id,venta_id,nombre,cantidad,unidad', 'pedido:id,numero,cliente_nombre'])->latest('fecha');
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
 
         $perPage = (int) $request->input('per_page', 20);
 
@@ -54,21 +42,14 @@ class VentaController extends Controller
     {
         $this->authorizeAction($request, 'Ver Ventas');
 
-<<<<<<< HEAD
-        return response()->json([
-            'efectivo' => (clone $query)->sum('monto_efectivo'),
-            'qr' => (clone $query)->sum('monto_qr'),
-            'total' => (clone $query)->sum('total'),
-            'descuento' => (clone $query)->sum('descuento'),
-            'cantidad' => (clone $query)->count(),
+        $ventas = $this->filteredQuery($request)->where('tipo', 'VENTA')->where('estado', 'COMPLETADA');
+
+        return response()->json($this->cashSummary($this->filteredQuery($request), $request) + [
             'ganancia' => $request->user()->hasPermissionTo('Ver Ganancias')
-                ? round((float) VentaDetalle::whereIn('venta_id', (clone $query)->select('id'))
+                ? round((float) VentaDetalle::whereIn('venta_id', $ventas->select('id'))
                     ->selectRaw('COALESCE(SUM(((precio_venta - precio_compra) * cantidad) - descuento), 0) AS total')
                     ->value('total'), 2)
                 : null,
-=======
-        return response()->json($this->cashSummary($this->filteredQuery($request), $request) + [
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
             'usuarios' => User::orderBy('name')->get(['id', 'name']),
         ]);
     }
@@ -133,7 +114,6 @@ class VentaController extends Controller
     public function dashboard(Request $request)
     {
         $this->authorizeAction($request, 'Ver Panel');
-<<<<<<< HEAD
         $request->validate([
             'desde' => ['nullable', 'date'],
             'hasta' => ['nullable', 'date', 'after_or_equal:desde'],
@@ -143,15 +123,12 @@ class VentaController extends Controller
         $range = fn ($query, string $column = 'fecha') => $query
             ->when($from, fn ($q) => $q->where($column, '>=', $from))
             ->when($to, fn ($q) => $q->where($column, '<=', $to));
-        $sales = $range(Venta::where('estado', 'COMPLETADA'));
+        $sales = $range(Venta::where('tipo', 'VENTA')->where('estado', 'COMPLETADA'));
         $details = fn () => $range(DB::table('venta_detalles')
             ->join('ventas', 'ventas.id', '=', 'venta_detalles.venta_id')
             ->where('ventas.estado', 'COMPLETADA')
             ->whereNull('ventas.deleted_at')->whereNull('venta_detalles.deleted_at'), 'ventas.fecha');
 
-=======
-        $sales = Venta::where('tipo', 'VENTA')->where('estado', 'COMPLETADA');
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
         $total = (float) (clone $sales)->sum('total');
         $count = (clone $sales)->count();
         $items = (float) $details()->sum('venta_detalles.cantidad');
@@ -162,7 +139,6 @@ class VentaController extends Controller
                 ->value('total')
             : null;
 
-<<<<<<< HEAD
         // Gráfico: por hora si es un solo día, por mes si el rango supera 62 días, si no por día.
         // Sin rango → últimos 7 días.
         $chartFrom = $from ?? now()->subDays(6)->startOfDay();
@@ -181,12 +157,6 @@ class VentaController extends Controller
                 ->selectRaw("$detailBucket as periodo, SUM(((venta_detalles.precio_venta - venta_detalles.precio_compra) * venta_detalles.cantidad) - venta_detalles.descuento) as total")
                 ->groupByRaw($detailBucket)->pluck('total', 'periodo')
             : collect();
-=======
-        $dailyRaw = Venta::where('tipo', 'VENTA')->where('estado', 'COMPLETADA')->where('fecha', '>=', now()->subDays(6)->startOfDay())
-            ->selectRaw('DATE(fecha) as dia, SUM(total) as total')->groupBy('dia')->pluck('total', 'dia');
-        $daily = collect(range(6, 0))->map(function ($days) use ($dailyRaw) {
-            $date = now()->subDays($days);
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
 
         if ($bucket === 'HOUR(fecha)') {
             // Horario comercial 06–22, ampliado si hubo ventas fuera de él.
@@ -206,15 +176,9 @@ class VentaController extends Controller
             'ganancia' => $canProfit ? round((float) ($profitBy[$point[1]] ?? 0), 2) : null,
         ])->values();
 
-<<<<<<< HEAD
         $byUser = (clone $sales)->selectRaw('usuario_nombre as nombre, SUM(total) as total')
             ->groupBy('usuario_nombre')->orderByDesc('total')->limit(8)->get();
         $payments = (clone $sales)->selectRaw('tipo_pago as nombre, SUM(total) as total')
-=======
-        $byUser = Venta::where('tipo', 'VENTA')->where('estado', 'COMPLETADA')->selectRaw('usuario_nombre as nombre, SUM(total) as total')
-            ->groupBy('usuario_nombre')->orderByDesc('total')->limit(8)->get();
-        $payments = Venta::where('tipo', 'VENTA')->where('estado', 'COMPLETADA')->selectRaw('tipo_pago as nombre, SUM(total) as total')
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
             ->groupBy('tipo_pago')->get();
         $topProducts = $details()
             ->selectRaw('venta_detalles.producto_id, venta_detalles.nombre, venta_detalles.foto, SUM(venta_detalles.cantidad) as cantidad, SUM(venta_detalles.total) as total')
@@ -232,10 +196,8 @@ class VentaController extends Controller
     public function exportExcel(Request $request)
     {
         $this->authorizeAction($request, 'Ver Ventas');
-        $ventas = $this->filteredQuery($request)->with('detalles')->latest('fecha')->get();
 
-<<<<<<< HEAD
-        $ventas = $this->filteredQuery($request)->with('detalles')->latest('fecha')->get();
+        $ventas = $this->filteredQuery($request)->where('tipo', 'VENTA')->with('detalles')->latest('fecha')->get();
         $config = Configuracion::first();
         $from = $request->date('desde');
         $to = $request->date('hasta');
@@ -258,46 +220,6 @@ class VentaController extends Controller
             new VentasExport($ventas, $request->user()->hasPermissionTo('Ver Ganancias'), $meta),
             'ventas_'.now()->format('Ymd_His').'.xlsx'
         );
-=======
-        return Excel::download(
-            new VentasReporteExport($ventas, $this->exportMeta($request)),
-            'ventas_'.now()->format('Ymd_His').'.xlsx'
-        );
-    }
-
-    /** Datos de cabecera del Excel: empresa, quién lo generó y los filtros aplicados. */
-    private function exportMeta(Request $request): array
-    {
-        $filtros = [];
-        if ($desde = $request->date('desde')) {
-            $filtros[] = 'Desde '.$desde->format('d/m/Y');
-        }
-        if ($hasta = $request->date('hasta')) {
-            $filtros[] = 'Hasta '.$hasta->format('d/m/Y');
-        }
-        if ($horaDesde = $this->parseTime($request->input('hora_desde'), '00')) {
-            $filtros[] = 'Hora desde '.substr($horaDesde, 0, 5);
-        }
-        if ($horaHasta = $this->parseTime($request->input('hora_hasta'), '59')) {
-            $filtros[] = 'Hora hasta '.substr($horaHasta, 0, 5);
-        }
-        if ($tipo = $request->input('tipo')) {
-            $filtros[] = 'Tipo: '.$tipo;
-        }
-        if ($userId = $request->integer('user_id')) {
-            $filtros[] = 'Usuario: '.(User::find($userId)?->name ?? $userId);
-        }
-        if ($search = trim((string) $request->input('q'))) {
-            $filtros[] = 'Búsqueda: '.$search;
-        }
-
-        return [
-            'empresa' => Configuracion::first()?->nombre_empresa ?? 'MUNDOLAC',
-            'generado_por' => $request->user()?->name ?? '—',
-            'generado_en' => now()->format('d/m/Y H:i:s'),
-            'filtros' => $filtros ? implode(' · ', $filtros) : 'Sin filtros (todas las ventas)',
-        ];
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
     }
 
     public function exportPdf(Request $request)
@@ -332,93 +254,9 @@ class VentaController extends Controller
             'detalles.*.precio_venta' => ['required', 'numeric', 'min:0'],
             'detalles.*.precio_compra' => ['nullable', 'numeric', 'min:0'],
         ]);
-        $canSetCost = $request->user()->hasPermissionTo('Ver Ganancias');
+        $data['permite_costo'] = $request->user()->hasPermissionTo('Ver Ganancias');
 
-<<<<<<< HEAD
-        $venta = DB::transaction(function () use ($request, $data, $canSetCost) {
-            $items = [];
-            $subtotal = 0;
-            foreach ($data['detalles'] as $detail) {
-                $product = Producto::lockForUpdate()->findOrFail($detail['producto_id']);
-                $quantity = round((float) $detail['cantidad'], 3);
-                abort_if((float) $product->stock_inicial + 0.0001 < $quantity, 422, "Stock insuficiente para {$product->nombre}");
-                $salePrice = round((float) $detail['precio_venta'], 4);
-                $lineSubtotal = round($salePrice * $quantity, 2);
-                $subtotal += $lineSubtotal;
-                $costPrice = $canSetCost && isset($detail['precio_compra']) && $detail['precio_compra'] !== ''
-                    ? round((float) $detail['precio_compra'], 2)
-                    : (float) $product->precio_compra;
-                $items[] = [$product, $quantity, $salePrice, $lineSubtotal, $costPrice];
-            }
-
-            $discount = round((float) ($data['descuento'] ?? 0), 2);
-            abort_if($discount > $subtotal, 422, 'El descuento no puede superar el subtotal');
-            $total = round($subtotal - $discount, 2);
-            $cash = $data['tipo_pago'] === 'EFECTIVO' ? $total : round((float) ($data['monto_efectivo'] ?? 0), 2);
-            $qr = $data['tipo_pago'] === 'QR' ? $total : round((float) ($data['monto_qr'] ?? 0), 2);
-            abort_if(abs(($cash + $qr) - $total) > 0.009, 422, 'Los montos de efectivo y QR deben sumar el total de la venta');
-
-            $sale = Venta::create([
-                'user_id' => $request->user()->id,
-                'usuario_nombre' => $request->user()->name,
-                'subtotal' => $subtotal,
-                'descuento' => $discount,
-                'total' => $total,
-                'tipo_pago' => $data['tipo_pago'],
-                'monto_efectivo' => $cash,
-                'monto_qr' => $qr,
-                'estado' => 'COMPLETADA',
-                'observacion' => $data['observacion'] ?? null,
-                'fecha' => now(),
-            ]);
-            $sale->update(['numero' => 'V-'.str_pad((string) $sale->id, 8, '0', STR_PAD_LEFT)]);
-
-            $allocated = 0;
-            foreach ($items as $index => [$product, $quantity, $salePrice, $lineSubtotal, $costPrice]) {
-                $lineDiscount = $index === array_key_last($items)
-                    ? $discount - $allocated
-                    : round($discount * ($lineSubtotal / $subtotal), 2);
-                $allocated += $lineDiscount;
-                $saleDetail = $sale->detalles()->create([
-                    'producto_id' => $product->id,
-                    'codigo' => $product->codigo,
-                    'codigo_barras' => $product->codigo_barras,
-                    'nombre' => $product->nombre,
-                    'categoria' => $product->categoria,
-                    'unidad' => $product->unidad,
-                    'foto' => $product->foto,
-                    'precio_compra' => $costPrice,
-                    'precio_venta' => $salePrice,
-                    'cantidad' => $quantity,
-                    'subtotal' => $lineSubtotal,
-                    'descuento' => $lineDiscount,
-                    'total' => $lineSubtotal - $lineDiscount,
-                ]);
-                $product->decrement('stock_inicial', $quantity);
-                $remaining = $quantity;
-                $lots = Lote::where('producto_id', $product->id)
-                    ->where('cantidad_disponible', '>', 0)
-                    ->orderByRaw('fecha_vencimiento IS NULL')
-                    ->orderBy('fecha_vencimiento')->orderBy('id')->lockForUpdate()->get();
-                foreach ($lots as $lot) {
-                    if ($remaining <= 0.0001) {
-                        break;
-                    }
-                    $taken = min($remaining, (float) $lot->cantidad_disponible);
-                    $lot->decrement('cantidad_disponible', $taken);
-                    DB::table('venta_detalle_lotes')->insert([
-                        'venta_detalle_id' => $saleDetail->id, 'lote_id' => $lot->id,
-                        'cantidad' => $taken, 'created_at' => now(), 'updated_at' => now(),
-                    ]);
-                    $remaining = round($remaining - $taken, 3);
-                }
-            }
-
-            return $sale;
-        });
-=======
         $venta = $this->ventas->registrar($request->user(), $data);
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
 
         return response()->json($venta->load('detalles'), 201);
     }

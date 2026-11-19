@@ -129,7 +129,11 @@ class VentaService
                 $salePrice = round((float) $detail['precio_venta'], 4);
                 $lineSubtotal = round($salePrice * $quantity, 2);
                 $subtotal += $lineSubtotal;
-                $items[] = [$product, $quantity, $salePrice, $lineSubtotal];
+                // Quien ve ganancias puede fijar el costo de la línea; si no, se usa el del producto.
+                $costPrice = ! empty($data['permite_costo']) && isset($detail['precio_compra']) && $detail['precio_compra'] !== ''
+                    ? round((float) $detail['precio_compra'], 2)
+                    : (float) $product->precio_compra;
+                $items[] = [$product, $quantity, $salePrice, $lineSubtotal, $costPrice];
             }
 
             $discount = round((float) ($data['descuento'] ?? 0), 2);
@@ -167,7 +171,7 @@ class VentaService
             }
 
             $allocated = 0;
-            foreach ($items as $index => [$product, $quantity, $salePrice, $lineSubtotal]) {
+            foreach ($items as $index => [$product, $quantity, $salePrice, $lineSubtotal, $costPrice]) {
                 $lineDiscount = $index === array_key_last($items)
                     ? $discount - $allocated
                     : round($discount * ($lineSubtotal / $subtotal), 2);
@@ -180,7 +184,7 @@ class VentaService
                     'categoria' => $product->categoria,
                     'unidad' => $product->unidad,
                     'foto' => $product->foto,
-                    'precio_compra' => $product->precio_compra,
+                    'precio_compra' => $costPrice,
                     'precio_venta' => $salePrice,
                     'cantidad' => $quantity,
                     'subtotal' => $lineSubtotal,

@@ -59,26 +59,27 @@ class ExportarVentasExcelTest extends TestCase
         file_put_contents($archivo, $response->streamedContent());
         $libro = IOFactory::load($archivo);
 
-        $this->assertSame(['Ventas', 'Productos'], $libro->getSheetNames());
+        $this->assertSame(['Ventas', 'Productos vendidos'], $libro->getSheetNames());
 
+        // Hoja de ventas: encabezado, ventas de la franja (más reciente primero) y totales con ganancia.
         $ventas = $libro->getSheetByName('Ventas');
-        $this->assertSame('REPORTE DE VENTAS', $ventas->getCell('A1')->getValue());
-        $this->assertSame($admin->name, $ventas->getCell('B3')->getValue());
-        $this->assertStringContainsString('Hora desde 08:00', (string) $ventas->getCell('B5')->getValue());
-        $this->assertSame('Nº Venta', $ventas->getCell('A7')->getValue());
-        $this->assertSame('V-00000002', $ventas->getCell('A8')->getValue());
-        $this->assertSame('10:00:00', $ventas->getCell('C8')->getValue());
-        $this->assertSame($admin->name, $ventas->getCell('D8')->getValue());
-        $this->assertSame('TOTALES', $ventas->getCell('A10')->getValue());
-        $this->assertEquals(70, $ventas->getCell('L10')->getValue());
+        $this->assertSame('Reporte de ventas', $ventas->getCell('A2')->getValue());
+        $this->assertStringContainsString('22/08/2026', (string) $ventas->getCell('A3')->getValue());
+        $this->assertSame('Nº venta', $ventas->getCell('A6')->getValue());
+        $this->assertSame('V-00000002', $ventas->getCell('A7')->getValue());
+        $this->assertSame('10:00', $ventas->getCell('C7')->getValue());
+        $this->assertSame($admin->name, $ventas->getCell('D7')->getValue());
+        $this->assertSame('V-00000001', $ventas->getCell('A8')->getValue());
+        $this->assertStringStartsWith('TOTAL (2 ventas', (string) $ventas->getCell('A9')->getValue());
+        $this->assertEquals(70, $ventas->getCell('K9')->getCalculatedValue());
+        $this->assertEquals(35, $ventas->getCell('L9')->getCalculatedValue());
 
-        $productos = $libro->getSheetByName('Productos');
-        $this->assertSame('LECHE', $productos->getCell('C8')->getValue());
-        $this->assertEquals(5, $productos->getCell('F8')->getValue());
-        $this->assertEquals(2, $productos->getCell('G8')->getValue());
-        $this->assertSame('YOGURT', $productos->getCell('C9')->getValue());
-        $this->assertSame('TOTALES', $productos->getCell('A10')->getValue());
-        $this->assertEquals(70, $productos->getCell('K10')->getValue());
+        // Hoja de productos: la venta de las 22:00 (JUGO) no entra.
+        $productos = $libro->getSheetByName('Productos vendidos');
+        $nombres = array_column($productos->toArray(null, true, false, true), 'C');
+        $this->assertContains('LECHE', $nombres);
+        $this->assertContains('YOGURT', $nombres);
+        $this->assertNotContains('JUGO', $nombres);
 
         unlink($archivo);
     }

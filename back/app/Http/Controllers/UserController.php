@@ -158,14 +158,6 @@ class UserController extends Controller
         $this->requirePermission($request, 'Editar Usuarios');
 
         $request->validate([
-<<<<<<< HEAD
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        User::findOrFail($id)->update(['password' => bcrypt($request->password)]);
-
-        return response()->json(['message' => 'Contraseña actualizada']);
-=======
             'password' => 'required|string|min:6',
             'password_confirmation' => 'required|same:password',
             'cerrar_sesiones' => 'sometimes|boolean',
@@ -197,7 +189,6 @@ class UserController extends Controller
         }
 
         return $query->delete();
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
     }
 
     // ── Avatar ───────────────────────────────────────────────

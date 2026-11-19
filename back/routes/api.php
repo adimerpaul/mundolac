@@ -24,10 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::put('/users/{id}/reset-password', [UserController::class, 'resetPassword']);
     Route::put('/users/{id}/password', [UserController::class, 'setPassword']);
-<<<<<<< HEAD
-=======
     Route::delete('/users/{id}/tokens', [UserController::class, 'revokeTokens']);
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
     Route::post('/users/{id}/avatar', [UserController::class, 'uploadAvatar']);
     Route::get('/permissions', [UserController::class, 'permissions']);
     Route::get('/users/{id}/permissions', [UserController::class, 'userPermissions']);

@@ -16,11 +16,7 @@
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openForm(p.row)"><q-item-section avatar><q-icon name="edit" color="primary"/></q-item-section><q-item-section>Editar y permisos</q-item-section></q-item>
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openPassword(p.row)"><q-item-section avatar><q-icon name="password" color="primary"/></q-item-section><q-item-section>Cambiar contraseña</q-item-section></q-item>
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="resetPassword(p.row)"><q-item-section avatar><q-icon name="lock_reset" color="orange"/></q-item-section><q-item-section>Restablecer clave</q-item-section></q-item>
-<<<<<<< HEAD
-              <q-item v-if="can('Editar Usuarios')" clickable v-close-popup @click="openPassword(p.row)"><q-item-section avatar><q-icon name="key" color="teal"/></q-item-section><q-item-section>Cambiar contraseña</q-item-section></q-item>
-=======
               <q-item v-if="can('Editar Usuarios')" clickable v-close-popup :disable="!p.row.tokens_count" @click="revokeSessions(p.row)"><q-item-section avatar><q-icon name="logout" color="deep-orange"/></q-item-section><q-item-section>Cerrar sesiones</q-item-section></q-item>
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
               <q-separator/>
               <q-item v-if="can('Eliminar Usuarios')&&p.row.id!==proxy.$store.user.id" clickable v-close-popup class="text-negative" @click="remove(p.row)"><q-item-section avatar><q-icon name="delete"/></q-item-section><q-item-section>Eliminar</q-item-section></q-item>
             </q-list>
@@ -84,17 +80,6 @@
       </q-card>
     </q-dialog>
 
-<<<<<<< HEAD
-    <q-dialog v-model="pwd.open" persistent>
-      <q-card style="width:380px;max-width:96vw">
-        <q-form @submit="savePassword">
-          <q-card-section class="row items-center q-py-sm bg-blue-1">
-            <q-avatar size="34px" color="primary" text-color="white" icon="key" class="q-mr-sm"/>
-            <div><div class="text-subtitle1 text-weight-bold">Cambiar contraseña</div><div class="text-caption text-grey-7">{{pwd.user?.name}} (@{{pwd.user?.username}})</div></div>
-            <q-space/><q-btn flat round dense icon="close" v-close-popup/>
-          </q-card-section>
-          <q-separator/>
-=======
     <q-dialog v-model="pwdDialog" persistent>
       <q-card style="width:400px;max-width:96vw">
         <q-form @submit="savePassword">
@@ -103,21 +88,14 @@
             <div><div class="text-subtitle1 text-weight-bold">Cambiar contraseña</div><div class="text-caption text-grey-7">{{pwd.name}} (@{{pwd.username}})</div></div>
             <q-space/><q-btn flat round dense icon="close" v-close-popup/>
           </q-card-section>
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
           <q-card-section class="q-gutter-sm">
             <q-input v-model="pwd.password" dense outlined :type="pwd.show?'text':'password'" label="Nueva contraseña *" autofocus :rules="[v=>v?.length>=6||'Mínimo 6 caracteres']" hide-bottom-space>
               <template #append><q-icon :name="pwd.show?'visibility_off':'visibility'" class="cursor-pointer" @click="pwd.show=!pwd.show"/></template>
             </q-input>
-<<<<<<< HEAD
-            <q-input v-model="pwd.confirm" dense outlined :type="pwd.show?'text':'password'" label="Confirmar contraseña *" :rules="[v=>v===pwd.password||'Las contraseñas no coinciden']" hide-bottom-space/>
-          </q-card-section>
-          <q-separator/><q-card-actions align="right" class="q-py-xs"><q-btn dense flat label="Cancelar" no-caps v-close-popup/><q-btn dense unelevated color="primary" icon="save" label="Guardar" no-caps type="submit" :loading="pwd.saving"/></q-card-actions>
-=======
             <q-input v-model="pwd.password_confirmation" dense outlined :type="pwd.show?'text':'password'" label="Repetir contraseña *" :rules="[v=>v===pwd.password||'Las contraseñas no coinciden']" hide-bottom-space/>
             <q-checkbox v-model="pwd.cerrar_sesiones" dense size="sm" label="Cerrar las sesiones abiertas de este usuario"/>
           </q-card-section>
           <q-separator/><q-card-actions align="right" class="q-py-xs"><q-btn dense flat label="Cancelar" no-caps v-close-popup/><q-btn dense unelevated color="primary" icon="save" label="Guardar" no-caps type="submit" :loading="saving"/></q-card-actions>
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
         </q-form>
       </q-card>
     </q-dialog>
@@ -129,7 +107,6 @@ import { computed, getCurrentInstance, onMounted, reactive, ref } from 'vue'
 const { proxy }=getCurrentInstance()
 const rows=ref([]),search=ref(''),loading=ref(false),saving=ref(false),dialog=ref(false),permissions=ref([]),selectedPermissions=ref([])
 const avatarFile=ref(null),avatarPreview=ref(''),dragging=ref(false),fileInput=ref(null)
-const pwd=reactive({open:false,user:null,password:'',confirm:'',show:false,saving:false})
 const empty=()=>({id:null,name:'',username:'',email:'',celular:'',ci:'',password:'123456',avatar:null}),form=reactive(empty())
 const columns=[{name:'actions',label:'Acciones',align:'left'},{name:'user',label:'Usuario',field:'name',align:'left'},{name:'email',label:'Correo',field:'email',align:'left'},{name:'celular',label:'Celular',field:'celular',align:'left'},{name:'ci',label:'CI',field:'ci',align:'left'},{name:'permissions',label:'Permisos',align:'center'},{name:'sessions',label:'Sesiones',align:'center'}]
 const pwdDialog=ref(false),pwd=reactive({id:null,name:'',username:'',password:'',password_confirmation:'',cerrar_sesiones:true,show:false})
@@ -157,14 +134,9 @@ function rejectAvatar(){proxy.$alert.error('Selecciona una imagen de hasta 8 MB'
 function dropAvatar(event){dragging.value=false;const file=event.dataTransfer?.files?.[0];if(!file)return;if(!file.type.startsWith('image/')||file.size>8388608){rejectAvatar();return}avatarFile.value=file;selectAvatar(file)}
 async function save(){saving.value=true;try{let user;if(form.id){user=(await proxy.$axios.put(`/users/${form.id}`,form)).data}else{user=(await proxy.$axios.post('/users',form)).data}if(avatarFile.value){const data=new FormData();data.append('avatar',avatarFile.value);const uploaded=await proxy.$axios.post(`/users/${user.id}/avatar`,data);user.avatar=uploaded.data.avatar}if(can('Gestionar Permisos'))await proxy.$axios.put(`/users/${user.id}/permissions`,{permissions:selectedPermissions.value});proxy.$alert.success('Usuario guardado');closeForm();load()}catch(e){proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo guardar')}finally{saving.value=false}}
 function resetPassword(u){proxy.$alert.dialog(`¿Restablecer la contraseña de ${u.name} a 123456?`).onOk(()=>proxy.$axios.put(`/users/${u.id}/reset-password`).then(()=>proxy.$alert.success('Contraseña restablecida')).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo restablecer')))}
-<<<<<<< HEAD
-function openPassword(u){Object.assign(pwd,{open:true,user:u,password:'',confirm:'',show:false,saving:false})}
-function savePassword(){pwd.saving=true;proxy.$axios.put(`/users/${pwd.user.id}/password`,{password:pwd.password,password_confirmation:pwd.confirm}).then(()=>{proxy.$alert.success('Contraseña actualizada');pwd.open=false}).catch(e=>proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo cambiar la contraseña')).finally(()=>pwd.saving=false)}
-=======
 function openPassword(u){Object.assign(pwd,{id:u.id,name:u.name,username:u.username,password:'',password_confirmation:'',cerrar_sesiones:true,show:false});pwdDialog.value=true}
 function savePassword(){saving.value=true;proxy.$axios.put(`/users/${pwd.id}/password`,{password:pwd.password,password_confirmation:pwd.password_confirmation,cerrar_sesiones:pwd.cerrar_sesiones}).then(r=>{const n=r.data.sesiones_cerradas;proxy.$alert.success(n?`Contraseña actualizada y ${n} sesión(es) cerrada(s)`:'Contraseña actualizada');pwdDialog.value=false;load()}).catch(e=>proxy.$alert.error(Object.values(e.response?.data?.errors||{})[0]?.[0]||e.response?.data?.message||'No se pudo cambiar la contraseña')).finally(()=>saving.value=false)}
 function revokeSessions(u){const self=u.id===proxy.$store.user.id;proxy.$alert.dialog(self?'¿Cerrar tus otras sesiones abiertas? (Esta se mantiene)':`¿Cerrar todas las sesiones de ${u.name}? Tendrá que volver a iniciar sesión.`).onOk(()=>proxy.$axios.delete(`/users/${u.id}/tokens`).then(r=>{proxy.$alert.success(`${r.data.sesiones_cerradas} sesión(es) cerrada(s)`);load()}).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudieron cerrar las sesiones')))}
->>>>>>> 94250f62ade6398272c93fee17291b33aada27b2
 function remove(u){proxy.$alert.dialog(`¿Eliminar al usuario ${u.name}?`).onOk(()=>proxy.$axios.delete(`/users/${u.id}`).then(()=>{proxy.$alert.success('Usuario eliminado');load()}).catch(e=>proxy.$alert.error(e.response?.data?.message||'No se pudo eliminar')))}
 onMounted(load)
 </script>
